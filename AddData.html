@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة عمودية</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+
+
+        .registration-form {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.submit-btn {
+    background: #3498db;
+    color: white;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.submit-btn:hover {
+    background: #2980b9;
+}
+
+/* تنسيق رسالة التحميل */
+#loadingMessage {
+    color: #3498db;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.spinner-border {
+    width: 2rem;
+    height: 2rem;
+    border-width: 0.2em;
+}
+
+/* تنسيق للأخطاء */
+input:invalid {
+    border-color: #e74c3c;
+}
+
+input:valid {
+    border-color: #2ecc71;
+}
+
+/* تنسيق للجوالات */
+@media (max-width: 768px) {
+    .registration-form {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    .form-control {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .submit-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+
+    <div class="registration-form">
+        <form id="registration-form" name="registration-form">
+            <div class="form-group">
+                <label for="رقم عامل التوصيل">رقم العامل بالترتيب:</label>
+                <input type="text" id="رقم عامل التوصيل" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="الكود">الكود :</label>
+                <input type="number" id="الكود" name="الكود" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="الاسم">الاسم ثنائي:</label>
+                <input type="text" id="الاسم" name="الاسم" class="form-control" min="16" max="30" required pattern="[\u0600-\u06FF\s]+" title="يُسمح فقط بالحروف العربية" >
+            </div>
+            
+            <div class="form-group">
+                <label for="حضور"> وقت الحضور:</label>
+                <input type="number" id="حضور" name="حضور" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="انصراف"> وقت النصراف:</label>
+                <input type="number" id="انصراف" name="انصراف" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="عدد ساعات العمل">عدد ساعات العمل :</label>
+                <input type="number" id="عدد ساعات العمل" name="عدد ساعات العمل" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+    
+
+            <div class="form-group">
+                <label for="إجمالي التوصيل">اجمالي التوصيل :</label>
+                <input type="number" id="إجمالي التوصيل" name="إجمالي التوصيل" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="  الخصم"> الخصم:</label>
+                <input type="number" id="  الخصم" name="  الخصم" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+
+            <div class="form-group">
+                <label for=" الإضافة "> الاضافه:</label>
+                <input type="number" id=" الإضافة " name=" الإضافة " class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+
+            <div class="form-group">
+                <label for="الصافي"> الصافي:</label>
+                <input type="number" id="الصافي" name="الصافي" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="عدد الخدمات فوق"> عدد الخدمات فوق:</label>
+                <input type="number" id="عدد الخدمات فوق" name="عدد الخدمات فوق" class="form-control" pattern="[0-9]{11}" title="يجب أن يتكون رقم الهاتف من 11 رقمًا" required>
+            </div>
+
+            
+            <button type="submit" class="submit-btn" id="submitBtn">تسجيل</button>
+            
+            <!-- رسالة جاري الإرسال -->
+
+            <div id="loadingMessage" style="display: none; text-align: center; margin-top: 15px;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">جاري التحميل...</span>
+                </div>
+                <p style="margin-top: 10px;">جاري إرسال البيانات، الرجاء الانتظار...</p>
+            </div>
+        </form>
+    </div>
+
+
+
+<script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyjFJJXmKxI3fVP4jI_8aTCptL1UEX5xdvB_CyLJdy8li9OGd3x7w2FRdiAbS_MXAI/exec";
+        const form = document.forms["registration-form"];
+        const submitBtn = document.getElementById("submitBtn");
+        const loadingMessage = document.getElementById("loadingMessage");
+        
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            
+            // التحقق من صحة النموذج قبل الإرسال
+            if(!form.checkValidity()) {
+                Swal.fire('خطأ', 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
+                return;
+            }
+            
+            // تعطيل الزر وإظهار رسالة التحميل
+            submitBtn.disabled = true;
+            loadingMessage.style.display = "block";
+            
+            fetch(scriptURL, { 
+                method: "POST", 
+                body: new FormData(form) 
+            })
+            .then((response) => {
+                if(response.ok) {
+                    Swal.fire('تم بنجاح', 'تم تسجيل البيانات بنجاح', 'success');
+                    form.reset();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch((error) => {
+                Swal.fire('خطأ', 'حدث خطأ أثناء محاولة التسجيل', 'error');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                // إعادة تمكين الزر وإخفاء رسالة التحميل
+                submitBtn.disabled = false;
+                loadingMessage.style.display = "none";
+            });
+        });
+</script>
+
+</body>
+
+</html>
