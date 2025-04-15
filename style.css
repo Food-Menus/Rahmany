@@ -5,9 +5,9 @@
 
     /* المتغيرات الأساسية للألوان */
     :root {
-    --primary: #e63946;    /* اللون الأساسي (أحمر) */
-    --dark: #1f4fa2;       /* اللون الداكن (أزرق) */
-    --light: #f8f9fa;      /* اللون الفاتح (خلفية الصفحة) */
+    --primary: #e63946;   
+    --dark: #1f4fa2;   
+    --light: #f8f9fa;    
     }
 
     /* إعادة تعيين الهوامش والحشوات */
@@ -115,7 +115,7 @@
         font-family: 'Arial', sans-serif;
         line-height: 1.6;
         color: #333;
-        background-color: #dce2fb;
+        background-color: #ffffff;
         margin: 0;
         padding: 10px;
     }
@@ -145,14 +145,7 @@
         0% { transform: translateX(0); }
         100% { transform: translateX(-100%); }
     }
-    .background{
-        background-image: url('./اساسيات/WhatsApp\ .jpg'); /* استبدل URL_الصورة_الخاصة_بك برابط صورتك */
-        background-size: cover;
-        background-position: center;
-        box-shadow: var(--shadow);
-        animation: moveBackground 80s linear infinite alternate; /* حركة الخلفية */
-    }
-      
+
 /****************************************************************************************/
 /* دي اكواد خاصه بالزراير اللي اسف الصفحة الخاصه بالكيو ار وبالاتصال */
 /****************************************************************************************/
@@ -195,261 +188,6 @@
         text-align: center;
         padding: 15px;
         margin-top: 30px;
-    }
-  
-/****************************************************************************************/
-/* دي اكواد خاصه بالفورم اللي بيتسجل فيه بيانات الطلاب واللي بتحدد شكله وحجمه ولونه */
-/****************************************************************************************/
-
-    /* عنوان الصفحة */
-    .page-title {
-        text-align: center;
-        margin: 20px 0;
-        color: var(--dark);
-    }
-    /* نموذج التسجيل */
-    .registration-form {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.502);
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    }
-    @keyframes moveBackground {
-    from {
-    background-position: left center;
-    }
-    to {
-    background-position: right center;
-    }
-    }
-    .form-group {
-    margin-bottom: 20px;
-    }
-    .form-group label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--dark);
-    font-weight: 500;
-    }
-    .form-control {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border 0.3s;
-    }
-    .form-control:focus {
-    border-color: var(--primary);
-    outline: none;
-    }
-    .submit-btn {
-    background: #4d9240;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
-    display: block;
-    width: 40%; /* عرض 50% من النموذج */
-    margin: 0 auto; /* تلقائي من الجانبين (للمركزة) */
-    display: block; /* لجعله في سطر منفصل */
-    }
-    .logout-btn {
-        background: #ff3232;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.3s;
-        display: block;
-        width: 20%;
-        margin: 0 auto; /* تلقائي من الجانبين (للمركزة) */
-        display: block; /* لجعله في سطر منفصل */
-    }
-    .submit-btn:hover {
-    background: var(--dark);
-    }
-
-/****************************************************************************************/
-/* دي الاكواد اللي خاصه بالكروت اللي بتظهر بيانات الطلاب كل طالب لوحده وبتحدد شكلها */
-/****************************************************************************************/
-
-    /* بطاقات البيانات */
-    .data-container {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80%, 3fr));
-    gap: 20px;
-    width: 100%;
-    margin: 20px auto;
-    border-radius: 20px;
-    background-color: #c4c4c4;
-    }
-    .data-title {
-    text-align: center;
-    margin: 20px 0;
-    color: var(--dark);
-    font-size: 2.8rem;
-    grid-column: 1 / -1;
-    }
-    .card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 20px;
-    transition: transform 0.3s;
-    font-size: 1.7rem;
-    margin: 20px;
-    }
-    .card:hover {
-    transform: translateY(-25px);
-    }
-    .card-content {
-    margin-bottom: 15px;
-    }
-    .card h2 {
-    color: var(--dark);
-    font-size: 2.2rem;
-    margin-bottom: 5px;
-    }
-    .card-title {
-    color: #555;
-    font-size: 1.7rem;
-    }
-    hr {
-    border: none;
-    border-top: 1px solid #eee;
-    margin: 15px 0;
-    }
-    .checkybox {
-    display: block;
-    margin: 10px 0;
-    cursor: pointer;
-    }
-
-/****************************************************************************************/
-/* دي الاكواد الخاصه بالسنين والمواد والترمات وبتعرضها بشكل منظم */
-/****************************************************************************************/
-
-    .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    }
-    h1 {
-    text-align: center;
-    color: #2c3e50;
-    margin-bottom: 30px;
-    }
-    .specializations {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    }
-    .specialization {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    width: calc(25% - 20px);
-    padding: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .specialization:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-    .specialization h2 {
-    color: #3498db;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-    text-align: center;
-    margin-top: 0;
-    }
-    .year {
-    margin-top: 15px;
-    overflow: hidden;
-    }
-    .year-header {
-    background-color: #e74c3c;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-    }
-    .year-header:hover {
-    background-color: #c0392b;
-    transform: translateX(-5px);
-    }
-    .year-header h3 {
-    margin: 0;
-    font-size: 1.1em;
-    }
-    .year-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease, padding 0.3s ease;
-    }
-    .year.active .year-content {
-    max-height: 1000px; /* يمكن تعديله حسب المحتوى */
-    padding-top: 10px;
-    }
-    .semester {
-    background-color: #f9f9f9;
-    padding: 12px;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: transform 0.4s ease, opacity 0.4s ease;
-    }
-    .year.active .semester {
-    transform: translateY(0);
-    opacity: 1;
-    }
-    .year.active .semester:nth-child(1) {
-    transition-delay: 0.1s;
-    }
-    .year.active .semester:nth-child(2) {
-    transition-delay: 0.2s;
-    }
-    .semester h4 {
-    color: #2ecc71;
-    margin-top: 0;
-    margin-bottom: 8px;
-    border-bottom: 1px dashed #2ecc71;
-    padding-bottom: 5px;
-    }
-    .courses {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
-    }
-    .courses li {
-    padding: 8px 0;
-    border-bottom: 1px dotted #ddd;
-    transition: all 0.2s ease;
-    }
-    .courses li:hover {
-    background-color: #f0f0f0;
-    padding-right: 5px;
-    }
-    .toggle-icon {
-    font-size: 1.2em;
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    }
-    .year.active .toggle-icon {
-    transform: rotate(180deg);
     }
 
 /****************************************************************************************/
@@ -520,6 +258,78 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    
+/*******************************/
+/* التكيف مع الشاشات الصغيرة */
+/*******************************/
+
+
+    .main-nav-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary);
+        color: var(--light);
+        text-decoration: none;
+        padding: 25px 15px;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid transparent;
+    }
+    
+    .nav-btn:hover {
+        background-color: var(--dark);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .nav-btn i {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    
+    /* تصميم للأجهزة اللوحية (أكبر من 768px) */
+    @media (min-width: 768px) {
+        .main-nav-buttons {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    
+    /* تصميم لأجهزة الكمبيوتر (أكبر من 992px) */
+    @media (min-width: 992px) {
+        .main-nav-buttons {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            padding: 30px;
+        }
+        
+        .nav-btn {
+            padding: 30px 20px;
+            font-size: 1.2rem;
+        }
+        
+        .nav-btn i {
+            font-size: 2.5rem;
+        }
+    }
+    
+    /* إضافة أيقونات فونت أويسوم */
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
 /*******************************/
 /* التكيف مع الشاشات الصغيرة */

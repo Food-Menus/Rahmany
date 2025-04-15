@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة عمودية</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+        @media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+        font-size: 12pt;
+    }
+    
+    .invoice-container {
+        width: 100%;
+        margin: 0;
+        padding: 0.5cm;
+        box-shadow: none;
+        page-break-after: always;
+    }
+    
+    .print-actions, .no-print {
+        display: none !important;
+    }
+    
+    table {
+        page-break-inside: avoid;
+    }
+    
+    .table2 {
+        font-size: 10pt;
+    }
+    
+    /* تجنب قطع الصفوف بين صفحات الطباعة */
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    /* تحديد هوامش الصفحة */
+    @page {
+        size: A4 portrait;
+        margin: 1cm;
+        margin-top: 2cm;
+        margin-bottom: 2cm;
+        
+        @top-center {
+            content: "فاتورة العمل اليومي";
+            font-size: 14pt;
+            font-weight: bold;
+        }
+        
+        @bottom-center {
+            content: "الصفحة " counter(page);
+            font-size: 10pt;
+        }
+    }
+}
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            direction: rtl;
+
+        }
+
+        .invoice-container {
+            width: 400px;
+            min-height: 29.7cm; /* ارتفاع A4 */
+            margin: 0 auto;
+            background: white;
+            padding: 1cm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* تنسيق الجدول الأول */
+        .table1 {
+            width: 380px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .table1 th, .table1 td {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+
+        .table1 th {
+            background-color: #f2f2f2;
+            width: 30%;
+        }
+
+        /* تنسيق الجدول الثاني */
+        .table2 {
+            max-width: 380px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            
+        }
+
+        .table2 th, .table2 td {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            text-align: center;
+            border: 1px solid #ddd;
+            white-space: nowrap; /* لمنع التفاف النص داخل الخلية إذا كنت تريد عرض كل النص في سطر واحد */
+        }
+
+
+        .table2 th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            writing-mode: vertical-lr;
+            text-orientation: sideways; /* يجعل الحروف مستدارة 90 درجة */
+        }
+
+        .table2 tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* تنسيق الجدول الثالث */
+        .table3 {
+            width: 380px;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .table3 th, .table3 td {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+
+        .table3 th {
+            background-color: #f2f2f2;
+        }
+
+        /* تنسيق زر الطباعة */
+        .print-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .print-actions button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+
+        .print-actions button:hover {
+            background: #45a049;
+        }
+
+        @media print {
+            .print-actions {
+                display: none;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .invoice-container {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- الجدول الأول -->
+        <table class="table1">
+            <tr>
+                <th>مسئول الجرد:</th>
+                <td>أحمد نبيل</td>
+            </tr>
+            <tr>
+                <th>رقم الوردية:</th>
+                <td>5000</td>
+            </tr>
+            <tr>
+                <th>التاريخ:</th>
+                <td>31-10-2025</td>
+            </tr>
+            <tr>
+                <th>اليوم:</th>
+                <td>الجمعة</td>
+            </tr>
+        </table>
+
+        <!-- الجدول الثاني -->
+        <table class="table2">
+            <thead>
+                <tr>
+                    <th>رقم العميل</th>
+                    <th>كود العميل</th>
+                    <th>اسم العميل</th>
+                    <th>حضور العميل</th>
+                    <th>انصراف العميل</th>
+                    <th>عدد ساعات العمل</th>
+                    <th>إجمالي التوصيل</th>
+                    <th>الخصم</th>
+                    <th>الإضافة</th>
+                    <th>الصافي</th>
+                    <th>عدد الخدمات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>20</td>
+                    <td>محمد أحمد</td>
+                    <td>08:00 ص</td>
+                    <td>04:00 م</td>
+                    <td>8</td>
+                    <td>1200.00</td>
+                    <td>50.00</td>
+                    <td>100.00</td>
+                    <td>1250.00</td>
+                    <td>3</td>
+                </tr>
+                <tr>
+                    <td>1002</td>
+                    <td>CL002</td>
+                    <td>علي محمود</td>
+                    <td>09:00 ص</td>
+                    <td>05:00 م</td>
+                    <td>8</td>
+                    <td>1500.00</td>
+                    <td>0.00</td>
+                    <td>200.00</td>
+                    <td>1700.00</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>1003</td>
+                    <td>CL003</td>
+                    <td>سارة خالد</td>
+                    <td>10:00 ص</td>
+                    <td>06:00 م</td>
+                    <td>8</td>
+                    <td>900.00</td>
+                    <td>100.00</td>
+                    <td>50.00</td>
+                    <td>850.00</td>
+                    <td>2</td>
+                </tr>
+                <!-- يمكن إضافة المزيد من الصفوف هنا -->
+            </tbody>
+        </table>
+
+        <!-- الجدول الثالث -->
+        <table class="table3">
+            <tr>
+                <th>إجمالي المصاريف:</th>
+                <td>3750.00 ر.س</td>
+            </tr>
+            <tr>
+                <th>النقدية:</th>
+                <td>3800.00 ر.س</td>
+            </tr>
+            <tr>
+                <th>الإجمالي:</th>
+                <td>3800.00 ر.س</td>
+            </tr>
+            <tr>
+                <th>الضريبة:</th>
+                <td>570.00 ر.س</td>
+            </tr>
+            <tr>
+                <th>الزيادة:</th>
+                <td>50.00 ر.س</td>
+            </tr>
+        </table>
+
+        <div class="print-actions">
+            <button onclick="window.print()">طباعة الفاتورة</button>
+        </div>
+    </div>
+</body>
+</html>
