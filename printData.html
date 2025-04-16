@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فاتورة عمودية</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+
         @page {
-            size: A4 portrait;
+            size: 400px;
             margin: 0;
         }
         @media print {
@@ -22,16 +23,15 @@
                 page-break-after: always;
             }
         }
-        
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            margin: 0% 27%;
             padding: 20px;
+            width: 450px;
             background-color: #f5f5f5;
             direction: rtl;
 
         }
-
         .invoice-container {
             width: 400px;
             min-height: 29.7cm; /* ارتفاع A4 */
@@ -40,9 +40,6 @@
             padding: 1cm;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-
-        /* تنسيق الجدول الأول */
         .table1 {
             width: 380px;
             border-collapse: collapse;
@@ -51,20 +48,15 @@
             font-size: 18px;
 
         }
-
         .table1 th, .table1 td {
             padding: 5px;
             text-align: center;
             border: 1px solid #ddd;
         }
-
         .table1 th {
             background-color: #f2f2f2;
             width: 50%;
         }
-
-
-        /* تنسيق الجدول الثاني */
         .table2 {
         max-width: 380px;
         width: 100%;
@@ -75,7 +67,6 @@
         table-layout: fixed; /* لتثبيت توزيع الأعمدة */
         direction: rtl;
         }
-
         .table2 th, .table2 td {
             padding-top: 4px;
             padding-bottom: 4px;
@@ -83,19 +74,15 @@
             border: 1px solid #ddd;
             white-space: nowrap; /* لمنع التفاف النص داخل الخلية إذا كنت تريد عرض كل النص في سطر واحد */
         }
-
         .table2 th {
             background-color: #f2f2f2;
             font-weight: bold;
             writing-mode: vertical-lr;
             text-orientation: sideways; /* يجعل الحروف مستدارة 90 درجة */
         }
-
         .table2 tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
-        /* تحديد عرض الأعمدة حسب أهميتها */
         .table2 td:nth-child(1), .table2 th:nth-child(1) { width: 4%; } /* رقم العميل */
         .table2 td:nth-child(2), .table2 th:nth-child(2) { width: 4%; } /* كود العميل */
         .table2 td:nth-child(3), .table2 th:nth-child(3) { width: 15%; } /* اسم العميل */
@@ -107,10 +94,6 @@
         .table2 td:nth-child(9), .table2 th:nth-child(9) { width: 4%; } /* الإضافة */
         .table2 td:nth-child(10), .table2 th:nth-child(10) { width: 8%; } /* الصافي */
         .table2 td:nth-child(11), .table2 th:nth-child(11) { width: 4%; } /* عدد الخدمات */
-
-
-        
-        /* تنسيق الجدول الثالث */
         .table3 {
             width: 380px;
             border-collapse: collapse;
@@ -118,7 +101,6 @@
             font-size: 18px;
             border: 1px solid #ddd;
         }
-
         .table3 th, .table3 td {
             padding-top: 4px;
             padding-bottom: 4px;
@@ -126,21 +108,15 @@
             border: 1px solid #ddd;
             white-space: nowrap; /* لمنع التفاف النص داخل الخلية إذا كنت تريد عرض كل النص في سطر واحد */
         }
-
         .table3 th {
             background-color: #f2f2f2;
             width: 50%;
 
         }
-
-
-        
-        /* تنسيق زر الطباعة */
         .print-actions {
             text-align: center;
             margin-top: 20px;
         }
-
         .print-actions button {
             background: #4CAF50;
             color: white;
@@ -150,11 +126,25 @@
             font-size: 16px;
             border-radius: 4px;
         }
-
         .print-actions button:hover {
             background: #45a049;
         }
-
+        .logout-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .logout-btn button {
+            background: #ff3131;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        .logout-btn button:hover {
+            background: #45a049;
+        }
         @media print {
             .print-actions {
                 display: none;
@@ -170,287 +160,321 @@
                 box-shadow: none;
             }
         }
+        @media (max-width: 768px) {
+            body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            width: 450px;
+            background-color: #f5f5f5;
+            direction: rtl;
+
+        }
+        }
     </style>
 </head>
 
 <body>
 
-<div class="invoice-container">
+    <div class="invoice-container">
 
-        <table class="table1">
-            <tbody id="data-container2">
-         </table>
-
-
-        <!-- الجدول الثاني -->
-        <table class="table2">
-            <thead>
-                <tr>
-                    <th>رقم العميل</th>
-                    <th>كود العميل</th>
-                    <th>اسم العميل</th>
-                    <th>حضور العميل</th>
-                    <th>انصراف العميل</th>
-                    <th>عدد ساعات العمل</th>
-                    <th>إجمالي التوصيل</th>
-                    <th>الخصم</th>
-                    <th>الإضافة</th>
-                    <th>الصافي</th>
-                    <th>عدد الخدمات</th>
-                </tr>
-            </thead>
-            <tbody id="data-container">
-                <!-- البيانات ستضاف هنا عبر الجافا سكريبت -->
-            </tbody>
-        </table>
+            <table class="table1">
+                <tbody id="data-container2">
+            </table>
 
 
-        <table class="table3">
-           <tbody id="data-container1">
-        </table>
-   
+            <!-- الجدول الثاني -->
+            <table class="table2">
+                <thead>
+                    <tr>
+                        <th>رقم العميل</th>
+                        <th>كود العميل</th>
+                        <th>اسم العميل</th>
+                        <th>حضور العميل</th>
+                        <th>انصراف العميل</th>
+                        <th>عدد ساعات العمل</th>
+                        <th>إجمالي التوصيل</th>
+                        <th>الخصم</th>
+                        <th>الإضافة</th>
+                        <th>الصافي</th>
+                        <th>عدد الخدمات</th>
+                    </tr>
+                </thead>
+                <tbody id="data-container">
+                    <!-- البيانات ستضاف هنا عبر الجافا سكريبت -->
+                </tbody>
+            </table>
 
-</div>
 
+            <table class="table3">
+            <tbody id="data-container1">
+            </table>
+    
 
+    </div>
 
-<button onclick="deleteData()">احذف البيانات</button>
+    <div class="print-actions">
+        <button onclick="window.print()">طباعة الفاتورة</button>
+    </div>
+    <hr>
+    <div class="logout-btn">
+        <button id="logoutButton" > انهاء الشيفت </button><br>
+    </div>
 
 <script>
-  async function deleteData() {
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwiwXTH5Pt_wVSZkZKafZg91ADMoI7BWCsrlbdcChHXGvAIMT9I61c73SFhCorkI84/exec"; // استبدل برابط الويب أب
-    
-    try {
-      const response = await fetch(webAppUrl, { method: 'POST' });
-      const result = await response.text();
-      alert(result); // "تم الحذف بنجاح!"
-    } catch (error) {
-      alert("حدث خطأ: " + error);
-    }
-  }
-</script>
+    // جلب وعرض بيانات الطلاب من Google Sheets  
+    const sheetID = '153TNOWAm7QiCO-gGi37JzKg87hQYy7EEz2wqWsEMJOE';
+    const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
 
-
-
-    <script>
-        // جلب وعرض بيانات الطلاب من Google Sheets  
-        const sheetID = '153TNOWAm7QiCO-gGi37JzKg87hQYy7EEz2wqWsEMJOE';
-        const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
-
-        // دالة لتحويل تاريخ جوجل شيتس إلى تنسيق قابل للقراءة
-        function formatGoogleSheetDate(dateStr) {
-            if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
+    // دالة لتحويل تاريخ جوجل شيتس إلى تنسيق قابل للقراءة
+    function formatGoogleSheetDate(dateStr) {
+        if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
+        
+        try {
+            const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+            if (!parts) return dateStr;
             
-            try {
-                const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
-                if (!parts) return dateStr;
-                
-                const year = 1899 + parseInt(parts[1]);
-                const month = parseInt(parts[2]);
-                const day = parseInt(parts[3]);
-                const hour = parseInt(parts[4]);
-                const minute = parseInt(parts[5]);
-                
-                const date = new Date(year, month, day, hour, minute);
-                return date.toLocaleTimeString('EG', { 
-                    hour: '2-digit', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
-            } catch (e) {
-                console.error('Error parsing date:', e);
-                return dateStr;
-            }
+            const year = 1899 + parseInt(parts[1]);
+            const month = parseInt(parts[2]);
+            const day = parseInt(parts[3]);
+            const hour = parseInt(parts[4]);
+            const minute = parseInt(parts[5]);
+            
+            const date = new Date(year, month, day, hour, minute);
+            return date.toLocaleTimeString('EG', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: true 
+            });
+        } catch (e) {
+            console.error('Error parsing date:', e);
+            return dateStr;
         }
+    }
 
-        // دالة لتنسيق الأرقام (إضافة فواصل للألوف وغيرها)
-        function formatNumber(value) {
-            if (typeof value !== 'number') return value;
-            return new Intl.NumberFormat('EG').format(value);
-        }
+    // دالة لتنسيق الأرقام (إضافة فواصل للألوف وغيرها)
+    function formatNumber(value) {
+        if (typeof value !== 'number') return value;
+        return new Intl.NumberFormat('EG').format(value);
+    }
 
-        fetch(base)
-            .then(response => response.text())
-            .then(data => {
-                const json = JSON.parse(data.substring(47).slice(0, -2));
-                const tableData = json.table.rows;
-                const dataContainer = document.getElementById('data-container');
-                const dataContainer1 = document.getElementById('data-container1');
-                const dataContainer2 = document.getElementById('data-container2');
-                
+    fetch(base)
+        .then(response => response.text())
+        .then(data => {
+            const json = JSON.parse(data.substring(47).slice(0, -2));
+            const tableData = json.table.rows;
+            const dataContainer = document.getElementById('data-container');
+            const dataContainer1 = document.getElementById('data-container1');
+            const dataContainer2 = document.getElementById('data-container2');
+            
 //**************************************************************************************************//
 //**************************************************************************************************//
 //**table1**//
+dataContainer.innerHTML = '';
 
-                dataContainer.innerHTML = '';
-                
-                if (!tableData || tableData.length === 0) {
-                    dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات متاحة</td></tr>';
-                    return;
-                }
+// جلب قيمة الشيفت من اللوكل ستوريج
+const shiftNumber = localStorage.getItem('shiftNumber');
 
-                tableData.forEach((row, index) => {
-                    const tr = document.createElement('tr');
-                    
-                    const number = row.c && row.c[0] ? row.c[0].v : "غير متوفر";
-                    const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
-                    const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
-                    const come = row.c && row.c[3] ? formatGoogleSheetDate(row.c[3].v.toString()) : "غير محدد";
-                    const go = row.c && row.c[4] ? formatGoogleSheetDate(row.c[4].v.toString()) : "غير محدد";
-                    const hours_num = row.c && row.c[5] ? formatNumber(row.c[5].v) : "غير محدد";
-                    const total_delivery = row.c && row.c[6] ? formatNumber(row.c[6].v) : "غير محدد";
-                    const discount = row.c && row.c[7] ? `${formatNumber(row.c[7].v * 100)}%` : "0%";
-                    const Additional = row.c && row.c[8] ? formatNumber(row.c[8].v) : "غير محدد";
-                    const Net = row.c && row.c[9] ? formatNumber(row.c[9].v) : "غير محدد";
-                    const services_num = row.c && row.c[10] ? formatNumber(row.c[10].v) : "غير محدد";
+// التحقق من وجود القيمة
+if (!shiftNumber) {
+dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</td></tr>';
+return;
+}
 
-                    tr.innerHTML = `
-                        <td>${number}</td>
-                        <td>${code}</td>
-                        <td>${name}</td>
-                        <td>${come}</td>
-                        <td>${go}</td>
-                        <td>${hours_num}</td>
-                        <td>${total_delivery}</td>
-                        <td>${discount}</td>
-                        <td>${Additional}</td>
-                        <td>${Net}</td>
-                        <td>${services_num}</td>
-                    `;
-                    
-                    dataContainer.appendChild(tr);
-                });   
-            
+// فلترة البيانات حسب رقم الشيفت
+const filteredData = tableData.filter(row => {
+const rowShiftNumber = row.c && row.c[11] ? row.c[11].v.toString() : null;
+return rowShiftNumber === shiftNumber;
+});
+
+// إذا لم توجد بيانات بعد الفلترة
+if (filteredData.length === 0) {
+dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات لهذا الشيفت</td></tr>';
+return;
+}
+
+// عرض البيانات المفلترة
+filteredData.forEach((row, index) => {
+const tr = document.createElement('tr');
+
+const number = row.c && row.c[0] ? row.c[0].v : "غير متوفر";
+const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
+const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
+const come = row.c && row.c[3] ? formatGoogleSheetDate(row.c[3].v.toString()) : "غير محدد";
+const go = row.c && row.c[4] ? formatGoogleSheetDate(row.c[4].v.toString()) : "غير محدد";
+const hours_num = row.c && row.c[5] ? formatNumber(row.c[5].v) : "غير محدد";
+const total_delivery = row.c && row.c[6] ? formatNumber(row.c[6].v) : "غير محدد";
+const discount = row.c && row.c[7] ? `${formatNumber(row.c[7].v * 100)}%` : "0%";
+const Additional = row.c && row.c[8] ? formatNumber(row.c[8].v) : "غير محدد";
+const Net = row.c && row.c[9] ? formatNumber(row.c[9].v) : "غير محدد";
+const services_num = row.c && row.c[10] ? formatNumber(row.c[10].v) : "غير محدد";
+const shiftNumberOne = row.c && row.c[11] ? formatNumber(row.c[11].v) : "غير محدد";
+
+tr.innerHTML = `
+    <td>${number}</td>
+    <td>${code}</td>
+    <td>${name}</td>
+    <td>${come}</td>
+    <td>${go}</td>
+    <td>${hours_num}</td>
+    <td>${total_delivery}</td>
+    <td>${discount}</td>
+    <td>${Additional}</td>
+    <td>${Net}</td>
+    <td>${services_num}</td>
+`;
+
+dataContainer.appendChild(tr);
+});
 //**************************************************************************************************//
 //**************************************************************************************************//
 //**table2**//
 
-                dataContainer1.innerHTML = '';
+            dataContainer1.innerHTML = '';
 
-                if (!tableData || tableData.length === 0) {
-                    dataContainer1.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات متاحة</td></tr>';
-                    return;
+            if (!tableData || tableData.length === 0) {
+                dataContainer1.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات متاحة</td></tr>';
+                return;
+            }
+
+            // جلب البيانات من localStorage
+            const cashValue = localStorage.getItem('cash') || "غير متوفر";
+            const totalValue = localStorage.getItem('total') || "غير متوفر";
+            const increaseValue = localStorage.getItem('increase') || "غير متوفر";
+
+            tableData.forEach((row, index) => {
+                if (index === 0) {
+                    const table = document.createElement('table');
+                    table.className = 'table3';
+                    
+                    const Total_expenses = row.c && row.c[12] ? row.c[12].v : "غير متوفر";
+
+                    table.innerHTML = `
+                        <table class="table3">
+                            <tr>
+                                <th>إجمالي المصاريف:</th>
+                                <td>${Total_expenses}</td>
+                            </tr>
+                            <tr>
+                                <th>النقدية:</th>
+                                <td>${cashValue}</td>
+                            </tr>
+                            <tr>
+                                <th>الإجمالي:</th>
+                                <td>${totalValue}</td>
+                            </tr>
+                            <tr>
+                                <th>الزيادة:</th>
+                                <td>${increaseValue}</td>
+                            </tr>
+                        </table>
+                    `;
+                    
+                    dataContainer1.appendChild(table);
                 }
-
-                // جلب البيانات من localStorage
-                const cashValue = localStorage.getItem('cash') || "غير متوفر";
-                const totalValue = localStorage.getItem('total') || "غير متوفر";
-                const increaseValue = localStorage.getItem('increase') || "غير متوفر";
-
-                tableData.forEach((row, index) => {
-                    if (index === 0) {
-                        const table = document.createElement('table');
-                        table.className = 'table3';
-                        
-                        const Total_expenses = row.c && row.c[12] ? row.c[12].v : "غير متوفر";
-
-                        table.innerHTML = `
-                            <table class="table3">
-                                <tr>
-                                    <th>إجمالي المصاريف:</th>
-                                    <td>${Total_expenses}</td>
-                                </tr>
-                                <tr>
-                                    <th>النقدية:</th>
-                                    <td>${cashValue}</td>
-                                </tr>
-                                <tr>
-                                    <th>الإجمالي:</th>
-                                    <td>${totalValue}</td>
-                                </tr>
-                                <tr>
-                                    <th>الزيادة:</th>
-                                    <td>${increaseValue}</td>
-                                </tr>
-                            </table>
-                        `;
-                        
-                        dataContainer1.appendChild(table);
-                    }
-                });        
+            });        
 
 //**************************************************************************************************//
 //**************************************************************************************************//
 //**table3**//
 
-                dataContainer2.innerHTML = '';
+            dataContainer2.innerHTML = '';
 
-                if (!tableData || tableData.length === 0) {
-                    dataContainer2.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات متاحة</td></tr>';
-                    return;
-                }
+            if (!tableData || tableData.length === 0) {
+                dataContainer2.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات متاحة</td></tr>';
+                return;
+            }
 
-                // جلب بيانات مسؤول الجرد ورقم الوردية من localStorage
-                const inventoryOfficer = localStorage.getItem('inventoryOfficer') || "غير محدد";
-                const shiftNumber = localStorage.getItem('shiftNumber') || "غير محدد";
+            // جلب بيانات مسؤول الجرد ورقم الوردية من localStorage
+            const inventoryOfficer = localStorage.getItem('inventoryOfficer') || "غير محدد";
 
-                // الحصول على تاريخ اليوم ويوم الأسبوع
-                const today = new Date();
-                const optionsDate = { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                };
-                const optionsDay = { 
-                    weekday: 'long' 
-                };
-                const todayDate = today.toLocaleDateString('ar-EG', optionsDate);
-                const todayDay = today.toLocaleDateString('ar-EG', optionsDay);
+            // الحصول على تاريخ اليوم ويوم الأسبوع
+            const today = new Date();
+            const optionsDate = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const optionsDay = { 
+                weekday: 'long' 
+            };
+            const todayDate = today.toLocaleDateString('ar-EG', optionsDate);
+            const todayDay = today.toLocaleDateString('ar-EG', optionsDay);
 
-                tableData.forEach((row, index) => {
-                    if (index === 0) {
-                        const table = document.createElement('table');
-                        table.className = 'table1';
+            tableData.forEach((row, index) => {
+                if (index === 0) {
+                    const table = document.createElement('table');
+                    table.className = 'table1';
 
-                        table.innerHTML = `
-                            <tr>
-                                <th>مسؤول الجرد:</th>
-                                <td>${inventoryOfficer}</td>
-                            </tr>
-                            <tr>
-                                <th>رقم الوردية:</th>
-                                <td>${shiftNumber}</td>
-                            </tr>
-                            <tr>
-                                <th>تاريخ اليوم:</th>
-                                <td>${todayDate}</td>
-                            </tr>
-                            <tr>
-                                <th>اليوم:</th>
-                                <td>${todayDay}</td>
-                            </tr>
-                        `;
-                        
-                        dataContainer2.appendChild(table);
-                    }
-                });
-
-//**************************************************************************************************//
-//**************************************************************************************************//
-
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('data-container').innerHTML = `
-                    <tr>
-                        <td colspan="11" style="text-align: center; color: var(--primary);">
-                            حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً
-                        </td>
-                    </tr>
-                `;
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire('خطأ', 'حدث خطأ أثناء جلب البيانات', 'error');
+                    table.innerHTML = `
+                        <tr>
+                            <th>مسؤول الجرد:</th>
+                            <td>${inventoryOfficer}</td>
+                        </tr>
+                        <tr>
+                            <th>رقم الوردية:</th>
+                            <td>${shiftNumber}</td>
+                        </tr>
+                        <tr>
+                            <th>تاريخ اليوم:</th>
+                            <td>${todayDate}</td>
+                        </tr>
+                        <tr>
+                            <th>اليوم:</th>
+                            <td>${todayDay}</td>
+                        </tr>
+                    `;
+                    
+                    dataContainer2.appendChild(table);
                 }
             });
-    
-    
-    
-    
-    
+
+//**************************************************************************************************//
+//**************************************************************************************************//
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('data-container').innerHTML = `
+                <tr>
+                    <td colspan="11" style="text-align: center; color: var(--primary);">
+                        حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً
+                    </td>
+                </tr>
+            `;
+            if (typeof Swal !== 'undefined') {
+                Swal.fire('خطأ', 'حدث خطأ أثناء جلب البيانات', 'error');
+            }
+        });
 
 
-    </script>
 
+
+
+
+
+</script>
+
+<script>
+            const logoutButton = document.getElementById('logoutButton');
+        if(logoutButton) {
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('inventoryOfficer');
+                localStorage.removeItem('shiftNumber');
+                window.location.href = './index.html';
+                swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                document.getElementById('shiftNumber').textContent = shiftNumber;
+            }
+        });
+</script>
 </body>
 
 </html>

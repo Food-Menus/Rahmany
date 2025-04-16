@@ -3,117 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فاتورة عمودية</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-
-
-
-        .registration-form {
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 30px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    direction: rtl;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #2c3e50;
-    font-size: 16px;
-}
-
-.form-control {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-}
-
-.submit-btn {
-    background: #3498db;
-    color: white;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.submit-btn:hover {
-    background: #2980b9;
-}
-
-/* تنسيق رسالة التحميل */
-#loadingMessage {
-    color: #3498db;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.spinner-border {
-    width: 2rem;
-    height: 2rem;
-    border-width: 0.2em;
-}
-
-/* تنسيق للأخطاء */
-input:invalid {
-    border-color: #e74c3c;
-}
-
-input:valid {
-    border-color: #2ecc71;
-}
-
-/* تنسيق للجوالات */
-@media (max-width: 768px) {
-    .registration-form {
-        margin: 20px;
-        padding: 20px;
-    }
-    
-    .form-control {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    .submit-btn {
-        padding: 12px 20px;
-        font-size: 16px;
-    }
-}
-    </style>
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>The Rahmany Management</title>
 </head>
 
 <body>
+<!--###############################################################################################-->
+<!--###############################################################################################-->
+<!--sidebar-->
+<div class="sidebar">
+    <h2 class="logo">October High Institute</h2>
+    <div class="sidebar-menus">
+        <a href="https://www.facebook.com/ohinstitute">الصفحة الرسمية</a>
+        <a href="https://www.ohi.edu.eg/default.aspx">الموقع الرسمي</a>
+        <a href="https://wa.me/+201102716716?text=مرحبا اريد التواصل معكم">الدعم الفني</a>
+        <a href="./auth.html">فورم التسجيل</a>
+        <a href="./about.html">من نحن</a>
+        <a href="./AI.html">المساعد الذكي</a>
+        <a href="#" class="menu-off">إغلاق</a>
+    </div>
+</div>
+<!--###############################################################################################-->
+<!--###############################################################################################-->
+<!--navbar-->
+<div class="navbar">
+    <div class="menu-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;">
+            <path d="M5 5H13V19H5V5ZM19 19H15V5H19V19ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V4C21 3.44772 20.5523 3 20 3H4ZM7 12L11 8.5V15.5L7 12Z"></path>
+        </svg>
+    </div>
+    
+    <img class="head-img" src="./اساسيات/logo-white.png" alt="شعار المعهد">
+    
+    <a href="./Location.html" class="user">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;"  >
+            <path d="M12 20.8995L16.9497 15.9497C19.6834 13.2161 19.6834 8.78392 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.31658 8.78392 4.31658 13.2161 7.05025 15.9497L12 20.8995ZM12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM12 13C13.1046 13 14 12.1046 14 11C14 9.89543 13.1046 9 12 9C10.8954 9 10 9.89543 10 11C10 12.1046 10.8954 13 12 13ZM12 15C9.79086 15 8 13.2091 8 11C8 8.79086 9.79086 7 12 7C14.2091 7 16 8.79086 16 11C16 13.2091 14.2091 15 12 15Z"></path>
+        </svg>
+    </a>
+</div>
 
 
     <div class="registration-form">
         <form id="registration-form" name="registration-form">
             <div class="form-group">
                 <label for="رقم عامل التوصيل">رقم العامل بالترتيب:</label>
-                <input type="text" id="رقم عامل التوصيل" name="name" class="form-control" required>
+                <input type="number" id="رقم عامل التوصيل" name="name" class="form-control" required>
             </div>
             
             <div class="form-group">
@@ -174,17 +110,21 @@ input:valid {
             <!-- رسالة جاري الإرسال -->
 
             <div id="loadingMessage" style="display: none; text-align: center; margin-top: 15px;">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">جاري التحميل...</span>
-                </div>
                 <p style="margin-top: 10px;">جاري إرسال البيانات، الرجاء الانتظار...</p>
-            </div>
+            </div> 
         </form>
     </div>
 
+    <br> <br> <hr> <br> <br>
+    <div class="main-nav-buttons">
+        <a href="./End_expense_shift.html" class="nav-btn">
+            <i class="fas fa-utensils"></i>
+            <span>  انهاء الدورية ( الشيف )  </span>
+        </a>
+    </div>
+    <br> <br> <br> <br>
 
-
-<script>
+    <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbyjFJJXmKxI3fVP4jI_8aTCptL1UEX5xdvB_CyLJdy8li9OGd3x7w2FRdiAbS_MXAI/exec";
         const form = document.forms["registration-form"];
         const submitBtn = document.getElementById("submitBtn");
@@ -193,19 +133,30 @@ input:valid {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             
-            // التحقق من صحة النموذج قبل الإرسال
+            // جلب قيمة الshiftNumber من اللوكل ستوريج
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            
+            // التحقق من وجود القيمة
+            if(!shiftNumber) {
+                Swal.fire('خطأ', ' لم يتم العثور على رقم الشيفت في النظام سجل خروج وادخل تاني', 'error');
+                return;
+            }
+            
             if(!form.checkValidity()) {
                 Swal.fire('خطأ', 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
                 return;
             }
             
-            // تعطيل الزر وإظهار رسالة التحميل
             submitBtn.disabled = true;
             loadingMessage.style.display = "block";
             
+            // إنشاء كائن FormData وإضافة shiftNumber
+            const formData = new FormData(form);
+            formData.append('shiftNumber', shiftNumber); // إضافة القيمة هنا
+            
             fetch(scriptURL, { 
                 method: "POST", 
-                body: new FormData(form) 
+                body: formData // استخدام الكائن المعدل
             })
             .then((response) => {
                 if(response.ok) {
@@ -220,13 +171,22 @@ input:valid {
                 console.error('Error:', error);
             })
             .finally(() => {
-                // إعادة تمكين الزر وإخفاء رسالة التحميل
                 submitBtn.disabled = false;
                 loadingMessage.style.display = "none";
             });
         });
-</script>
-
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                document.getElementById('shiftNumber').textContent = shiftNumber;
+            }
+        });
+    </script>
 </body>
 
 </html>

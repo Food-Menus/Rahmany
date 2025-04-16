@@ -1,16 +1,20 @@
-/****************************************************************************************/
-/* الاكواد عامه بتحدد اللوان المشروع كله والتنسق العام */
-/****************************************************************************************/
 
 
-    /* المتغيرات الأساسية للألوان */
+/**********************************************************************************/
+/**********************************************************************************/
+/** root **/
+
     :root {
-    --primary: #e63946;   
-    --dark: #1f4fa2;   
-    --light: #f8f9fa;    
+        --primary: #e63946;
+        --primary-light: rgba(230, 57, 70, 0.1);
+        --dark: #1f4fa2;
+        --dark-light: rgba(31, 79, 162, 0.1);
+        --light: #f8f9fa;
+        --gray: #e9ecef;
+        --success: #51cf66;
+        --error: #ff6b6b;
     }
-
-    /* إعادة تعيين الهوامش والحشوات */
+    
     * {
         margin: 0;
         padding: 0;
@@ -18,17 +22,18 @@
         font-family: 'Tajawal', sans-serif;
     }
 
-    /* تنسيق عام للصفحة */
     body {
         background: var(--light);
         min-height: 100vh;
     }
+    
 
-/****************************************************************************************/
-/* دي اكواد  خاصه بالشريط الجانبي بتحدد شكله وحجمه ولونه */
-/****************************************************************************************/
 
-    /* تنسيق القائمة الجانبية */
+
+/**********************************************************************************/
+/**********************************************************************************/
+/** sidebar **/   
+
     .sidebar {
         position: fixed;
         right: -300px;          /* إخفاء القائمة خارج الشاشة */
@@ -41,11 +46,9 @@
         padding: 20px;
         z-index: 1000;         /* التأكد من ظهورها فوق كل العناصر */
     }
-    /* حالة القائمة عند ظهورها */
     .sidebar.active {
         right: 0;
     }
-    /* تنسيق عنوان القائمة */
     .sidebar .logo {
         text-align: center;
         margin-bottom: 20px;
@@ -53,7 +56,6 @@
         padding-bottom: 15px;
         border-bottom: 1px solid rgba(255,255,255,0.2);
     }
-    /* تنسيق روابط القائمة */
     .sidebar-menus a {
         display: block;
         color: white;
@@ -63,23 +65,20 @@
         border-radius: 5px;
         transition: all 0.3s;
     }
-    /* تأثير عند مرور الماوس على الروابط */
     .sidebar-menus a:hover {
         background: var(--primary);
         transform: translateX(-5px);
     }
-    /* زر إغلاق القائمة */
     .menu-off {
         background: var(--primary);
         margin-top: 20px;
         text-align: center;
     }
 
-/****************************************************************************************/
-/* دي اكواد خاصه بالشريط العلوي واللي بتحدد حجمه ولونه وشكله */
-/****************************************************************************************/
-
-    /* شريط التنقل العلوي */
+/**********************************************************************************/
+/**********************************************************************************/
+/** navbar **/
+    
     .navbar {
         display: flex;
         justify-content: space-between;
@@ -91,14 +90,12 @@
         top: 0;
         z-index: 100;
     }
-    /* تنسيق الشعار في الشريط العلوي */
     .navbar img {
         height: 10%;
     }
     .head-img {
         width: 30%;
     }
-    /* تأثير الأزرار عند المرور عليها */
     .menu-toggle, .user {
         cursor: pointer;
         transition: transform 0.3s;
@@ -107,9 +104,9 @@
         transform: scale(1.1);
     }
 
-/****************************************************************************************/
-/* دا كود خاصه بالديف اللي اسمها "مين" والي بداخلها جميع اجزاء المشروع ما عدى  الشريط العلوي والجانبي */
-/****************************************************************************************/
+/**********************************************************************************/
+/**********************************************************************************/
+/** navbar **/
 
     .main {
         font-family: 'Arial', sans-serif;
@@ -120,11 +117,10 @@
         padding: 10px;
     }
 
-/****************************************************************************************/
-/* دي الاكواد الخاصه بالصوره اللي في الواجهه والشريط اللي بيلف  */
-/****************************************************************************************/
+/**********************************************************************************/
+/**********************************************************************************/
+/** navbar **/
 
-    /* الشريط المتحرك للنص */
     .marquee {
         width: 100%;
         padding: 10px 0;
@@ -134,146 +130,28 @@
         overflow: hidden;
         white-space: nowrap;
     }
-    /* حركة الشريط المتحرك */
     .marquee p {
         display: inline-block;
         padding-left: 100%;
         animation: marquee 15s linear infinite;
     }
-    /* حركة الشريط من اليمين لليسار */
     @keyframes marquee {
         0% { transform: translateX(0); }
         100% { transform: translateX(-100%); }
     }
 
-/****************************************************************************************/
-/* دي اكواد خاصه بالزراير اللي اسف الصفحة الخاصه بالكيو ار وبالاتصال */
-/****************************************************************************************/
-
-    .services {
-        display: flex; /* لجعل الأزرار بجانب بعضها */
-        justify-content: center; /* لتوسيط الأزرار أفقيًا */
-        flex-wrap: wrap; /* للسماح بلف الأزرار إذا لم يكن هناك مساحة كافية */
-        gap: 15px; /* لإضافة مسافة بين الأزرار */
-        padding: 20px;
-    }
-    .service-btn {
-        background: var(--primary);
-        color: white;
-        border: none;
-        padding: 15px;
-        border-radius: 8px;
-        cursor: pointer;
-        min-width: 150px;
-        text-align: center;
-        transition: all 0.3s;
-    }
-    .service-btn:hover {
-        background: var(--dark);
-        transform: translateY(-3px);
-    }
-    .services button:nth-child(2) p { 
-        color: white; 
-        text-decoration: none; 
-    }
-
-/****************************************************************************************/
-/* دي خاصه بكود الفوتر واللي هو الشريط اللي في اسفل الصفحة خالص */
-/****************************************************************************************/
-
-    /* تذييل الصفحة */
-    .footer {
-        background: var(--dark);
-        color: white;
-        text-align: center;
-        padding: 15px;
-        margin-top: 30px;
-    }
-
-/****************************************************************************************/
-/* دي الاكواد الخاصه بتسجيل الدخول */
-/****************************************************************************************/
-
-    #loginForm {
-        max-width: 500px;
-        margin: 0 auto;
-        padding: 30px;
-        background-color: #f9f9f9;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        font-family: 'Tajawal', sans-serif;
-        text-align: center;
-    }
-    .section__header {
-        color: #6A0C0B; /* اللون الأحمر الداكن */
-        font-size: 2.2rem;
-        margin-bottom: 20px;
-        text-align: center;
-        font-weight: 700;
-    }
-    #loginForm h4 {
-        color: #333;
-        font-size: 1.2rem;
-        margin-bottom: 25px;
-        font-weight: 500;
-    }
-    #loginForm input {
-        width: 100%;
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-        transition: all 0.3s;
-        text-align: right;
-    }
-    #loginForm input:focus {
-        border-color: #6A0C0B;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(106, 12, 11, 0.2);
-    }
-    .WhatsApp {
-        background-color: var(--dark);
-        color: white;
-        border: none;
-        padding: 15px 30px;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-        width: 100%;
-        font-weight: bold;
-    }
-    .WhatsApp:hover {
-        background-color: #266b2f;
-        transform: translateY(-2px);
-    }
-    .WhatsApp:active {
-        transform: translateY(0);
-    }
-    #loginForm {
-        animation: fadeIn 0.5s ease-in-out;
-    }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    
-/*******************************/
-/* التكيف مع الشاشات الصغيرة */
-/*******************************/
-
+/**********************************************************************************/
+/**********************************************************************************/
+/** navbar **/
 
     .main-nav-buttons {
-        display: grid;
+        display: block;
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
         padding: 20px;
         max-width: 1200px;
         margin: 0 auto;
     }
-    
     .nav-btn {
         display: flex;
         flex-direction: column;
@@ -291,147 +169,354 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border: 2px solid transparent;
     }
-    
     .nav-btn:hover {
         background-color: var(--dark);
         transform: translateY(-3px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
-    
     .nav-btn i {
         font-size: 2rem;
         margin-bottom: 10px;
     }
     
-    /* تصميم للأجهزة اللوحية (أكبر من 768px) */
-    @media (min-width: 768px) {
-        .main-nav-buttons {
-            grid-template-columns: repeat(3, 1fr);
-        }
+/**********************************************************************************/
+/**********************************************************************************/
+/** login **/
+
+    main {
+        display: flex; /* تحويل العنصر إلى حاوية مرنة */
+        justify-content: center; /* توسيط العناصر أفقياً */
+        align-items: center; /* توسيط العناصر رأسياً */
+        min-height: 100vh; /* التأكد من أن الحاوية المرنة تغطي كامل ارتفاع الشاشة */
+        margin: 0; /* إزالة الهوامش الافتراضية للجسم */
     }
-    
-    /* تصميم لأجهزة الكمبيوتر (أكبر من 992px) */
-    @media (min-width: 992px) {
-        .main-nav-buttons {
-            grid-template-columns: repeat(5, 1fr);
-            gap: 20px;
-            padding: 30px;
-        }
-        
-        .nav-btn {
-            padding: 30px 20px;
-            font-size: 1.2rem;
-        }
-        
-        .nav-btn i {
-            font-size: 2.5rem;
-        }
+    .login-container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
     }
-    
-    /* إضافة أيقونات فونت أويسوم */
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
-
-
-
-
-
-
-
-
-    
-/*******************************/
-/* التكيف مع الشاشات الصغيرة */
-/*******************************/
-
-    @media (max-width: 768px) {
-
-    #loginForm {
-        padding: 20px;
-        margin: 20px;
+    h2 {
+        color: var(--dark);
+        text-align: center;
+        margin-bottom: 2rem;
     }
-    
-    .section__header {
-        font-size: 1.8rem;
+    .form-group {
+        margin-bottom: 1.5rem;
     }
-    
-    #loginForm h4 {
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--dark);
+        font-weight: bold;
+    }
+    input {
+        width: 98%;
+        padding: 0.8rem;
+        border: 2px solid #ddd;
+        border-radius: 5px;
         font-size: 1rem;
+        transition: border-color 0.3s ease;
     }
-    
-    #loginForm input {
-        padding: 12px;
+    input:focus {
+        outline: none;
+        border-color: var(--primary);
     }
-    
-    .WhatsApp {
-        padding: 12px 25px;
+    button {
+        width: 50%;
+        margin-right: 23% ;
+        padding: 1rem;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
-
-
-
-    .card {
-    font-size: 1.2rem;
-    margin: 0px;
-    margin-top: 20px;
-    }
-    .card h2 {
-    color: var(--dark);
-    font-size: 1.6rem;
-    margin-bottom: 5px;
-    }
-    .card-title {
-    color: #555;
-    font-size: 1.2rem;
-    }
-    /* القائمة الجانبية تأخذ عرض كامل على الهاتف */
-    .sidebar {
-    width: 100%;
-    right: -100%;
-    }
-    .specialization {
-        width: calc(50% - 20px);
-    }
-    /* تنسيق أزرار الخدمات في عمود واحد */
-    .services {
-    flex-direction: column;
-    align-items: center;
+    button:hover {
+        background-color: #c5303c;
     }
 
-    /* جعل الأزرار تأخذ عرض كامل */
-    .service-btn {
-    width: 100%;
-    max-width: 300px;
-    }
-
-    /* تصغير حجم الشعار على الهاتف */
-    .navbar img {
-    height: 40px;
-    }
-    .head-img {
-    width: 70%;
-    }
-
-    .data-container {
-    grid-template-columns: 1fr;
-    }
+/**********************************************************************************/
+/**********************************************************************************/
+/** registration **/
 
     .registration-form {
-    margin: 0 15px;
+        max-width: 850px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--gray);
+    }
+    .form-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+    .form-header h2 {
+        color: var(--dark);
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    .form-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        width: 50%;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary), var(--dark));
+        border-radius: 2px;
+    }
+    .form-group {
+        margin-bottom: 1.8rem;
+        position: relative;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--dark);
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+    .form-control {
+        width: 100%;
+        padding: 1rem 1.2rem;
+        border: 2px solid var(--gray);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: var(--light);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        background-color: white;
+        box-shadow: 0 0 0 4px var(--primary-light);
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .submit-btn {
+        width: 50%;
+        padding: 1.2rem;
+        background: var(--success);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 6px rgba(230, 57, 70, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        background: linear-gradient(135deg, #d62839, var(--primary));
+    }
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+    .submit-btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+    .submit-btn:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+    }
+    @keyframes ripple {
+        0% {
+            transform: scale(0, 0);
+            opacity: 0.5;
+        }
+        100% {
+            transform: scale(20, 20);
+            opacity: 0;
+        }
+    }
+    #loadingMessage {
+        color: var(--dark);
+        font-size: 1.1rem;
+        margin-top: 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .validation-message {
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 4px;
+        display: none;
+    }
+    input:invalid ~ .validation-message.error {
+        display: block;
+        color: var(--error);
+        background-color: rgba(255, 107, 107, 0.1);
+    }
+    input:valid ~ .validation-message.success {
+        display: block;
+        color: var(--success);
+        background-color: rgba(81, 207, 102, 0.1);
+    }
+    .form-group:focus-within label {
+        color: var(--primary);
+    }
+    .form-group.required label::after {
+        content: ' *';
+        color: var(--primary);
     }
 
-    .navbar img {
-    height: 40px;
+/**********************************************************************************/
+/**********************************************************************************/
+/** footer **/
+
+    #inventoryForm {
+        max-width: 850px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--gray);
+    }
+    #inventoryForm > div {
+        margin-bottom: 1.8rem;
+        position: relative;
+    }
+    #inventoryForm label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--dark);
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s;
+    }
+    #inventoryForm input {
+        width: 100%;
+        padding: 1rem 1.2rem;
+        border: 2px solid var(--gray);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: var(--light);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    #inventoryForm input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background-color: white;
+        box-shadow: 0 0 0 4px var(--primary-light);
+    }
+    #inventoryForm input[type="number"]::-webkit-outer-spin-button,
+    #inventoryForm input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    #inventoryForm button[type="submit"] {
+        width: 50%;
+        padding: 1.2rem;
+        background: var(--success);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 6px rgba(230, 57, 70, 0.2);
+        position: relative;
+        overflow: hidden;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #inventoryForm button[type="submit"]:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        background: linear-gradient(135deg, #d62839, var(--primary));
+    }
+    #inventoryForm button[type="submit"]:active {
+        transform: translateY(0);
+    }
+    #inventoryForm button[type="submit"]::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+    #inventoryForm button[type="submit"]:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+    }
+    #message {
+        color: var(--dark);
+        font-size: 1.1rem;
+        margin-top: 2rem;
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+        background-color: rgba(31, 79, 162, 0.1);
+        transition: all 0.3s ease;
+    }
+    #message.success {
+        color: var(--success);
+        background-color: rgba(81, 207, 102, 0.1);
+    }
+    #message.error {
+        color: var(--error);
+        background-color: rgba(255, 107, 107, 0.1);
+    }
+    #inventoryForm > div:focus-within label {
+        color: var(--primary);
+    }
+    #inventoryForm > div.required label::after {
+        content: ' *';
+        color: var(--primary);
     }
 
-    .specialization {
-    width: 100%;
-    }
+/**********************************************************************************/
+/**********************************************************************************/
+/** footer **/
 
-    .year-header {
-    padding: 10px 12px;
-    }
-
-    .year-header h3 {
-    font-size: 1em;
-    }
-
+    .footer {
+        background: var(--dark);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        margin-top: 30px;
     }
