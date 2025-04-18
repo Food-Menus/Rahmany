@@ -8,12 +8,20 @@
     <link rel="stylesheet" href="./style.css">
     <title>The Rahmany Management</title>
     <style>
-
         
         .header {
             text-align: center;
             margin-bottom: 30px;
             color: #2c3e50;
+        }
+
+        .shift-info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .cards-container {
@@ -97,6 +105,13 @@
             color: #7f8c8d;
             padding: 50px;
         }
+
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+        }
         
         @media (max-width: 768px) {
             .cards-container {
@@ -104,6 +119,7 @@
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -119,20 +135,12 @@
 <!--###############################################################################################-->
 <!--###############################################################################################-->
 <!--navbar-->
-<div class="navbar">
-    <div class="menu-toggle">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;">
-            <path d="M5 5H13V19H5V5ZM19 19H15V5H19V19ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V4C21 3.44772 20.5523 3 20 3H4ZM7 12L11 8.5V15.5L7 12Z"></path>
-        </svg>
-    </div>
+<div class="navbar" style=" display: flex; justify-content: center; align-items: center; ">
+
     
     <img class="head-img" src="./اساسيات/logo-white.png" alt="شعار المعهد">
     
-    <a href="./Location.html" class="user">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;"  >
-            <path d="M12 20.8995L16.9497 15.9497C19.6834 13.2161 19.6834 8.78392 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.31658 8.78392 4.31658 13.2161 7.05025 15.9497L12 20.8995ZM12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM12 13C13.1046 13 14 12.1046 14 11C14 9.89543 13.1046 9 12 9C10.8954 9 10 9.89543 10 11C10 12.1046 10.8954 13 12 13ZM12 15C9.79086 15 8 13.2091 8 11C8 8.79086 9.79086 7 12 7C14.2091 7 16 8.79086 16 11C16 13.2091 14.2091 15 12 15Z"></path>
-        </svg>
-    </a>
+
 </div>
 
     <div class="registration-form">
@@ -212,8 +220,13 @@
 
 
     <div class="header">
-        <h1>بيانات العاملين</h1>
+        <h1>بيانات دليفري الوردية </h1>
     </div>
+
+    <div id="shift-info" class="shift-info">
+        جاري تحميل معلومات الشيفت...
+    </div>
+    
     <div id="cards-container" class="cards-container">
         <div class="loading">جاري تحميل البيانات...</div>
     </div>
@@ -223,8 +236,9 @@
         const sheetID = '153TNOWAm7QiCO-gGi37JzKg87hQYy7EEz2wqWsEMJOE';
         const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
         
-        // عنصر الحاوية
+        // عناصر الصفحة
         const cardsContainer = document.getElementById('cards-container');
+        const shiftInfoElement = document.getElementById('shift-info');
         
         // دالة لتحويل تاريخ جوجل شيتس إلى تنسيق قابل للقراءة
         function formatGoogleSheetDate(dateStr) {
@@ -258,18 +272,39 @@
             return new Intl.NumberFormat('ar-EG').format(value);
         }
 
-        // دالة إنشاء الكروت
-        function createCards(tableData) {
+        // دالة لعرض معلومات الشيفت
+        function displayShiftInfo(shiftNumber) {
+            const today = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            };
+            const dateStr = today.toLocaleDateString('ar-EG', options);
+            
+            shiftInfoElement.innerHTML = `
+                <h3>بيانات الشيفت رقم: ${shiftNumber}</h3>
+                <p>تاريخ اليوم: ${dateStr}</p>
+                <p>مسؤول الجرد: ${localStorage.getItem('inventoryOfficer') || 'غير محدد'}</p>
+            `;
+        }
+
+        // دالة إنشاء الكروت مع فلترة حسب shiftNumber
+        function createFilteredCards(tableData) {
             // جلب قيمة الشيفت من اللوكل ستوريج
             const shiftNumber = localStorage.getItem('shiftNumber');
             
             // التحقق من وجود القيمة
             if (!shiftNumber) {
-                cardsContainer.innerHTML = '<div class="card" style="grid-column: 1/-1; text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</div>';
+                cardsContainer.innerHTML = '<div class="error">لم يتم تحديد رقم الشيفت في النظام!</div>';
                 return;
             }
+
+            // عرض معلومات الشيفت
+            displayShiftInfo(shiftNumber);
             
-            // فلترة البيانات حسب رقم الشيفت
+            // فلترة البيانات حسب رقم الشيفت (العمود 11 في الجدول)
             const filteredData = tableData.filter(row => {
                 const rowShiftNumber = row.c && row.c[11] ? row.c[11].v.toString() : null;
                 return rowShiftNumber === shiftNumber;
@@ -277,7 +312,7 @@
             
             // إذا لم توجد بيانات بعد الفلترة
             if (filteredData.length === 0) {
-                cardsContainer.innerHTML = '<div class="card" style="grid-column: 1/-1; text-align: center;">لا توجد بيانات لهذا الشيفت</div>';
+                cardsContainer.innerHTML = '<div class="error">لا توجد بيانات للشيفت رقم: ' + shiftNumber + '</div>';
                 return;
             }
             
@@ -290,17 +325,17 @@
                 card.className = 'card';
                 
                 // استخراج البيانات
-                const number = row.c && row.c[0] ? row.c[0].v : "غير متوفر";
-                const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
-                const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
-                const come = row.c && row.c[3] ? formatNumber(row.c[3].v) : "غير محدد";
-                const go = row.c && row.c[4] ? formatNumber(row.c[4].v) : "غير محدد";
-                const hours_num = row.c && row.c[5] ? formatNumber(row.c[5].v) : "غير محدد";
-                const total_delivery = row.c && row.c[6] ? formatNumber(row.c[6].v) : "غير محدد";
-                const discount = row.c && row.c[7] ? formatNumber(row.c[7].v) : "0";
-                const Additional = row.c && row.c[8] ? formatNumber(row.c[8].v) : "غير محدد";
-                const Net = row.c && row.c[9] ? formatNumber(row.c[9].v) : "غير محدد";
-                const services_num = row.c && row.c[10] ? formatNumber(row.c[10].v) : "غير محدد";
+                const number = row.c?.[0]?.v ?? "غير متوفر";
+                const code = row.c?.[1]?.v ?? "غير متوفر";
+                const name = row.c?.[2]?.v ?? "غير متوفر";
+                const come = row.c?.[3]?.v ? formatGoogleSheetDate(row.c[3].v.toString()) : "غير محدد";
+                const go = row.c?.[4]?.v ? formatGoogleSheetDate(row.c[4].v.toString()) : "غير محدد";
+                const hours_num = row.c?.[5]?.v ? formatNumber(row.c[5].v) : "غير محدد";
+                const total_delivery = row.c?.[6]?.v ? formatNumber(row.c[6].v) : "غير محدد";
+                const discount = row.c?.[7]?.v ? formatNumber(row.c[7].v) : "0";
+                const Additional = row.c?.[8]?.v ? formatNumber(row.c[8].v) : "غير محدد";
+                const Net = row.c?.[9]?.v ? formatNumber(row.c[9].v) : "غير محدد";
+                const services_num = row.c?.[10]?.v ? formatNumber(row.c[10].v) : "غير محدد";
                 
                 // إنشاء عناصر البطاقة
                 const cardHeader = document.createElement('div');
@@ -333,22 +368,20 @@
                 ];
                 
                 infoItems.forEach(item => {
-                    if (item.value) {
-                        const infoItem = document.createElement('div');
-                        infoItem.className = 'info-item';
-                        
-                        const infoLabel = document.createElement('div');
-                        infoLabel.className = 'info-label';
-                        infoLabel.textContent = item.label;
-                        
-                        const infoValue = document.createElement('div');
-                        infoValue.className = 'info-value';
-                        infoValue.textContent = item.value;
-                        
-                        infoItem.appendChild(infoLabel);
-                        infoItem.appendChild(infoValue);
-                        cardBody.appendChild(infoItem);
-                    }
+                    const infoItem = document.createElement('div');
+                    infoItem.className = 'info-item';
+                    
+                    const infoLabel = document.createElement('div');
+                    infoLabel.className = 'info-label';
+                    infoLabel.textContent = item.label;
+                    
+                    const infoValue = document.createElement('div');
+                    infoValue.className = 'info-value';
+                    infoValue.textContent = item.value;
+                    
+                    infoItem.appendChild(infoLabel);
+                    infoItem.appendChild(infoValue);
+                    cardBody.appendChild(infoItem);
                 });
                 
                 // إضافة الصافي
@@ -372,17 +405,18 @@
             fetch(base)
                 .then(response => response.text())
                 .then(data => {
-                    const json = JSON.parse(data.substring(47).slice(0, -2));
-                    const tableData = json.table.rows;
-                    createCards(tableData);
+                    try {
+                        const json = JSON.parse(data.substring(47).slice(0, -2));
+                        const tableData = json.table.rows;
+                        createFilteredCards(tableData);
+                    } catch (e) {
+                        console.error('Error parsing data:', e);
+                        cardsContainer.innerHTML = '<div class="error">حدث خطأ في معالجة البيانات</div>';
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    cardsContainer.innerHTML = `
-                        <div class="card" style="grid-column: 1/-1; text-align: center; color: red;">
-                            حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً
-                        </div>
-                    `;
+                    cardsContainer.innerHTML = '<div class="error">حدث خطأ أثناء جلب البيانات</div>';
                 });
         });
     </script>

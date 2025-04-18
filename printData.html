@@ -25,7 +25,7 @@
         }
         body {
             font-family: Arial, sans-serif;
-            margin: 0% 27%;
+            margin: 0%;
             padding: 20px;
             width: 450px;
             background-color: #f5f5f5;
@@ -145,31 +145,36 @@
         .logout-btn button:hover {
             background: #45a049;
         }
+        .invoice-container {
+            min-height: auto; /* أو تحديد ارتفاع يدوي مثل: min-height: 200mm; */
+        }
+        @page {
+        size: 210mm 297mm; /* A4 بالعرض */
+        margin: 10mm; /* الهوامش */
+        }
         @media print {
-            .print-actions {
-                display: none;
-            }
             body {
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                background: white !important;
             }
             .invoice-container {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
+                margin: 0 !important;
+                padding: 10px !important; /* هوامش داخلية صغيرة */
+                min-height: auto !important; /* إلغاء الارتفاع الثابت */
+                box-shadow: none !important;
+                page-break-after: avoid !important; /* منع إنشاء صفحة جديدة بعد العنصر */
+                page-break-inside: avoid !important; /* منع تقسيم الجداول بين صفحات */
             }
-        }
-        @media (max-width: 768px) {
-            body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            width: 450px;
-            background-color: #f5f5f5;
-            direction: rtl;
-
-        }
+            .table1, .table2, .table3 {
+                page-break-inside: avoid !important; /* منع تقسيم الجداول */
+                font-size: 12px !important; /* تصغير الخط إذا لزم الأمر */
+                width: 90% !important;
+            }
+            .print-actions, .logout-btn {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -217,10 +222,11 @@
         <button onclick="window.print()">طباعة الفاتورة</button>
     </div>
     <hr>
+    
     <div class="logout-btn">
         <button id="logoutButton" > انهاء الشيفت </button><br>
     </div>
-
+    
 <script>
     // جلب وعرض بيانات الطلاب من Google Sheets  
     const sheetID = '153TNOWAm7QiCO-gGi37JzKg87hQYy7EEz2wqWsEMJOE';
@@ -270,62 +276,81 @@
 //**************************************************************************************************//
 //**************************************************************************************************//
 //**table1**//
-dataContainer.innerHTML = '';
+            dataContainer.innerHTML = '';
 
-// جلب قيمة الشيفت من اللوكل ستوريج
-const shiftNumber = localStorage.getItem('shiftNumber');
+            // جلب قيمة الشيفت من اللوكل ستوريج
+            const shiftNumber = localStorage.getItem('shiftNumber');
 
-// التحقق من وجود القيمة
-if (!shiftNumber) {
-dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</td></tr>';
-return;
-}
+            // التحقق من وجود القيمة
+            if (!shiftNumber) {
+            dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</td></tr>';
+            return;
+            }
 
-// فلترة البيانات حسب رقم الشيفت
-const filteredData = tableData.filter(row => {
-const rowShiftNumber = row.c && row.c[11] ? row.c[11].v.toString() : null;
-return rowShiftNumber === shiftNumber;
-});
+            // فلترة البيانات حسب رقم الشيفت
+            const filteredData = tableData.filter(row => {
+            const rowShiftNumber = row.c && row.c[11] ? row.c[11].v.toString() : null;
+            return rowShiftNumber === shiftNumber;
+            });
 
-// إذا لم توجد بيانات بعد الفلترة
-if (filteredData.length === 0) {
-dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات لهذا الشيفت</td></tr>';
-return;
-}
+            // إذا لم توجد بيانات بعد الفلترة
+            if (filteredData.length === 0) {
+            dataContainer.innerHTML = '<tr><td colspan="11" style="text-align: center;">لا توجد بيانات لهذا الشيفت</td></tr>';
+            return;
+            }
 
-// عرض البيانات المفلترة
-filteredData.forEach((row, index) => {
-const tr = document.createElement('tr');
+            // عرض البيانات المفلترة
+            filteredData.forEach((row, index) => {
+            const tr = document.createElement('tr');
 
-const number = row.c && row.c[0] ? row.c[0].v : "غير متوفر";
-const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
-const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
-const come = row.c && row.c[3] ? formatGoogleSheetDate(row.c[3].v.toString()) : "غير محدد";
-const go = row.c && row.c[4] ? formatGoogleSheetDate(row.c[4].v.toString()) : "غير محدد";
-const hours_num = row.c && row.c[5] ? formatNumber(row.c[5].v) : "غير محدد";
-const total_delivery = row.c && row.c[6] ? formatNumber(row.c[6].v) : "غير محدد";
-const discount = row.c && row.c[7] ? `${formatNumber(row.c[7].v * 100)}%` : "0%";
-const Additional = row.c && row.c[8] ? formatNumber(row.c[8].v) : "غير محدد";
-const Net = row.c && row.c[9] ? formatNumber(row.c[9].v) : "غير محدد";
-const services_num = row.c && row.c[10] ? formatNumber(row.c[10].v) : "غير محدد";
-const shiftNumberOne = row.c && row.c[11] ? formatNumber(row.c[11].v) : "غير محدد";
+            
 
-tr.innerHTML = `
-    <td>${number}</td>
-    <td>${code}</td>
-    <td>${name}</td>
-    <td>${come}</td>
-    <td>${go}</td>
-    <td>${hours_num}</td>
-    <td>${total_delivery}</td>
-    <td>${discount}</td>
-    <td>${Additional}</td>
-    <td>${Net}</td>
-    <td>${services_num}</td>
-`;
+            const number = row.c && row.c[0] ? row.c[0].v : "0";
+            const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
+            const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
+            const time1 = row.c && row.c[3] ? formatNumber(row.c[3].v) : "غير محدد";
+            const time2 = row.c && row.c[4] ? formatNumber(row.c[4].v) : "غير محدد";
+            const hours_num = row.c && row.c[5] ? formatNumber(row.c[5].v) : "غير محدد";
+            const total_delivery = row.c && row.c[6] ? formatNumber(row.c[6].v) : "غير محدد";
+            const discount = row.c && row.c[7] ? `${formatNumber(row.c[7].v)}%` : "0%";
+            const Additional = row.c && row.c[8] ? formatNumber(row.c[8].v) : "غير محدد";
+            const Net = row.c && row.c[9] ? formatNumber(row.c[9].v) : "غير محدد";
+            const services_num = row.c && row.c[10] ? formatNumber(row.c[10].v) : "غير محدد";
+            const shiftNumberOne = row.c && row.c[11] ? formatNumber(row.c[11].v) : "غير محدد";
 
-dataContainer.appendChild(tr);
-});
+            function decimalToTime(time1) {
+                const hours = Math.floor(time1);
+                const remainingAfterHours = time1 - hours;
+                
+                const minutes = Math.floor(remainingAfterHours * 60);
+                const remainingAfterMinutes = remainingAfterHours * 60 - minutes;
+                
+                const seconds = Math.round(remainingAfterMinutes * 60);
+                
+                // تنسيق الأرقام لإضافة صفر أمامها إذا كانت أقل من 10
+                const formattedHours = hours.toString().padStart(2, '0');
+                const formattedMinutes = minutes.toString().padStart(2, '0');                
+                return `${formattedHours}:${formattedMinutes}`;
+            }
+            const come = decimalToTime(time1);
+            const go = decimalToTime(time2);
+
+            tr.innerHTML = `
+                <td>${number}</td>
+                <td>${code}</td>
+                <td>${name}</td>
+                <td>${come}</td>
+                <td>${go}</td>
+                <td>${hours_num}</td>
+                <td>${total_delivery}</td>
+                <td>${discount}</td>
+                <td>${Additional}</td>
+                <td>${Net}</td>
+                <td>${services_num}</td>
+            `;
+
+            dataContainer.appendChild(tr);
+            });
 //**************************************************************************************************//
 //**************************************************************************************************//
 //**table2**//
@@ -447,12 +472,6 @@ dataContainer.appendChild(tr);
             }
         });
 
-
-
-
-
-
-
 </script>
 
 <script>
@@ -475,6 +494,7 @@ dataContainer.appendChild(tr);
             }
         });
 </script>
+
 </body>
 
 </html>
