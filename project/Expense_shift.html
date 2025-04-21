@@ -7,294 +7,372 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>The Rahmany Management</title>
     <style>
-     /* تنسيق عام - متوافق مع الكود السابق */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    margin: 0;
-    min-height: 100vh;
-    color: #fff;
-    padding: 20px;
-    box-sizing: border-box;
-}
+            /* تنسيق عام - متوافق مع الكود السابق */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-/* تنسيق الهيدر */
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-    animation: fadeInDown 1s ease;
-}
+        /* تنسيق الهيدر */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
 
-.header h1 {
-    font-size: 2.5rem;
-    margin: 0;
-    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    position: relative;
-    display: inline-block;
-}
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
 
-.header h1::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: #fff;
-    border-radius: 2px;
-}
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+        }
 
-/* تنسيق النموذج */
-.registration-form {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    max-width: 800px;
-    margin: 0 auto 30px;
-    animation: fadeInUp 1s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
+        /* تنسيق النموذج */
+        .registration-form {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            animation: fadeInUp 1s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.form-group {
-    margin-bottom: 20px;
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    font-size: 1.1rem;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
 
-.form-control {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-}
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
 
-.form-control:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
-    transform: translateY(-2px);
-}
+        .form-control:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+        }
 
-/* تنسيق زر التسجيل */
-.submit-btn {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(to right, #ff8a00, #da1b60);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(218, 27, 96, 0.4);
-    position: relative;
-    overflow: hidden;
-    margin-top: 10px;
-}
+        /* تنسيق زر التسجيل */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(218, 27, 96, 0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
 
-.submit-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 20px rgba(218, 27, 96, 0.6);
-}
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(218, 27, 96, 0.6);
+        }
 
-.submit-btn:active {
-    transform: translateY(1px);
-}
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
 
-.submit-btn::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -60%;
-    width: 200%;
-    height: 200%;
-    background: rgba(255, 255, 255, 0.2);
-    transform: rotate(30deg);
-    transition: all 0.3s ease;
-}
+        .submit-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+            transition: all 0.3s ease;
+        }
 
-.submit-btn:hover::after {
-    left: 100%;
-}
+        .submit-btn:hover::after {
+            left: 100%;
+        }
 
-.submit-btn.loading {
-    pointer-events: none;
-    background: linear-gradient(to right, #6b6b6b, #3a3a3a);
-}
+        .submit-btn.loading {
+            pointer-events: none;
+            background: linear-gradient(to right, #6b6b6b, #3a3a3a);
+        }
 
-/* رسالة التحميل */
-#loadingMessage {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 20px;
-    animation: fadeIn 0.5s ease;
-}
+        /* رسالة التحميل */
+        #loadingMessage {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
 
-/* تنسيق زر التنقل */
-.main-nav-buttons {
-    text-align: center;
-    margin: 30px auto;
-    max-width: 800px;
-}
+        /* تنسيق زر التنقل */
+        .main-nav-buttons {
+            text-align: center;
+            margin: 30px auto;
+            max-width: 800px;
+        }
 
-.nav-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 15px 25px;
-    color: white;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.nav-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
-    background: rgba(255, 255, 255, 0.25);
-}
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
 
-.nav-btn i {
-    margin-left: 10px;
-    font-size: 1.2rem;
-}
+        .nav-btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
 
-/* تنسيق معلومات الشيفت */
-.shift-info {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px auto;
-    max-width: 800px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: fadeIn 1s ease;
-}
+        /* تنسيق معلومات الشيفت */
+        .shift-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
 
-/* تنسيق حاويات البطاقات */
-.cards-container {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px auto;
-    max-width: 800px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    animation: fadeIn 1s ease;
-}
+        /* تنسيق حاويات البطاقات */
+        .cards-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
 
-.cards-container .loading {
-    text-align: center;
-    padding: 20px;
-}
+        .cards-container .loading {
+            text-align: center;
+            padding: 20px;
+        }
 
-/* تأثيرات الحركة */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* تنسيق للهواتف */
-@media (max-width: 768px) {
-    .registration-form {
-        padding: 1.5rem;
-    }
-    
-    .header h1 {
-        font-size: 2rem;
-    }
-    
-    .form-control {
-        padding: 12px;
-    }
-    
-    .submit-btn, .nav-btn {
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
-}
+        /* تنسيق للهواتف */
+        @media (max-width: 768px) {
+            .registration-form {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-control {
+                padding: 12px;
+            }
+            
+            .submit-btn, .nav-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
+        
+
+        .card {
+            background: linear-gradient(to right, #ff88004a, #da1b614a);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px; /* عرض الكرت */
+            overflow: hidden;
+            transition: transform 0.2s;
+            
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-header {
+            background: linear-gradient(to right, #ff8a00, #da1b60);
+            padding: 10px;
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
+
+        .driver-name {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .driver-id {
+            font-size: 0.9em;
+            color: #ffffff;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .info-value {
+            color: #ffffff;
+        }
+
+        .net-salary {
+            margin-top: 15px;
+            font-size: 1.5em;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #007bff; /* لون نص التحميل */
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
     </style>
 
 </head>
 
 <body>
-
-
- 
-    <div class="main-nav-buttons">
-        <a href="./End_expense_shift.html" class="nav-btn">
-            <i class="fas fa-utensils"></i>
-            <span>  انهاء الدورية ( الشيف )  </span>
-        </a>
-    </div>
-
-    <div class="header">
-        <h1>بيانات دليفري الوردية </h1>
-    </div>
-
-    <div id="shift-info" class="shift-info">
-        جاري تحميل معلومات الشيفت...
-    </div>
-    
-    <div id="cards-container" class="cards-container">
-        <div class="loading">جاري تحميل البيانات...</div>
-    </div>
 
     <div class="registration-form">
         <form id="registration-form" name="registration-form">
@@ -341,7 +419,7 @@ body {
     
             <div class="form-group">
                 <label for="عدد ساعات العمل">عدد ساعات العمل:</label>
-                <input type="number" id="عدد ساعات العمل" name="عدد ساعات العمل" class="form-control" readonly>
+                <input type="text" id="عدد ساعات العمل" name="عدد ساعات العمل" class="form-control" readonly>
             </div>
         
             <button type="submit" class="submit-btn" id="submitBtn">تسجيل</button>
@@ -351,6 +429,22 @@ body {
             </div> 
         </form>
     </div>
+ 
+    <div class="main-nav-buttons">
+        <a href="./End_expense_shift.html" class="nav-btn">
+            <i class="fas fa-utensils"></i>
+            <span>  انهاء الدورية ( الشيف )  </span>
+        </a>
+    </div>
+
+    <div class="header">
+        <h1>بيانات دليفري الوردية </h1>
+    </div>
+
+    <div id="shift-info" class="shift-info">
+        جاري تحميل معلومات الشيفت...
+    </div>
+    
     
     <script>
         const scriptURL = "https://script.google.com/macros/s/AKfycbyQWvM4pOeRPP2ywswYHG4hKgkEH-0WQCYAPcwKI_ZDFvF7G3l0YL9SncgprZim9lQ/exec";
@@ -366,13 +460,27 @@ body {
                 const حضورDate = new Date(`1970-01-01T${حضور}:00`);
                 const انصرافDate = new Date(`1970-01-01T${انصراف}:00`);
                 const hoursDiff = (انصرافDate - حضورDate) / (1000 * 60 * 60);
-                document.getElementById("عدد ساعات العمل").value = hoursDiff;
+
+                function formatDecimalHours(decimalHours) {
+                const totalMinutes = decimalHours * 60;
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = Math.floor(totalMinutes % 60);
+
+                const formattedHours = String(hours).padStart(1, '0'); // يضيف صفرًا في البداية إذا كانت خانة واحدة
+                const formattedMinutes = String(minutes).padStart(2, '0'); // يضيف صفرًا في البداية إذا كانت خانة واحدة
+
+                return `${formattedHours}:${formattedMinutes}`;
+                }
+                const formattedTime = formatDecimalHours(hoursDiff);
+                console.log(formattedTime);                
+                
+                document.getElementById("عدد ساعات العمل").value = formattedTime;
             }
         }
     
         function updateTotal() {
             const totalInput = document.getElementById("إجمالي التوصيل");
-            totalInput.value = parseFloat(totalInput.value) + 80;
+            totalInput.value = parseFloat(totalInput.value) ;
             calculateNet();
         }
     
@@ -380,7 +488,7 @@ body {
             const اجمالي = parseFloat(document.getElementById("إجمالي التوصيل").value) || 0;
             const الخصم = parseFloat(document.getElementById("  الخصم").value) || 0;
             const الاضافه = parseFloat(document.getElementById(" الإضافة ").value) || 0;
-            const الصافي = اجمالي - الخصم + الاضافه;
+            const الصافي = اجمالي - الخصم + الاضافه + 80;
             document.getElementById("الصافي").value = الصافي;
     
             // حساب عدد الخدمات فوق المحدد
@@ -432,20 +540,14 @@ body {
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const shiftNumber = localStorage.getItem('shiftNumber');
-            if (!shiftNumber) {
-                window.location.href = './index.html';
-            } else {
-                document.getElementById('shiftNumber').textContent = shiftNumber;
-            }
-        });
-    </script>
+    
+    <div id="cards-container" class="cards-container">
+        <div class="loading">جاري تحميل البيانات...</div>
+    </div>
 
     <script>
-        // رابط الجدول
-        const sheetID = '153TNOWAm7QiCO-gGi37JzKg87hQYy7EEz2wqWsEMJOE';
+        // رابط الجدول 
+        const sheetID = '1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes';
         const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
         
         // عناصر الصفحة
@@ -477,13 +579,13 @@ body {
                 return dateStr;
             }
         }
-
+    
         // دالة لتنسيق الأرقام (إضافة فواصل للألوف وغيرها)
         function formatNumber(value) {
             if (typeof value !== 'number') return value;
             return new Intl.NumberFormat('ar-EG').format(value);
         }
-
+    
         // دالة لعرض معلومات الشيفت
         function displayShiftInfo(shiftNumber) {
             const today = new Date();
@@ -498,10 +600,10 @@ body {
             shiftInfoElement.innerHTML = `
                 <h3>بيانات الشيفت رقم: ${shiftNumber}</h3>
                 <p>تاريخ اليوم: ${dateStr}</p>
-                <p>مسؤول الجرد: ${localStorage.getItem('inventoryOfficer') || 'غير محدد'}</p>
+                <p>مسؤول الجرد: ${localStorage.getItem('username') || 'غير محدد'}</p>
             `;
         }
-
+    
         // دالة إنشاء الكروت مع فلترة حسب shiftNumber
         function createFilteredCards(tableData) {
             // جلب قيمة الشيفت من اللوكل ستوريج
@@ -512,13 +614,13 @@ body {
                 cardsContainer.innerHTML = '<div class="error">لم يتم تحديد رقم الشيفت في النظام!</div>';
                 return;
             }
-
+    
             // عرض معلومات الشيفت
             displayShiftInfo(shiftNumber);
             
-            // فلترة البيانات حسب رقم الشيفت (العمود 11 في الجدول)
+            // فلترة البيانات حسب رقم الشيفت (العمود 6 في الجدول كما ذكرت)
             const filteredData = tableData.filter(row => {
-                const rowShiftNumber = row.c && row.c[11] ? row.c[11].v.toString() : null;
+                const rowShiftNumber = row.c && row.c[6] ? row.c[6].v.toString() : null;
                 return rowShiftNumber === shiftNumber;
             });
             
@@ -536,18 +638,16 @@ body {
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // استخراج البيانات
-                const number = row.c?.[0]?.v ?? "غير متوفر";
-                const code = row.c?.[1]?.v ?? "غير متوفر";
-                const name = row.c?.[2]?.v ?? "غير متوفر";
-                const come = row.c?.[3]?.v ? formatGoogleSheetDate(row.c[3].v.toString()) : "غير محدد";
-                const go = row.c?.[4]?.v ? formatGoogleSheetDate(row.c[4].v.toString()) : "غير محدد";
-                const hours_num = row.c?.[5]?.v ? formatNumber(row.c[5].v) : "غير محدد";
-                const total_delivery = row.c?.[6]?.v ? formatNumber(row.c[6].v) : "غير محدد";
-                const discount = row.c?.[7]?.v ? formatNumber(row.c[7].v) : "0";
-                const Additional = row.c?.[8]?.v ? formatNumber(row.c[8].v) : "غير محدد";
-                const Net = row.c?.[9]?.v ? formatNumber(row.c[9].v) : "غير محدد";
-                const services_num = row.c?.[10]?.v ? formatNumber(row.c[10].v) : "غير محدد";
+                // استخراج البيانات حسب الترتيب الذي ذكرته
+                const name = row.c?.[0]?.v ?? "غير متوفر";
+                const come = row.c?.[1]?.v ? formatGoogleSheetDate(row.c[1].v.toString()) : "غير محدد";
+                const go = row.c?.[2]?.v ? formatGoogleSheetDate(row.c[2].v.toString()) : "غير محدد";
+                const total_delivery = row.c?.[3]?.v ? formatNumber(row.c[3].v) : "غير محدد";
+                const discount = row.c?.[4]?.v ? formatNumber(row.c[4].v) : "0";
+                const Additional = row.c?.[5]?.v ? formatNumber(row.c[5].v) : "غير محدد";
+                const services_num = row.c?.[7]?.v ? formatNumber(row.c[7].v) : "غير محدد";
+                const Net = row.c?.[8]?.v ? formatNumber(row.c[8].v) : "غير محدد";
+                const hours_num = row.c?.[9]?.v ?  formatGoogleSheetDate(row.c[9].v.toString()) : "غير محدد";
                 
                 // إنشاء عناصر البطاقة
                 const cardHeader = document.createElement('div');
@@ -557,19 +657,13 @@ body {
                 driverName.className = 'driver-name';
                 driverName.textContent = name;
                 
-                const driverId = document.createElement('div');
-                driverId.className = 'driver-id';
-                driverId.textContent = `ID: ${number}`;
-                
                 cardHeader.appendChild(driverName);
-                cardHeader.appendChild(driverId);
                 
                 const cardBody = document.createElement('div');
                 cardBody.className = 'card-body';
                 
                 // إضافة معلومات العامل
                 const infoItems = [
-                    { label: 'الكود', value: code },
                     { label: 'وقت الحضور', value: come },
                     { label: 'وقت الانصراف', value: go },
                     { label: 'ساعات العمل', value: hours_num },
@@ -632,6 +726,7 @@ body {
                 });
         });
     </script>
+    
 </body>
 
 </html>
