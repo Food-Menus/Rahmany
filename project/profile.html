@@ -196,8 +196,13 @@
         <div class="buttons-grid">
             
             <a href="Expense_shift.html" class="main-btn">
-                <i class="fas fa-list-alt"></i>
+                <i class="fas fa-table"></i>
                 قائمة الشيفتات
+            </a>
+
+            <a href="./statement.html" class="main-btn">
+                <i class="fas fa-list-alt"></i>
+                اضافه بيان
             </a>
 
             <a href="page1.html" class="main-btn">
@@ -222,6 +227,23 @@
         // إضافة تأثير عند الضغط على الأزرار
         document.querySelectorAll('.main-btn').forEach(button => {
             button.addEventListener('click', function(e) {
+                // التأثير المرئي فقط
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                this.style.pointerEvents = 'none';
+                
+                // الانتقال بعد تأخير بسيط
+                setTimeout(() => {
+                    window.location.href = this.getAttribute('href');
+                }, 500);
+            });
+        });
+    </script>
+
+    <script>
+        // إضافة تأثير عند الضغط على الأزرار
+        document.querySelectorAll('.main-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
                 // يمكنك إضافة تأثير التحميل هنا إذا كنت تريد
                 // هذا مثال:
                 const originalText = this.innerHTML;
@@ -238,6 +260,17 @@
                 // لمنع الانتقال الفوري (لأغراض العرض فقط)
                 e.preventDefault();
             });
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
         });
     </script>
 </body>

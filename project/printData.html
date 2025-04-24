@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    color: black;
+    width: 400px;
+}
+
+.invoice-container {
+    width: 380px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Table Styles - أبيض وأسود للطباعة */
+.table1, .table2 {
+    width: 100%;
+    width: 400px;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    border: 2px solid black !important;
+    page-break-inside: avoid; /* لمنع تقسيم الجدول بين صفحات الطباعة */
+}
+
+.table1 th, 
+.table1 td, 
+.table2 th, 
+.table2 td {
+    border: 1px solid black !important;
+    padding: 8px 0px;
+    text-align: right;
+    font-size: 10px;
+    background-color: white !important;
+    color: black !important;
+}
+
+.table1 th, 
+.table2 th {
+    font-weight: bold;
+    background-color: #f0f0f0 !important; /* رمادي فاتح للعناوين */
+}
+
+/* إزالة أي تأثيرات غير ضرورية للطباعة */
+.table1 tr:hover, 
+.table2 tr:hover {
+    background-color: white !important;
+}
+
+/* طباعة التنسيقات */
+@media print {
+    body {
+        padding: 0;
+        margin: 0;
+        background-color: white;
+    }
+    
+    .invoice-container {
+        width: 100%;
+        padding: 0;
+        box-shadow: none;
+    }
+    
+    /* إجبار الطباعة بخلفية بيضاء */
+    table, tr, td, th {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* منع تقسيم الصفوف بين الصفحات */
+    tr {
+        page-break-inside: avoid;
+    }
+}
+
+/* تحديد عرض الأعمدة */
+.table2 th:nth-child(1), .table2 td:nth-child(1) { width: 20%; }
+.table2 th:nth-child(2), .table2 td:nth-child(2) { width: 10%; }
+.table2 th:nth-child(3), .table2 td:nth-child(3) { width: 10%; }
+.table2 th:nth-child(4), .table2 td:nth-child(4) { width: 5%; }
+.table2 th:nth-child(5), .table2 td:nth-child(5) { width: 5%; }
+.table2 th:nth-child(6), .table2 td:nth-child(6) { width: 2%; }
+.table2 th:nth-child(7), .table2 td:nth-child(7) { width: 5%; }
+.table2 th:nth-child(8), .table2 td:nth-child(8) { width: 5%; }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- <div class="print-actions">
+        <button onclick="window.print()">طباعة الفاتورة</button>
+    </div>
+    <hr>
+    
+    <div class="logout-btn">
+        <button id="logoutButton" > انهاء الشيفت </button><br>
+    </div> -->
+    <div class="invoice-container">
+
+        <table class="table1">
+            <tbody id="data-container2">
+            </tbody>
+        </table>
+    
+        <!-- الجدول الثاني -->
+        <table class="table2">
+            <thead>
+                <tr>
+                    <th>رقم العميل</th>
+                    <th>كود العميل</th>
+                    <th>اسم العميل</th>
+                    <th>حضور العميل</th>
+                    <th>انصراف العميل</th>
+                    <th>إجمالي التوصيل</th>
+                    <th>الخصم</th>
+                    <th>الإضافة</th>
+                </tr>
+            </thead>
+            <tbody id="data-container">
+                <!-- البيانات ستضاف هنا عبر الجافا سكريبت -->
+            </tbody>
+        </table>
+    
+    </div>
+    
+    <script>
+        // جلب وعرض بيانات العملاء من Google Sheets  
+        const sheetID = '1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes';
+        const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+        fetch(base)
+            .then(response => response.text())
+            .then(data => {
+                const json = JSON.parse(data.substring(47).slice(0, -2));
+                const tableData = json.table.rows;
+                const dataContainer = document.getElementById('data-container');
+                const dataContainer2 = document.getElementById('data-container2');
+    
+                dataContainer.innerHTML = '';
+    
+                // جلب قيمة الشيفت من اللوكل ستوريج
+                const shiftNumber = localStorage.getItem('shiftNumber');
+    
+                // التحقق من وجود القيمة
+                if (!shiftNumber) {
+                    dataContainer.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</td></tr>';
+                    return;
+                }
+    
+                // فلترة البيانات حسب رقم الشيفت
+                const filteredData = tableData.filter(row => {
+                    const rowShiftNumber = row.c && row.c[6] ? row.c[6].v.toString() : null; // تعديل هنا ليتناسب مع العمود الجديد
+                    return rowShiftNumber === shiftNumber;
+                });
+    
+                // إذا لم توجد بيانات بعد الفلترة
+                if (filteredData.length === 0) {
+                    dataContainer.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد بيانات لهذا الشيفت</td></tr>';
+                    return;
+                }
+    
+                // عرض البيانات المفلترة
+                filteredData.forEach((row) => {
+                    const tr = document.createElement('tr');
+    
+                    const number = row.c && row.c[0] ? row.c[0].v : "0";
+                    const code = row.c && row.c[1] ? row.c[1].v : "غير متوفر";
+                    const name = row.c && row.c[2] ? row.c[2].v : "غير متوفر";
+                    const come = row.c && row.c[3] ? row.c[3].v : "غير محدد"; // حضور
+                    const go = row.c && row.c[4] ? row.c[4].v : "غير محدد"; // انصراف
+                    const total_delivery = row.c && row.c[5] ? row.c[5].v : "غير محدد"; // إجمالي التوصيل
+                    const discount = row.c && row.c[6] ? `${row.c[6].v}%` : "0%"; // خصم
+                    const Additional = row.c && row.c[7] ? row.c[7].v : "غير محدد"; // إضافة
+    
+                    tr.innerHTML = `
+                        <td>${number}</td>
+                        <td>${code}</td>
+                        <td>${name}</td>
+                        <td>${come}</td>
+                        <td>${go}</td>
+                        <td>${total_delivery}</td>
+                        <td>${discount}</td>
+                        <td>${Additional}</td>
+                    `;
+    
+                    dataContainer.appendChild(tr);
+                });
+    
+                // عرض بيانات الجدول الأول (تقارير)
+                dataContainer2.innerHTML = '';
+    
+                // يمكنك إضافة أي بيانات إضافية هنا إذا لزم الأمر
+                const inventoryOfficer = localStorage.getItem('inventoryOfficer') || "غير محدد";
+                const today = new Date();
+                const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+                const todayDate = today.toLocaleDateString('ar-EG', optionsDate);
+    
+                const reportRow = document.createElement('tr');
+                reportRow.innerHTML = `
+                    <td>مسؤول الجرد:</td>
+                    <td>${inventoryOfficer}</td>
+                `;
+                dataContainer2.appendChild(reportRow);
+    
+                const dateRow = document.createElement('tr');
+                dateRow.innerHTML = `
+                    <td>تاريخ اليوم:</td>
+                    <td>${todayDate}</td>
+                `;
+                dataContainer2.appendChild(dateRow);
+    
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('data-container').innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; color: var(--primary);">
+                            حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً
+                        </td>
+                    </tr>
+                `;
+            });
+    </script>
+    
+    <script>
+                const logoutButton = document.getElementById('logoutButton');
+            if(logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.removeItem('inventoryOfficer');
+                    localStorage.removeItem('shiftNumber');
+                    window.location.href = './index.html';
+                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const shiftNumber = localStorage.getItem('shiftNumber');
+                if (!shiftNumber) {
+                    window.location.href = './index.html';
+                } else {
+                    document.getElementById('shiftNumber').textContent = shiftNumber;
+                }
+            });
+    </script>
+
+</body>
+
+</html>
