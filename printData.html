@@ -223,7 +223,20 @@ button[onclick="printInvoice()"]:active {
         </table>
     
     </div> 
+    <script>
+        function printInvoice() {
+            const invoiceContent = document.getElementById('invoice-container').innerHTML;
+            const originalContent = document.body.innerHTML;
 
+            document.body.innerHTML = invoiceContent;
+
+            window.print();
+
+            document.body.innerHTML = originalContent;
+            location.reload(); // إعادة تحميل الصفحة لضمان استعادة الحالة الأصلية
+        }
+    </script>
+    
     <button onclick="printInvoice()">طباعة الفاتورة</button>
     
     <div class="logout-btn">
@@ -231,6 +244,73 @@ button[onclick="printInvoice()"]:active {
     </div>  
 
     <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const shiftNumber = localStorage.getItem('shiftNumber');
+    
+    if (!shiftNumber) {
+        console.error('لم يتم العثور على رقم الشيفت في localStorage');
+        return;
+    }
+
+    const url = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
+    
+    let totalStatementsSum = 0;
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const jsonData = JSON.parse(data.substring(47).slice(0, -2));
+            const rows = jsonData.table.rows;
+            
+            const filteredRows = rows.filter(row => {
+                const rowShiftNumber = row.c[2]?.v;
+                return rowShiftNumber == shiftNumber;
+            });
+            
+            filteredRows.forEach(row => {
+                const statementValue = row.c[1]?.v;
+                const numericValue = parseFloat(statementValue) || 0;
+                totalStatementsSum += numericValue;
+            });
+            
+            // تخزين المجموع في localStorage
+            localStorage.setItem('totalStatementsSum', totalStatementsSum.toString());
+            console.log('تم تخزين المجموع في localStorage:', totalStatementsSum);
+            
+            const container = document.getElementById('data-container1');
+            
+            filteredRows.forEach(row => {
+                const name = row.c[0]?.v || '';
+                const statement = row.c[1]?.v || '';
+                
+                const tr = document.createElement('tr');
+                
+                const tdName = document.createElement('td');
+                tdName.textContent = name;
+                tr.appendChild(tdName);
+                
+                const tdStatement = document.createElement('td');
+                tdStatement.textContent = statement;
+                tr.appendChild(tdStatement);
+                
+                container.appendChild(tr);
+            });
+            
+            console.log('المجموع الكلي لقيم البيان:', totalStatementsSum);
+            
+            // يمكنك الآن استرجاع القيمة في أي وقت باستخدام:
+            // const savedTotal = localStorage.getItem('totalStatementsSum');
+        })
+        .catch(error => {
+            console.error('حدث خطأ أثناء جلب البيانات:', error);
+        });
+});
+
+        
+   </script>
+
+    <script>
+
         // جلب وعرض بيانات العملاء من Google Sheets 
         const sheetID = '1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes';
         const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
@@ -327,13 +407,20 @@ button[onclick="printInvoice()"]:active {
                     dataContainer.appendChild(tr);
                 });
     
-                // إضافة صف الإجمالي
-                const totalRow = document.createElement('tr');
-                totalRow.innerHTML = `
-                    <td colspan="8" style="text-align: "><h2>اجمالي المصروفات :</h2></td>
-                    <td>${totalNet.toFixed(2)}</td>
-                `;
-                dataContainer.appendChild(totalRow);
+                    // إضافة صف الإجمالي
+                    const totalRow = document.createElement('tr');
+
+                    // جلب القيمة من localStorage وتحويلها إلى رقم
+                    const totalStatementsSum = parseFloat(localStorage.getItem('totalStatementsSum')) || 0;
+
+                    // حساب الإجمالي الكلي
+                    const grandTotal = totalNet + totalStatementsSum;
+
+                    totalRow.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
+                        <td><h2>${grandTotal.toFixed(2)}</h2></td>
+                    `;
+                    dataContainer.appendChild(totalRow);
     
                 // عرض بيانات الجدول الأول (تقارير)
                 dataContainer2.innerHTML = '';
@@ -371,67 +458,6 @@ button[onclick="printInvoice()"]:active {
     </script>
 
     <script>
- document.addEventListener('DOMContentLoaded', function() {
-    // جلب رقم الشيفت من localStorage
-    const shiftNumber = localStorage.getItem('shiftNumber');
-    
-    // إذا لم يوجد رقم شيفت مخزن، نستخدم قيمة افتراضية أو نوقف التنفيذ
-    if (!shiftNumber) {
-        console.error('لم يتم العثور على رقم الشيفت في localStorage');
-        return;
-    }
-
-    // رابط جدول Google Sheets
-    const url = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
-    
-    // جلب البيانات من الجدول
-    fetch(url)
-        .then(response => response.text())
-        .then(data => {
-            // تحويل البيانات من JSON
-            const jsonData = JSON.parse(data.substring(47).slice(0, -2));
-            
-            // استخراج الصفوف من البيانات
-            const rows = jsonData.table.rows;
-            
-            // فلترة الصفوف بناءً على رقم الشيفت المطابق
-            const filteredRows = rows.filter(row => {
-                const rowShiftNumber = row.c[2]?.v; // العمود الثالث (shiftNumber)
-                return rowShiftNumber == shiftNumber;
-            });
-            
-            // الحصول على عنصر tbody لعرض البيانات
-            const container = document.getElementById('data-container1');
-            
-            // عرض البيانات المفلترة
-            filteredRows.forEach(row => {
-                const name = row.c[0]?.v || ''; // العمود الأول (name)
-                const statement = row.c[1]?.v || ''; // العمود الثاني (statement)
-                
-                // إنشاء صف جديد في الجدول
-                const tr = document.createElement('tr');
-                
-                // إنشاء خلية الاسم
-                const tdName = document.createElement('td');
-                tdName.textContent = name;
-                tr.appendChild(tdName);
-                
-                // إنشاء خلية البيان
-                const tdStatement = document.createElement('td');
-                tdStatement.textContent = statement;
-                tr.appendChild(tdStatement);
-                
-                // إضافة الصف إلى الجدول
-                container.appendChild(tr);
-            });
-        })
-        .catch(error => {
-            console.error('حدث خطأ أثناء جلب البيانات:', error);
-        });
-});
-    </script>
-        
-    <script>
                 const logoutButton = document.getElementById('logoutButton');
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
@@ -452,20 +478,7 @@ button[onclick="printInvoice()"]:active {
             });
     </script>
 
-    <script>
-        function printInvoice() {
-            const invoiceContent = document.getElementById('invoice-container').innerHTML;
-            const originalContent = document.body.innerHTML;
 
-            document.body.innerHTML = invoiceContent;
-
-            window.print();
-
-            document.body.innerHTML = originalContent;
-            location.reload(); // إعادة تحميل الصفحة لضمان استعادة الحالة الأصلية
-        }
-    </script>
-    
 </body>
 
 </html>
