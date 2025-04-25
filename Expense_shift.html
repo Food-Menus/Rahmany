@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="./style.css">
     <title>The Rahmany Management</title>
     <style>
             /* تنسيق عام - متوافق مع الكود السابق */
@@ -26,6 +26,64 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        #logoutButton {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #logoutButton .fas {
+            color: white;
+            font-size: 1em;
+        }
+
+                /* تنسيق الناف بار */
+                .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
 
         /* تنسيق الهيدر */
         .header {
@@ -393,6 +451,15 @@
 </head>
 
 <body>
+
+    <!-- الناف بار -->
+    <nav class="navbar">
+        <div class="logo">نظام ادارة بيانات الرحماني</div>
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-sign-out-alt"></i> <button id="logoutButton" > تسجيل خروج</button><br>   </a>
+        </div>
+    </nav>
+    
     <div class="header">
         <h1>بيانات دليفري الوردية </h1>
     </div>

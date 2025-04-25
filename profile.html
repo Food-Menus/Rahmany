@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./style.css">
     <title>The Rahmany Management</title>
     <style>
         /* تنسيق عام للصفحة */
@@ -173,18 +173,40 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        #logoutButton {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+            margin: 0;
+            font: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #logoutButton .fas {
+            color: white;
+            font-size: 1em;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
+
 <body>
+
     <!-- الناف بار -->
     <nav class="navbar">
-        <div class="logo">نظام الشيفتات</div>
+        <div class="logo">نظام ادارة بيانات الرحماني</div>
         <div class="nav-links">
-            <a href="#"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i> <button id="logoutButton" > تسجيل خروج</button><br>   </a>
         </div>
     </nav>
+    
     
     <!-- المحتوى الرئيسي -->
     <div class="main-content">
@@ -235,6 +257,16 @@
                 }, 500);
             });
         });
+
+        const logoutButton = document.getElementById('logoutButton');
+            if(logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.removeItem('inventoryOfficer');
+                    localStorage.removeItem('shiftNumber');
+                    window.location.href = './index.html';
+                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+                });
+            }
     </script>
 
     <script>
@@ -272,4 +304,5 @@
     </script>
 
 </body>
+
 </html>
