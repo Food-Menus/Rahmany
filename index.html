@@ -1,99 +1,126 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="./style.css">
     <title>The Rahmany Management</title>
+
 </head>
-
-
 <body>
-<!--*************************************************************************************************-->
-<!--*************************************************************************************************-->
-<!--Codes-->
+<div class="startform">
 
-<main>
-    <div class="login-container">
-        <h2>تسجيل دخول الوردية</h2>
-        <form id="loginForm">
+    <h1> مرحبا بك </h1>
+    <form id="loginForm">
+        <p>  برجاء ادخال اسمك و رقم الودية الجديدة  </p><br>
+        <input type="text" id="username" name="username"  placeholder="اسم المستخدم" required>
+        <input type="text" id="shiftNum" name="shiftNum" placeholder="رقم الشيفت" required>
+        <button type="submit" class="Create-btn" id="submitBtn">بحث</button>
+    </form>
 
-            <div class="form-group">
-                <label for="inventoryOfficer">مسئول الوردية</label>
-                <input type="text" id="inventoryOfficer" required>
-            </div>
-
-            <div class="form-group">
-                <label for="shiftNumber">رقم الوردية</label>
-                <input type="text" id="shiftNumber" required>
-            </div>    
-
-            <button type="submit">تسجيل الدخول</button>
-
-        </form>
-    </div>
-</main>
-
-<!--*************************************************************************************************-->
-<!--*************************************************************************************************-->
-<!--script-->
-
+</div>
     <script>
-
-
-//####################################################################################################//
-//####################################################################################################//
-//## مسح اللوكل استوريدج من اللي فيها ##//
-
-        // استهداف حقول الإدخال التي قد تكون لها قيم محفوظة
-        const shiftNumberInput = document.getElementById('shiftNumber');
-        const inventoryOfficerInput = document.getElementById('inventoryOfficer');
-
-        // مسح القيم من localStorage والحقول إذا كانت موجودة عند التحميل
-        if (localStorage.getItem('shiftNumber')) {
-            localStorage.removeItem('shiftNumber');
-            if (shiftNumberInput) {
-                shiftNumberInput.value = '';
-            }
-        }
-
-        if (localStorage.getItem('inventoryOfficer')) {
-            localStorage.removeItem('inventoryOfficer');
-            if (inventoryOfficerInput) {
-                inventoryOfficerInput.value = '';
-            }
-        }
-   
-//####################################################################################################//
-//####################################################################################################//
-//## تسجيل القيم الجديده في اللوكل استوريدج ##//
-
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // الحصول على القيم من الحقول
-            const shiftNumber = document.getElementById('shiftNumber').value;
-            const inventoryOfficer = document.getElementById('inventoryOfficer').value;
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // تعطيل الزر وإظهار حالة التحميل
+    submitBtn.classList.add('loading');
+    
+  
+    
+    // محاكاة انتظار الطلب (استبدل هذا بالوظيفة الفعلية)
+    setTimeout(function() {
+        submitBtn.classList.remove('loading');
+        loadingMessage.style.display = 'none';
+        
+    }, 3000);
+});
+    </script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const shiftNum = document.getElementById('shiftNum').value.trim();
+        
+            fetch('https://docs.google.com/spreadsheets/d/1a3pDcgzbcHsl3TNfgNQJGD_CZ3AcL1rvnubuXE8aAVI/gviz/tq?tqx=out:json')
+                .then(response => response.text())
+                .then(data => {
+                    const jsonString = data.match(/google\.visualization\.Query\.setResponse\(([\s\S]+?)\);/)[1];
+                    const jsonData = JSON.parse(jsonString);
+                    const rows = jsonData.table.rows;
+                    let shiftExists = false;
+        
+                    for (let row of rows) {
+                        const rowData = row.c;
+                        if (rowData && rowData[0] && rowData[1] &&
+                            rowData[1].v.toString().trim() === shiftNum) {
+                            shiftExists = true;
+                            break;
+                        }
+                    }
+        
+                    if (shiftExists) {
+                        alert('الشيفت دي مسجلة من قبل');
+                    } else {
+                        submitForm();
+                    }
+                })
+                .catch(error => {
+                    console.error('حدث خطأ:', error);
+                });
+        });
+        
+        function submitForm() {
+            const scriptURL = "https://script.google.com/macros/s/AKfycbxmBCI1UdreaxaEZi87rXOEdpQjKcrGpTvusT33pv_my4ZyraFZyXiRpx745nf5ahvy/exec";
+            const form = document.forms["loginForm"];
+            const submitBtn = document.getElementById("submitBtn");
+            const formData = new FormData(form);
+            const formObject = Object.fromEntries(formData.entries());
+            const username = document.getElementById('username').value.trim();
+            const shiftNum = document.getElementById('shiftNum').value.trim();
             const redirectURL = './profile.html'; 
 
-            // التحقق من عدم وجود حقول فارغة
-            if (!shiftNumber || !inventoryOfficer) {
-                alert('يرجى ملء جميع الحقول المطلوبة');
-                return;
-            }
-            
-            // حفظ البيانات في localStorage
-            localStorage.setItem('shiftNumber', shiftNumber);
-            localStorage.setItem('inventoryOfficer', inventoryOfficer);
-            
-            // إعادة تعيين النموذج
-            this.reset();
+            // تخزين الإدخال الجديد بشكل منفصل
+            localStorage.setItem('shiftNumber', shiftNum);
+            localStorage.setItem('username', username);
+        
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire('تم بنجاح', 'تم تسجيل الدخول بنجاح', 'success');
+                    form.reset();
+                    setTimeout(function() { window.location.href = redirectURL;}, 500); 
 
-            setTimeout(function() { window.location.href = redirectURL;}, 500); 
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                Swal.fire('خطأ', 'حدث خطأ أثناء محاولة التسجيل', 'error');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+            });
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                console.log('يجب ان تسجل دخول')
+            } else {
+                window.location.href = './profile.html';
+
+            }
         });
-    
     </script>
 </body>
 </html>

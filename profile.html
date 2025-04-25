@@ -1,89 +1,274 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Rahmany Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./style.css">
-
-</head>
-
-<body>
-<!--###############################################################################################-->
-<!--###############################################################################################-->
-<!--sidebar-->
-<div class="sidebar">
-    <h2 class="logo">The Rahmany Management</h2>
-    <div class="sidebar-menus">
-        <a href="#" class="menu-off">إغلاق</a>
-    </div>
-</div>
-<!--###############################################################################################-->
-<!--###############################################################################################-->
-<!--navbar-->
-<div class="navbar">
-    <div class="menu-toggle">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;">
-            <path d="M5 5H13V19H5V5ZM19 19H15V5H19V19ZM4 3C3.44772 3 3 3.44772 3 4V20C3 20.5523 3.44772 21 4 21H20C20.5523 21 21 20.5523 21 20V4C21 3.44772 20.5523 3 20 3H4ZM7 12L11 8.5V15.5L7 12Z"></path>
-        </svg>
-    </div>
-    
-    <img class="head-img" src="./اساسيات/logo-white.png" alt="شعار المعهد">
-    
-    <a href="./Location.html" class="user">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" style="color: aliceblue;"  >
-            <path d="M12 20.8995L16.9497 15.9497C19.6834 13.2161 19.6834 8.78392 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.31658 8.78392 4.31658 13.2161 7.05025 15.9497L12 20.8995ZM12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM12 13C13.1046 13 14 12.1046 14 11C14 9.89543 13.1046 9 12 9C10.8954 9 10 9.89543 10 11C10 12.1046 10.8954 13 12 13ZM12 15C9.79086 15 8 13.2091 8 11C8 8.79086 9.79086 7 12 7C14.2091 7 16 8.79086 16 11C16 13.2091 14.2091 15 12 15Z"></path>
-        </svg>
-    </a>
-</div>
-<!--###############################################################################################-->
-<!--###############################################################################################-->
-<!--main--><div class="main">
-
-<!---------------------------------------------------------------->
-
-
-
-    <div class="main-nav-buttons">
-
-        <a href="./Expense_shift.html" class="nav-btn">
-            <i class="fas fa-utensils"></i>
-            <span>  مصاريف الدليفري  </span>
-        </a>
-        <br>
-
-        <a href="./project/index.html" class="nav-btn">
-            <i class="fas fa-utensils"></i>
-            <span>   تجريبي  </span>
-        </a>
-
-    </div>
-
-
-
-<!---------------------------------------------------------------->
-</div>
-
-<!--###############################################################################################-->
-<!--###############################################################################################-->
-<!--script-->
-<script src="./javascript.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const shiftNumber = localStorage.getItem('shiftNumber');
-        if (!shiftNumber) {
-            window.location.href = './index.html';
-        } else {
-            document.getElementById('shiftNumber').textContent = shiftNumber;
+    <title>The Rahmany Management</title>
+    <style>
+        /* تنسيق عام للصفحة */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            min-height: 100vh;
+            color: #fff;
         }
-    });
-</script>
-</body>
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* تنسيق الناف بار */
+        .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* تنسيق المحتوى الرئيسي */
+        .main-content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        /* تنسيق الأزرار */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .main-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            text-decoration: none;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .main-btn:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .main-btn i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .main-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: all 0.5s ease;
+        }
+
+        .main-btn:hover::after {
+            left: 100%;
+        }
+
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* تنسيق للهواتف */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- رابط أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- الناف بار -->
+    <nav class="navbar">
+        <div class="logo">نظام الشيفتات</div>
+        <div class="nav-links">
+            <a href="#"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+        </div>
+    </nav>
+    
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <h1 class="page-title">لوحة التحكم الرئيسية</h1>
+        
+        <div class="buttons-grid">
+            
+            <a href="Expense_shift.html" class="main-btn">
+                <i class="fas fa-table"></i>
+                قائمة الشيفتات
+            </a>
+
+            <a href="./statement.html" class="main-btn">
+                <i class="fas fa-list-alt"></i>
+                اضافه بيان
+            </a>
+
+            <a href="searsh.html" class="main-btn">
+                <i class="fas fa-search"></i>
+                البحث عن الشيفت نمبر
+            </a>
+
+            <!-- <a href="page3.html" class="main-btn">
+                <i class="fas fa-chart-line"></i>
+                التقارير والإحصائيات
+            </a>
+            
+            <a href="page4.html" class="main-btn">
+                <i class="fas fa-users"></i>
+                إدارة المستخدمين
+            </a> -->
+
+        </div>
+    </div>
+
+    <script>
+        // إضافة تأثير عند الضغط على الأزرار
+        document.querySelectorAll('.main-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // التأثير المرئي فقط
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                this.style.pointerEvents = 'none';
+                
+                // الانتقال بعد تأخير بسيط
+                setTimeout(() => {
+                    window.location.href = this.getAttribute('href');
+                }, 500);
+            });
+        });
+    </script>
+
+    <script>
+        // إضافة تأثير عند الضغط على الأزرار
+        document.querySelectorAll('.main-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // يمكنك إضافة تأثير التحميل هنا إذا كنت تريد
+                // هذا مثال:
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحميل...';
+                this.style.pointerEvents = 'none';
+                
+                // محاكاة الانتظار قبل الانتقال للصفحة
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = 'auto';
+                    // window.location.href = this.href; // إلغاء التعليق إذا كنت تريد الانتقال فورًا
+                }, 1000);
+                
+                // لمنع الانتقال الفوري (لأغراض العرض فقط)
+                e.preventDefault();
+            });
+        });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
+    </script>
+</body>
 </html>

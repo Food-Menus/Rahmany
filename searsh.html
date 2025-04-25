@@ -213,9 +213,7 @@
     <div class="navbar">
         <div class="logo">نظام إدارة الشيفتات</div>
         <div class="nav-links">
-            <a href="#">الصفحة الرئيسية</a>
-            <a href="#">الإعدادات</a>
-            <a href="#">التقارير</a>
+            <a href="./index.html">الصفحة الرئيسية</a>
         </div>
     </div>
 
@@ -279,27 +277,6 @@
                     });
             }
             
-            function parseGoogleSheetDate(dateStr) {
-                if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
-                
-                const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
-                if (!parts) return "غير محدد";
-                
-                const year = 1899 + parseInt(parts[1], 10);
-                const month = parseInt(parts[2], 10);
-                const day = parseInt(parts[3], 10);
-                const hour = parseInt(parts[4], 10);
-                const minute = parseInt(parts[5], 10);
-                
-                const date = new Date(year, month, day, hour, minute);
-                
-                const ampm = hour >= 12 ? 'PM' : 'AM';
-                const formattedHours = (hour % 12 || 12).toString();
-                const formattedMinutes = minute.toString().padStart(2, '0');
-                
-                return `${formattedHours}:${formattedMinutes}${ampm}`;
-            }
-            
             function displayResults(rows) {
                 if (rows.length === 0) {
                     resultsContainer.innerHTML = '<div class="no-results">لا توجد نتائج تطابق رقم الشيفت المطلوب</div>';
@@ -326,31 +303,18 @@
                 `;
                 
                 rows.forEach(row => {
-                    const name = row.c && row.c[0] ? row.c[0].v : "0";
-                    const time1 = row.c && row.c[1] ? row.c[1].v : null;
-                    const time2 = row.c && row.c[2] ? row.c[2].v : null;
-                    const total_delivery = row.c && row.c[3] ? row.c[3].v : "غير متوفر";
-                    const discount = row.c && row.c[4] ? row.c[4].v : "غير محدد";
-                    const Additional = row.c && row.c[5] ? row.c[5].v : "غير محدد";
-                    const Services = row.c && row.c[7] ? row.c[7].v : "غير محدد";
-                    const net = row.c && row.c[8] ? row.c[8].v : "غير محدد";
-                    const time3 = row.c && row.c[9] ? row.c[9].v : "غير محدد";
-                    
-                    const come = time1 ? parseGoogleSheetDate(time1) : "غير محدد";
-                    const go = time2 ? parseGoogleSheetDate(time2) : "غير محدد";
-                    const total_hours = time3 ? parseGoogleSheetDate(time3) : "غير محدد";
-                    
+                    const cells = row.c;
                     tableHTML += `
                         <tr>
-                            <td>${name}</td>
-                            <td>${come}</td>
-                            <td>${go}</td>
-                            <td>${total_delivery}</td>
-                            <td>${discount}</td>
-                            <td>${Additional}</td>
-                            <td>${Services}</td>
-                            <td>${net}</td>
-                            <td>${total_hours}</td>
+                            <td>${cells[0]?.v || ''}</td>
+                            <td>${cells[1]?.v || ''}</td>
+                            <td>${cells[2]?.v || ''}</td>
+                            <td>${cells[3]?.v || ''}</td>
+                            <td>${cells[4]?.v || ''}</td>
+                            <td>${cells[5]?.v || ''}</td>
+                            <td>${cells[7]?.v || ''}</td>
+                            <td>${cells[8]?.v || ''}</td>
+                            <td>${cells[9]?.v || ''}</td>
                         </tr>
                     `;
                 });

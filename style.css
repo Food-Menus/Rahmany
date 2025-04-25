@@ -120,25 +120,187 @@
 /**********************************************************************************/
 /**********************************************************************************/
 /** navbar **/
+/* تنسيق عام للصفحة */
+.startform{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
 
-    .marquee {
-        width: 100%;
-        padding: 10px 0;
-        background: var(--dark);
-        color: white;
-        margin: 15px 0;
-        overflow: hidden;
-        white-space: nowrap;
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* تنسيق العنوان */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeInDown 1s ease;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: #fff;
+    border-radius: 2px;
+}
+
+/* تنسيق النموذج */
+#loginForm {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    max-width: 90%;
+    animation: fadeInUp 1s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* تنسيق حقول الإدخال */
+input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+input::placeholder {
+    color: #666;
+    opacity: 1;
+}
+
+/* تنسيق الزر */
+.Create-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(to right, #ff8a00, #da1b60);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(218, 27, 96, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.Create-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(218, 27, 96, 0.6);
+}
+
+.Create-btn:active {
+    transform: translateY(1px);
+}
+
+.Create-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(30deg);
+    transition: all 0.3s ease;
+}
+
+.Create-btn:hover::after {
+    left: 100%;
+}
+
+/* تأثيرات عند الضغط على الزر */
+.Create-btn.loading {
+    pointer-events: none;
+    background: linear-gradient(to right, #6b6b6b, #3a3a3a);
+}
+
+.Create-btn.loading::before {
+    content: 'جاري تجهيز طلبك...';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #6b6b6b, #3a3a3a);
+    border-radius: 8px;
+}
+
+/* الرسالة الظاهرة */
+.loading-message {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    animation: fadeIn 0.5s ease;
+}
+
+/* تأثيرات الحركة */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
     }
-    .marquee p {
-        display: inline-block;
-        padding-left: 100%;
-        animation: marquee 15s linear infinite;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-100%); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 /**********************************************************************************/
 /**********************************************************************************/
