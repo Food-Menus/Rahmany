@@ -21,7 +21,6 @@
             width: 380px;
             margin: 0 auto;
             padding: 10px;
-            
         }
     
         /* Table Styles - أبيض وأسود للطباعة */
@@ -30,7 +29,7 @@
             border-collapse: collapse;
             margin-bottom: 15px;
             border: 3px solid black !important;
-            page-break-inside: avoid; /* لمنع تقسيم الجدول بين صفحات الطباعة */
+            page-break-inside: avoid;
             text-align: center;
         }
     
@@ -38,21 +37,20 @@
         .table1 td{
             border: 3px solid black !important;
             padding: 8px 0px;
-            text-align: center; /* محاذاة النص إلى المنتصف */
+            text-align: center;
             font-size: 10px;
             font-weight: bold;
             background-color: white !important;
             color: black !important;
             font-size: 20px;
             width: 50%;
-
         }
 
         .table2 th, 
         .table2 td {
             border: 3px solid black !important;
             padding: 8px 0px;
-            text-align: center; /* محاذاة النص إلى المنتصف */
+            text-align: center;
             font-size: 10px;
             font-weight: bold;
             background-color: white !important;
@@ -62,13 +60,12 @@
         .table1 th, 
         .table2 th {
             border: 3px solid black !important;
-            background-color: #f0f0f0 ; /* رمادي فاتح للعناوين */
-            writing-mode: vertical-rl; /* الكتابة بالطول */
-            transform: rotate(180deg); /* عكس الكتابة */
-            height: 100px; /* ارتفاع العنوان */
-            vertical-align: center; /* محاذاة النص إلى الأسفل */
+            background-color: #f0f0f0;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            height: 100px;
+            vertical-align: center;
             font-size: 13px;
-
         }
     
         /* إزالة أي تأثيرات غير ضرورية للطباعة */
@@ -79,17 +76,23 @@
     
         /* طباعة التنسيقات */
         @media print {
+            @page {
+                size: auto;
+                margin: 0mm;
+            }
+            
             body {
                 padding: 0;
                 margin: 0;
                 background-color: white;
+                width: 100%;
             }
             
             .invoice-container {
                 width: 100%;
                 padding: 0;
+                margin: 0;
                 box-shadow: none;
-
             }
             
             /* إجبار الطباعة بخلفية بيضاء */
@@ -102,15 +105,26 @@
             tr {
                 page-break-inside: avoid;
                 border: 3px solid black !important;
-
             }
-
-
+            
+            /* تحسين حجم الخطوط للطباعة */
+            .table1, .table2 {
+                font-size: 12px !important;
+            }
+            
+            .table1 th, .table1 td,
+            .table2 th, .table2 td {
+                padding: 4px 0px !important;
+            }
+            
+            /* إخفاء العناصر غير الضرورية */
+            button, .logout-btn {
+                display: none !important;
+            }
         }
     
         /* تحديد عرض الأعمدة */
         .table2 th:nth-child(1), .table2 td:nth-child(1) { width: 12%; }
-        .table2 th:nth-child(2), .table2 td:nth-child(2) { width: 10%; }
         .table2 th:nth-child(2), .table2 td:nth-child(2) { width: 10%; }
         .table2 th:nth-child(3), .table2 td:nth-child(3) { width: 10%; }
         .table2 th:nth-child(4), .table2 td:nth-child(4) { width: 10%; }
@@ -118,71 +132,58 @@
         .table2 th:nth-child(6), .table2 td:nth-child(6) { width: 3%; }
         .table2 th:nth-child(7), .table2 td:nth-child(7) { width: 3%; }
         .table2 th:nth-child(8), .table2 td:nth-child(8) { width: 5%; }
-        .table2 th:nth-child(9), .table2 td:nth-child(8) { width: 5%; }
-
-
-
-
+        .table2 th:nth-child(9), .table2 td:nth-child(9) { width: 5%; }
 
         /* تنسيق عام للأزرار */
-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
 
-}
+        /* زر طباعة الفاتورة */
+        button[onclick="printInvoice()"] {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-/* زر طباعة الفاتورة */
-button[onclick="printInvoice()"] {
-  background-color: #4CAF50; /* أخضر */
-  color: white;
-  
-}
+        button[onclick="printInvoice()"]:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-button[onclick="printInvoice()"]:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        button[onclick="printInvoice()"]:active {
+            transform: translateY(0);
+        }
 
-button[onclick="printInvoice()"]:active {
-  transform: translateY(0);
-}
+        /* زر إنهاء الشيفت */
+        #logoutButton {
+            background-color: #f44336;
+            color: white;
+        }
 
-/* زر إنهاء الشيفت */
-#logoutButton {
-  background-color: #f44336; /* أحمر */
-  color: white;
-}
+        #logoutButton:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-#logoutButton:hover {
-  background-color: #d32f2f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        #logoutButton:active {
+            transform: translateY(0);
+        }
 
-#logoutButton:active {
-  transform: translateY(0);
-}
-
-/* تنسيق div المحتوي على زر إنهاء الشيفت */
-.logout-btn {
-  text-align: center;
-  margin-top: 20px;
-}
-
-/* تأثيرات عند الطباعة */
-@media print {
-  button, .logout-btn {
-    display: none !important;
-  }
-}
+        /* تنسيق div المحتوي على زر إنهاء الشيفت */
+        .logout-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
     
 </head>
@@ -223,6 +224,13 @@ button[onclick="printInvoice()"]:active {
         </table>
     
     </div> 
+
+    <button onclick="printInvoice()">طباعة الفاتورة</button>
+    
+    <div class="logout-btn">
+        <button id="logoutButton" > انهاء الشيفت </button><br>
+    </div>  
+
     <script>
         function printInvoice() {
             const invoiceContent = document.getElementById('invoice-container').innerHTML;
@@ -236,12 +244,6 @@ button[onclick="printInvoice()"]:active {
             location.reload(); // إعادة تحميل الصفحة لضمان استعادة الحالة الأصلية
         }
     </script>
-    
-    <button onclick="printInvoice()">طباعة الفاتورة</button>
-    
-    <div class="logout-btn">
-        <button id="logoutButton" > انهاء الشيفت </button><br>
-    </div>  
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -418,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     totalRow.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
-                        <td><h2>${grandTotal.toFixed(2)}</h2></td>
+                        <td>${grandTotal.toFixed(2)}</td>
                     `;
                     dataContainer.appendChild(totalRow);
     
