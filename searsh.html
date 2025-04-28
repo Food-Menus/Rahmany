@@ -1,31 +1,169 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Rahmany Management</title>
+    <title>بحث عن الشيفت نبر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* تنسيق عام للصفحة */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            font-family: 'Tajawal', sans-serif;
+            background-color: white;
             margin: 0;
-            min-height: 100vh;
-            color: #fff;
+            font-weight: bold;
+            padding: 0;
+            color: black;
+            width: 100%;
+        }
+    
+        .invoice-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+    
+        .search-box {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    
+        .search-box input {
+            padding: 10px;
+            margin-left: 10px;
+            border: 2px solid black;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: bold;
+        }
+    
+        .search-box button {
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    
+        /* Table Styles - أبيض وأسود */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .table1, .table2, .table3 {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid black !important;
+            text-align: center;
+            border: 2px solid black !important;
+
+        }
+    
+        .table1 th, 
+        .table1 td,
+        .table2 th, 
+        .table2 td,
+        .table3 th,
+        .table3 td {
+            border: 2px solid black !important;
+            padding: 8px 2px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            background-color: white !important;
+            color: black !important;
+        }
+    
+        .table1 th, 
+        .table2 th,
+        .table3 th {
+            background-color: #f0f0f0;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            height: 100px;
+            vertical-align: center;
+            font-size: 13px;
+        }
+    
+        /* إزالة أي تأثيرات غير ضرورية */
+        .table1 tr:hover, 
+        .table2 tr:hover,
+        .table3 tr:hover {
+            background-color: white !important;
+        }
+    
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 20px;
+        }
+    
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
         }
 
-        /* تنسيق الناف بار */
+        /* تنسيق خاص بحقول الوقت */
+        .time-cell {
+            font-family: monospace;
+            white-space: nowrap;
+            direction: ltr;
+            padding: 5px;
+        }
+
+
+
+
+
+                
+        .printDiv {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+            margin-right: 38%;
+        }
+        
+        .printDiv:hover {
+            background-color: #0056b3;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #table1-container, #table1-container * {
+                visibility: visible;
+            }
+            #table1-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            button {
+                display: none;
+            }
+        }
+
+
+
+
+
+
+                        /* تنسيق الناف بار */
         .navbar {
-            background: rgba(0, 0, 0, 0.3);
+            width: 100%;
+            background: linear-gradient(135deg, #b21f1f, #fdbb2d);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
@@ -34,7 +172,10 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             position: sticky;
             top: 0;
+            font-weight: bold;
+            font-size: 20px;
             z-index: 100;
+            color: #ffffff;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -59,316 +200,219 @@
         }
 
         .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        #logoutButton {
-            background: none;
-            border: none;
-            color: white;
-            padding: 0;
-            margin: 0;
-            font: inherit;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+            background: rgba(255, 61, 61, 0.2);
         }
 
-        #logoutButton .fas {
-            color: white;
-            font-size: 1em;
-        }
-
-        /* تنسيق المحتوى الرئيسي */
-        .main-content {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease;
-        }
-
-        .page-title {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .page-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: #fff;
-            border-radius: 2px;
-        }
-
-        /* تنسيق مربع البحث */
-        .search-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            gap: 1rem;
-        }
-
-        .search-input {
-            padding: 0.8rem 1.2rem;
-            border-radius: 30px;
-            border: none;
-            width: 300px;
-            font-size: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .search-btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            border: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .search-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        /* تنسيق جدول النتائج */
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .results-table th, .results-table td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .results-table th {
-            background: rgba(0, 0, 0, 0.2);
-            font-weight: bold;
-        }
-
-        .results-table tr:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .no-results {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* تأثيرات الحركة */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* تنسيق للهواتف */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
-            .nav-links {
-                margin-top: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .search-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .search-input {
-                width: 100%;
-            }
-            
-            .results-table {
-                font-size: 0.9rem;
-            }
-            
-            .results-table th, .results-table td {
-                padding: 0.5rem;
-            }
-        }
     </style>
-
 </head>
-
 <body>
-
     <!-- الناف بار -->
     <nav class="navbar">
         <div class="logo">نظام ادارة بيانات الرحماني</div>
         <div class="nav-links">
-            <a href="#"><i class="fas fa-sign-out-alt"></i> <button id="logoutButton" > تسجيل خروج</button><br>   </a>
+            <a href="./index.html"> رجوع  </a>
         </div>
     </nav>
     
 
-    <div class="main-content">
-        <h1 class="page-title">بحث بيانات الشيفت</h1>
-        
-        <div class="search-container">
-            <input type="text" class="search-input" id="shiftNumber" placeholder="ادخل رقم الشيفت">
-            <button class="search-btn" id="searchBtn">بحث</button>
+    <div class="invoice-container">
+        <div class="search-box">
+            <h1>  البحث عن وردية قديمة  </h1>
+            <input type="text" id="shiftNumber" placeholder="أدخل رقم الوردية">
+            <button onclick="searchData()" >بحث</button>
         </div>
-        
-        <div id="resultsContainer"></div>
+
+        <div id="table1-container" class="table-container">
+            <div id="table1-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table2-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table3-data" class="no-data">لا توجد بيانات لعرضها</div>
+        </div>
     </div>
 
-    <script>
+    <button onclick="printDiv()" class="printDiv">طباعة الجداول</button>
 
-        const logoutButton = document.getElementById('logoutButton');
-            if(logoutButton) {
-                logoutButton.addEventListener('click', () => {
-                    localStorage.removeItem('inventoryOfficer');
-                    localStorage.removeItem('shiftNumber');
-                    window.location.href = './index.html';
-                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+    <script>
+        function printDiv() {
+            window.print();
+        }
+    </script>
+
+    <script>
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
+                return JSON.parse(jsonString);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                return null;
+            }
+        }
+
+        function formatTime(timeValue) {
+            if (!timeValue) return '';
+            
+            // إذا كان الوقت في صيغة ساعة:دقيقة (مثل 14:30)
+            if (typeof timeValue === 'string' && timeValue.includes(':')) {
+                return timeValue;
+            }
+            
+            // إذا كان الوقت رقم (مثل 0.5 لتمثل 12:00)
+            if (typeof timeValue === 'number') {
+                const date = new Date(timeValue * 24 * 60 * 60 * 1000);
+                return date.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
                 });
             }
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchBtn = document.getElementById('searchBtn');
-            const shiftNumberInput = document.getElementById('shiftNumber');
-            const resultsContainer = document.getElementById('resultsContainer');
             
-            searchBtn.addEventListener('click', searchShiftData);
-            shiftNumberInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchShiftData();
-                }
+            return timeValue;
+        }
+
+        function createTable(data, columns, tableClass) {
+            if (!data || data.length === 0) {
+                return '<div class="no-data">لا توجد بيانات لعرضها</div>';
+            }
+
+            let table = `<table class="${tableClass}"><thead><tr>`;
+            
+            // Create table headers
+            columns.forEach(col => {
+                table += `<th>${col}</th>`;
             });
             
-            function searchShiftData() {
-                const shiftNumber = shiftNumberInput.value.trim();
-                
-                if (!shiftNumber) {
-                    alert('الرجاء إدخال رقم الشيفت');
-                    return;
-                }
-                
-                // إظهار رسالة تحميل
-                resultsContainer.innerHTML = '<div class="no-results">جاري البحث...</div>';
-                
-                // جلب البيانات من جدول جوجل شيت
-                const url = 'https://docs.google.com/spreadsheets/d/1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes/gviz/tq?tqx=out:json';
-                
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        // معالجة البيانات من جوجل شيت
-                        const jsonData = JSON.parse(data.substr(47).slice(0, -2));
-                        const rows = jsonData.table.rows;
-                        
-                        // البحث عن الصفوف التي تطابق رقم الشيفت
-                        const matchedRows = rows.filter(row => {
-                            const shiftNum = row.c[6]?.v; // shiftNumber في العمود 6
-                            return shiftNum && shiftNum.toString() === shiftNumber;
-                        });
-                        
-                        // عرض النتائج
-                        displayResults(matchedRows);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                        resultsContainer.innerHTML = '<div class="no-results">حدث خطأ أثناء جلب البيانات. الرجاء المحاولة لاحقاً.</div>';
-                    });
-            }
+            table += '</tr></thead><tbody>';
             
-            function displayResults(rows) {
-                if (rows.length === 0) {
-                    resultsContainer.innerHTML = '<div class="no-results">لا توجد نتائج تطابق رقم الشيفت المطلوب</div>';
-                    return;
-                }
-                
-                // إنشاء جدول النتائج
-                let tableHTML = `
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>الاسم</th>
-                                <th>حضور</th>
-                                <th>انصراف</th>
-                                <th>إجمالي التوصيل</th>
-                                <th>الخصم</th>
-                                <th>الإضافة</th>
-                                <th>عدد الخدمات فوق</th>
-                                <th>الصافي</th>
-                                <th>عدد ساعات العمل</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
-                
-                rows.forEach(row => {
-                    const cells = row.c;
-                    tableHTML += `
-                        <tr>
-                            <td>${cells[0]?.v || ''}</td>
-                            <td>${cells[1]?.v || ''}</td>
-                            <td>${cells[2]?.v || ''}</td>
-                            <td>${cells[3]?.v || ''}</td>
-                            <td>${cells[4]?.v || ''}</td>
-                            <td>${cells[5]?.v || ''}</td>
-                            <td>${cells[7]?.v || ''}</td>
-                            <td>${cells[8]?.v || ''}</td>
-                            <td>${cells[9]?.v || ''}</td>
-                        </tr>
-                    `;
+            // Create table rows
+            data.forEach(row => {
+                table += '<tr>';
+                columns.forEach(col => {
+                    const cellValue = row[col] || '';
+                    // تطبيق تنسيق خاص على حقول الوقت
+                    if (col.toLowerCase().includes('time') || col.toLowerCase().includes('attendance') || col.toLowerCase().includes('departure')) {
+                        table += `<td class="time-cell">${formatTime(cellValue)}</td>`;
+                    } else {
+                        table += `<td>${cellValue}</td>`;
+                    }
                 });
-                
-                tableHTML += `
-                        </tbody>
-                    </table>
-                `;
-                
-                resultsContainer.innerHTML = tableHTML;
+                table += '</tr>';
+            });
+            
+            table += '</tbody></table>';
+            return table;
+        }
+
+        async function searchData() {
+            const shiftNumber = document.getElementById('shiftNumber').value.trim();
+            if (!shiftNumber) {
+                alert('الرجاء إدخال رقم الشيفت');
+                return;
             }
-        });
 
-</script>
+            // URLs for the three Google Sheets
+            const url1 = 'https://docs.google.com/spreadsheets/d/1a3pDcgzbcHsl3TNfgNQJGD_CZ3AcL1rvnubuXE8aAVI/gviz/tq?tqx=out:json';
+            const url2 = 'https://docs.google.com/spreadsheets/d/1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes/gviz/tq?tqx=out:json';
+            const url3 = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
 
+            // Fetch data from all three tables
+            const [data1, data2, data3] = await Promise.all([
+                fetchData(url1),
+                fetchData(url2),
+                fetchData(url3)
+            ]);
+
+            function parseGoogleSheetDate(dateStr) {
+                if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
+                
+                const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+                if (!parts) return "غير محدد";
+                
+                const year = 1899 + parseInt(parts[1], 10);
+                const month = parseInt(parts[2], 10);
+                const day = parseInt(parts[3], 10);
+                const hour = parseInt(parts[4], 10);
+                const minute = parseInt(parts[5], 10);
+                
+                const date = new Date(year, month, day, hour, minute);
+                
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const formattedHours = (hour % 12 || 12).toString().padStart(2, '0');
+                const formattedMinutes = minute.toString().padStart(2, '0');
+                
+                return `${formattedHours}:${formattedMinutes}`;
+            }
+
+            // Process Table 1 data
+            if (data1) {
+                const rows = data1.table.rows;
+                const table1Data = rows.map(row => {
+                    const cells = row.c;
+                    return {
+                        username: cells[0]?.v || '',
+                        shiftNum: cells[1]?.v || '',
+                        date: cells[2]?.v || '',
+                        openTime: parseGoogleSheetDate(cells[3]?.v) || ''
+                    };
+                }).filter(item => item.shiftNum == shiftNumber);
+                
+                document.getElementById('table1-data').innerHTML = createTable(table1Data, [
+                    'username', 'date', 'openTime'
+                ], 'table1');
+            }
+
+
+
+
+            // Process Table 2 data
+            if (data2) {
+                const rows = data2.table.rows;
+                const table2Data = rows.map(row => {
+                    const cells = row.c;
+                    return {
+                        name: cells[0]?.v || '',
+                        attendance: parseGoogleSheetDate(cells[1]?.v),
+                        departure: parseGoogleSheetDate(cells[2]?.v),
+                        totalDelivery: cells[3]?.v || '',
+                        discount: cells[4]?.v || '',
+                        addition: cells[5]?.v || '',
+                        shiftNumber: cells[6]?.v || '',
+                        servicesAbove: cells[7]?.v || '',
+                        net: cells[8]?.v || '',
+                        workingHours: parseGoogleSheetDate(cells[9]?.v)
+                    };
+                }).filter(item => item.shiftNumber == shiftNumber);
+                
+                document.getElementById('table2-data').innerHTML = createTable(table2Data, [
+                    'name', 'attendance', 'departure', 'totalDelivery', 'discount', 
+                    'addition',  'servicesAbove', 'net', 'workingHours'
+                ], 'table2');
+            }
+
+
+
+
+
+            // Process Table 3 data
+            if (data3) {
+                const rows = data3.table.rows;
+                const table3Data = rows.map(row => {
+                    const cells = row.c;
+                    return {
+                        name: cells[0]?.v || '',
+                        statement: cells[1]?.v || '',
+                        shiftNumber: cells[2]?.v || '',
+                        statementdate: cells[3]?.v || '',
+                        statementtime: parseGoogleSheetDate(cells[4]?.v) || ''
+                    };
+                }).filter(item => item.shiftNumber == shiftNumber);
+                
+                document.getElementById('table3-data').innerHTML = createTable(table3Data, [
+                    'name', 'statement'
+                ], 'table3');
+            }
+        }
+    </script>
 </body>
-
 </html>
