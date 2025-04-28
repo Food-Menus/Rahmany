@@ -137,8 +137,15 @@
             background-color: #0056b3;
         }
         
+
+
         @media print {
-            body * {
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+
+    body * {
                 visibility: hidden;
             }
             #table1-container, #table1-container * {
@@ -150,11 +157,42 @@
                 top: 0;
                 width: 100%;
             }
-            button {
-                display: none;
-            }
-        }
 
+    .invoice-container {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    /* إجبار الطباعة بخلفية بيضاء */
+    table, tr, td, th {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* منع تقسيم الصفوف بين الصفحات */
+    tr {
+        page-break-inside: avoid;
+        border: 2px solid black !important;
+    }
+
+    /* تحسين حجم الخطوط للطباعة */
+    .table1, .table2 {
+        font-size: 12px !important;
+    }
+
+    .table1 th, .table1 td,
+    .table2 th, .table2 td {
+        padding: 4px 0px !important;
+        height: auto; /* جعل ارتفاع الخلايا يتناسب مع المحتوى */
+    }
+
+    /* إخفاء العناصر غير الضرورية */
+    button, .logout-btn {
+        display: none !important;
+    }
+}
 
 
 
