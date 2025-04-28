@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const formattedMinutes = minute.toString().padStart(2, '0');
                         const formattedSeconds = '00';
                         
-                        return `${formattedHours}:${formattedMinutes} ${ampm}`;
+                        return `${formattedHours}:${formattedMinutes}`;
                     }
     
                     const come = time1 ? parseGoogleSheetDate(time1) : "غير محدد";
@@ -420,7 +420,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // حساب الإجمالي الكلي
                     const grandTotal = totalNet + totalStatementsSum;
-
+//************************************************************************************************//
+//************************************************************************************************//
+//************************************************************************************************//
+  
                     totalRow.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
                         <td>${grandTotal.toFixed(2)}</td>
@@ -434,7 +437,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 dataContainer2.innerHTML = '';
     
                 const username = localStorage.getItem('username') || "غير محدد";
-                const shiftNum = localStorage.getItem('shiftNum') || "غير محدد";
                 const date = localStorage.getItem('date') || "غير محدد";
                 const openTime = localStorage.getItem('openTime') || "غير محدد";
 
@@ -448,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const reportRow2 = document.createElement('tr');
                 reportRow2.innerHTML = `
                     <td> رقم الوردية:</td>
-                    <td>${shiftNum}</td>
+                    <td>${shiftNumber}</td>
                 `;
                 dataContainer2.appendChild(reportRow2);
 
