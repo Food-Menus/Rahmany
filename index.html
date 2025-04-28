@@ -83,14 +83,26 @@
             const form = document.forms["loginForm"];
             const submitBtn = document.getElementById("submitBtn");
             const formData = new FormData(form);
-            const formObject = Object.fromEntries(formData.entries());
+            
+            // إضافة تاريخ ووقت فتح الوردية (بنظام 24 ساعة)
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('ar-EG'); // التاريخ بتنسيق عربي
+            const hours = String(now.getHours()).padStart(2, '0'); // الساعة (24)
+            const minutes = String(now.getMinutes()).padStart(2, '0'); // الدقائق
+            const openTime = ` ${hours}:${minutes}`; // تنسيق: "٢٥/١٠/٢٠٢٣ - 14:30"
+            
+            formData.append('date', formattedDate); // التاريخ فقط
+            formData.append('openTime', openTime); // التاريخ والوقت معًا
+            
             const username = document.getElementById('username').value.trim();
             const shiftNum = document.getElementById('shiftNum').value.trim();
             const redirectURL = './profile.html'; 
 
-            // تخزين الإدخال الجديد بشكل منفصل
+            // تخزين البيانات في localStorage
             localStorage.setItem('shiftNumber', shiftNum);
             localStorage.setItem('username', username);
+            localStorage.setItem('date', formattedDate);
+            localStorage.setItem('openTime', openTime);
         
             fetch(scriptURL, {
                 method: "POST",
@@ -98,10 +110,9 @@
             })
             .then(response => {
                 if (response.ok) {
-                    Swal.fire('تم بنجاح', 'تم تسجيل الدخول بنجاح', 'success');
+                    Swal.fire('تم بنجاح', 'تم تسجيل الوردية بنجاح', 'success');
                     form.reset();
-                    setTimeout(function() { window.location.href = redirectURL;}, 500); 
-
+                    setTimeout(function() { window.location.href = redirectURL; }, 500);
                 } else {
                     throw new Error('Network response was not ok');
                 }
