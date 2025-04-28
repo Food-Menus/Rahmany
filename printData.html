@@ -247,7 +247,7 @@
     </script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     const shiftNumber = localStorage.getItem('shiftNumber');
     
     if (!shiftNumber) {
@@ -418,19 +418,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // جلب القيمة من localStorage وتحويلها إلى رقم
                     const totalStatementsSum = parseFloat(localStorage.getItem('totalStatementsSum')) || 0;
+                    const TheCost = parseFloat(localStorage.getItem('TheCost')) || 0;
 
                     // حساب الإجمالي الكلي
-                    const grandTotal = totalNet + totalStatementsSum;
-//************************************************************************************************//
-//************************************************************************************************//
-//************************************************************************************************//
-  
+                    const grandTotal = totalNet + totalStatementsSum + TheCost;
+
+                    const totalRow1 = document.createElement('tr');
+                    totalRow1.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( مصروفات خارج الجرد ):</h2></td>
+                        <td>${TheCost}</td>
+                    `;
+                    dataContainer.appendChild(totalRow1);
+
                     totalRow.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
                         <td>${grandTotal.toFixed(2)}</td>
+                        
                     `;
                     dataContainer.appendChild(totalRow);
     
+
 //************************************************************************************************//
 //************************************************************************************************//
 //************************************************************************************************//

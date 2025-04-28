@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <title>The Rahmany Management</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="startform">
+        <h1>مرحبا بك</h1>
+        <form id="loginForm">
+            <p>برجاء ادخال اجمالي المصاريف لانهائ الشيفت</p>
+            <input type="number" id="TheCost" name="TheCost" placeholder="اجمالي المصاريف" required>
+            <button type="submit" class="Create-btn" id="submitBtn">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const TheCost = document.getElementById('TheCost').value.trim();
+            
+            if(TheCost) {
+                // حفظ القيمة في localStorage
+                localStorage.setItem('TheCost', TheCost);
+                
+                // الانتقال إلى صفحة الطباعة
+                window.location.href = 'printData.html'; // قم بتغيير هذا إلى اسم صفحة الطباعة لديك
+            } else {
+                alert('الرجاء إدخال قيمة المصاريف');
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // تعطيل الزر وإظهار حالة التحميل
+    submitBtn.classList.add('loading');
+    
+  
+    
+    // محاكاة انتظار الطلب (استبدل هذا بالوظيفة الفعلية)
+    setTimeout(function() {
+        submitBtn.classList.remove('loading');
+        loadingMessage.style.display = 'none';
+        
+    }, 3000);
+});
+    </script>
+
+</body>
+
+</html>
