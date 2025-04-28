@@ -582,11 +582,11 @@
             const اجمالي = parseFloat(document.getElementById("إجمالي التوصيل").value) || 0;
             const الخصم = parseFloat(document.getElementById("  الخصم").value) || 0;
             const الاضافه = parseFloat(document.getElementById(" الإضافة ").value) || 0;
-            const الصافي = اجمالي - الخصم + الاضافه + 80;
+            const الصافي = (اجمالي - الخصم + الاضافه + ((اجمالي - الخصم + الاضافه) > 149 ? 80 : 0));
             document.getElementById("الصافي").value = الصافي;
     
             // حساب عدد الخدمات فوق المحدد
-            const خدماتفوقالمحدد =( الصافي - 150) / 10;
+            const خدماتفوقالمحدد =( اجمالي - 150) / 10;
             document.getElementById("عدد الخدمات فوق").value = خدماتفوقالمحدد > 0 ? خدماتفوقالمحدد : 0;
         }
     
