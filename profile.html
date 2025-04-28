@@ -263,6 +263,11 @@
                 logoutButton.addEventListener('click', () => {
                     localStorage.removeItem('inventoryOfficer');
                     localStorage.removeItem('shiftNumber');
+                    localStorage.removeItem('date');
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('openTime');
+                    localStorage.removeItem('statementdate');
+                    localStorage.removeItem('statementtime');
                     window.location.href = './index.html';
                     swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
                 });

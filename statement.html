@@ -492,17 +492,11 @@
 </head>
 
 <body>
-    <!-- الناف بار -->
-    <nav class="navbar">
-        <div class="logo">نظام ادارة بيانات الرحماني</div>
-        <div class="nav-links">
-            <a href="#"><i class="fas fa-sign-out-alt"></i> <button id="logoutButton" > تسجيل خروج</button><br>   </a>
-        </div>
-    </nav>
-    
+    <br>
+    <br>
     <div class="header">
         <h1>بيانات دليفري الوردية </h1>
-    </div>
+    </div><br>
     <div class="registration-form">
         <form id="registration-form" name="registration-form">
     
@@ -561,12 +555,26 @@
                 Swal.fire('خطأ', 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح', 'error');
                 return;
             }
-            
+
             submitBtn.disabled = true;
             loadingMessage.style.display = "block";
     
             const formData = new FormData(form);
             formData.append('shiftNumber', shiftNumber);
+
+
+            // إضافة تاريخ ووقت فتح الوردية (بنظام 24 ساعة)
+            const now = new Date();
+            const statementdate = now.toLocaleDateString('ar-EG'); // التاريخ بتنسيق عربي
+            const hours = String(now.getHours()).padStart(2, '0'); // الساعة (24)
+            const minutes = String(now.getMinutes()).padStart(2, '0'); // الدقائق
+            const statementtime = ` ${hours}:${minutes}`; // تنسيق: "٢٥/١٠/٢٠٢٣ - 14:30"
+            
+            formData.append('statementdate', statementdate); // التاريخ فقط
+            formData.append('statementtime', statementtime); // التاريخ والوقت معًا
+
+            localStorage.setItem('statementdate', statementdate);
+            localStorage.setItem('statementtime', statementtime);
         
             fetch(scriptURL, { 
                 method: "POST", 
