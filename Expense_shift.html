@@ -594,9 +594,15 @@
             e.preventDefault();
             
             const shiftNumber = localStorage.getItem('shiftNumber');
-            
+            const اجمالي = parseFloat(document.getElementById("إجمالي التوصيل").value) || 0;
+
             if (!shiftNumber) {
                 Swal.fire('خطأ', ' لم يتم العثور على رقم الشيفت في النظام سجل خروج وادخل تاني', 'error');
+                return;
+            }
+
+            if (اجمالي < 150) {
+                Swal.fire('خطأ', 'اجمالي التوصيل اقل من 150 لا يسمح له بالتسجيل', 'error');
                 return;
             }
             
