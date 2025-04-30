@@ -451,5 +451,16 @@
             }
         }
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const shiftNumber = localStorage.getItem('shiftNumber');
+        if (!shiftNumber) {
+            window.location.href = './index.html';
+        } else {
+            console.log('يجب ان تسجل دخول')    
+        }
+    });
+</script>
 </body>
 </html>

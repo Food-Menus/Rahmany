@@ -12,32 +12,19 @@
 </head>
 
 <body>
+
     <div class="startform">
         <h1>مرحبا بك</h1>
         <form id="loginForm">
-            <p>برجاء ادخال اجمالي المصاريف لانهائ الشيفت</p>
+            <p>برجاء ادخال البيانات التالية</p><br>
             <input type="number" id="TheCost" name="TheCost" placeholder="اجمالي المصاريف" required>
+            <input type="number" id="cash" name="cash" placeholder="النقدية" required>
+            <input type="number" id="Silver" name="Silver" placeholder="الفضية" required>
+            <input type="number" id="backward" name="backward" placeholder="المرتجع" required>
             <button type="submit" class="Create-btn" id="submitBtn">تسجيل</button>
         </form>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const TheCost = document.getElementById('TheCost').value.trim();
-            
-            if(TheCost) {
-                // حفظ القيمة في localStorage
-                localStorage.setItem('TheCost', TheCost);
-                
-                // الانتقال إلى صفحة الطباعة
-                window.location.href = 'printData.html'; // قم بتغيير هذا إلى اسم صفحة الطباعة لديك
-            } else {
-                alert('الرجاء إدخال قيمة المصاريف');
-            }
-        });
-    </script>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -58,6 +45,55 @@
 });
     </script>
 
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwbTu5aaB4K6EcMNtrPZCQy5tOVWPb7yeizbOH9A77r66YW_V8YKb2JnB9S2b4hyhIS/exec";
+        const form = document.forms["loginForm"];
+        form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        var formData = new FormData(form);
+
+        fetch(scriptURL, { method: "POST", body: formData })
+            .then((response) => {
+                                
+                const TheCost = document.getElementById('TheCost').value.trim();
+                const cash = document.getElementById('cash').value.trim();
+                const Silver = document.getElementById('Silver').value.trim();
+                const backward = document.getElementById('backward').value.trim();
+                
+                if(TheCost && cash && Silver && backward) {
+                    localStorage.setItem('TheCost', TheCost);
+                    localStorage.setItem('cash', cash);
+                    localStorage.setItem('Silver', Silver);
+                    localStorage.setItem('backward', backward);
+                    
+                    window.location.href = 'printData.html'; // قم بتغيير هذا إلى اسم صفحة الطباعة لديك
+                } else {
+                    Swal.fire('خطأ', 'برجاء ادخال القيم المطلوبة', 'error');
+
+                }
+
+                Swal.fire('تم بنجاح', 'تم تسجيل البيانات بنجاح', 'success');
+                form.reset();
+            })
+            .catch((error) => {
+            alert("في مشكله", "فشل تسجيل البيانات", "error");
+            });
+        });
+
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
+    </script>
+    
 </body>
 
 </html>

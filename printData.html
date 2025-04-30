@@ -415,20 +415,20 @@
     
                     // إضافة صف الإجمالي
                     const totalRow = document.createElement('tr');
+                    const totalRow1 = document.createElement('tr');
+                    const totalRow2 = document.createElement('tr');
+                    const totalRow3 = document.createElement('tr');
+                    const totalRow4 = document.createElement('tr');
 
-                    // جلب القيمة من localStorage وتحويلها إلى رقم
                     const totalStatementsSum = parseFloat(localStorage.getItem('totalStatementsSum')) || 0;
                     const TheCost = parseFloat(localStorage.getItem('TheCost')) || 0;
+                    const Silver = parseFloat(localStorage.getItem('Silver')) || 0;
+                    const cash = parseFloat(localStorage.getItem('cash')) || 0;
+                    const backward = parseFloat(localStorage.getItem('backward')) || 0;
 
                     // حساب الإجمالي الكلي
-                    const grandTotal = totalNet + totalStatementsSum + TheCost;
-
-                    const totalRow1 = document.createElement('tr');
-                    totalRow1.innerHTML = `
-                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( مصروفات خارج الجرد ):</h2></td>
-                        <td>${TheCost}</td>
-                    `;
-                    dataContainer.appendChild(totalRow1);
+                    const grandTotal = totalNet  + TheCost + Silver + cash + backward + totalStatementsSum; 
+                    console.log(totalStatementsSum)
 
                     totalRow.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
@@ -436,7 +436,29 @@
                         
                     `;
                     dataContainer.appendChild(totalRow);
-    
+                    totalRow1.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( مصروفات خارج الجرد ):</h2></td>
+                        <td>${TheCost}</td>
+                    `;
+                    dataContainer.appendChild(totalRow1);
+                    totalRow2.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>النقدية : </h2></td>
+                        <td>${cash}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow2);
+                    totalRow3.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>الفضية</h2></td>
+                        <td>${Silver}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow3);
+                    totalRow4.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>المرتجع</h2></td>
+                        <td>${backward}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow4);
 
 //************************************************************************************************//
 //************************************************************************************************//
@@ -491,11 +513,21 @@
     </script>
 
     <script>
-                const logoutButton = document.getElementById('logoutButton');
+        const logoutButton = document.getElementById('logoutButton');
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
                     localStorage.removeItem('username');
                     localStorage.removeItem('shiftNumber');
+                    localStorage.removeItem('totalStatementsSum');
+                    localStorage.removeItem('statementtime');
+                    localStorage.removeItem('statementdate');
+                    localStorage.removeItem('openTime');
+                    localStorage.removeItem('password');
+                    localStorage.removeItem('date');
+                    localStorage.removeItem('cash');
+                    localStorage.removeItem('backward');
+                    localStorage.removeItem('TheCost');
+                    localStorage.removeItem('Silver');
                     window.location.href = './index.html';
                     swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
                 });
