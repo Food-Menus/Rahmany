@@ -50,7 +50,7 @@
         /* Table Styles - أبيض وأسود */
         .table-container {
             overflow-x: auto;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
         }
 
         .table1, .table2, .table3, .table4 {
@@ -247,27 +247,25 @@
     </style>
 </head>
 <body>
-    <!-- الناف بار -->
     <nav class="navbar">
         <div class="logo">نظام ادارة بيانات الرحماني</div>
         <div class="nav-links">
-            <a href="./index.html"> رجوع  </a>
+            <a href="./index.html"> رجوع </a>
         </div>
     </nav>
-    
 
     <div class="invoice-container">
         <div class="search-box">
-            <h1>  البحث عن وردية قديمة  </h1>
+            <h1> البحث عن وردية قديمة </h1>
             <input type="text" id="shiftNumber" placeholder="أدخل رقم الوردية">
-            <button onclick="searchData()" >بحث</button>
+            <button onclick="searchData()">بحث</button>
         </div>
 
         <div id="table1-container" class="table-container">
             <div id="table1-data" class="no-data">لا توجد بيانات لعرضها</div>
             <div id="table2-data" class="no-data">لا توجد بيانات لعرضها</div>
             <div id="table3-data" class="no-data">لا توجد بيانات لعرضها</div>
-            <div id="table4-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table4-data" class="no-data">لا توجد بيانات لعرضها</div> <!-- الجدول الرابع -->
         </div>
     </div>
 
@@ -277,9 +275,7 @@
         function printDiv() {
             window.print();
         }
-    </script>
 
-    <script>
         async function fetchData(url) {
             try {
                 const response = await fetch(url);
@@ -294,13 +290,9 @@
 
         function formatTime(timeValue) {
             if (!timeValue) return '';
-            
-            // إذا كان الوقت في صيغة ساعة:دقيقة (مثل 14:30)
             if (typeof timeValue === 'string' && timeValue.includes(':')) {
                 return timeValue;
             }
-            
-            // إذا كان الوقت رقم (مثل 0.5 لتمثل 12:00)
             if (typeof timeValue === 'number') {
                 const date = new Date(timeValue * 24 * 60 * 60 * 1000);
                 return date.toLocaleTimeString('en-US', {
@@ -309,7 +301,6 @@
                     hour12: false
                 });
             }
-            
             return timeValue;
         }
 
@@ -319,20 +310,14 @@
             }
 
             let table = `<table class="${tableClass}"><thead><tr>`;
-            
-            // Create table headers
             columns.forEach(col => {
                 table += `<th>${col}</th>`;
             });
-            
             table += '</tr></thead><tbody>';
-            
-            // Create table rows
             data.forEach(row => {
                 table += '<tr>';
                 columns.forEach(col => {
                     const cellValue = row[col] || '';
-                    // تطبيق تنسيق خاص على حقول الوقت
                     if (col.toLowerCase().includes('time') || col.toLowerCase().includes('attendance') || col.toLowerCase().includes('departure')) {
                         table += `<td class="time-cell">${formatTime(cellValue)}</td>`;
                     } else {
@@ -341,7 +326,6 @@
                 });
                 table += '</tr>';
             });
-            
             table += '</tbody></table>';
             return table;
         }
@@ -353,13 +337,11 @@
                 return;
             }
 
-            // URLs for the three Google Sheets
             const url1 = 'https://docs.google.com/spreadsheets/d/1a3pDcgzbcHsl3TNfgNQJGD_CZ3AcL1rvnubuXE8aAVI/gviz/tq?tqx=out:json';
             const url2 = 'https://docs.google.com/spreadsheets/d/1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes/gviz/tq?tqx=out:json';
             const url3 = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
             const url4 = 'https://docs.google.com/spreadsheets/d/1j2t2tPqbXxfzhl9OL-L3VmH5al3edvUEfNRcG96q_9c/gviz/tq?tqx=out:json';
 
-            // Fetch data from all three tables
             const [data1, data2, data3, data4] = await Promise.all([
                 fetchData(url1),
                 fetchData(url2),
@@ -367,28 +349,6 @@
                 fetchData(url4)
             ]);
 
-            function parseGoogleSheetDate(dateStr) {
-                if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
-                
-                const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
-                if (!parts) return "غير محدد";
-                
-                const year = 1899 + parseInt(parts[1], 10);
-                const month = parseInt(parts[2], 10);
-                const day = parseInt(parts[3], 10);
-                const hour = parseInt(parts[4], 10);
-                const minute = parseInt(parts[5], 10);
-                
-                const date = new Date(year, month, day, hour, minute);
-                
-                const ampm = hour >= 12 ? 'PM' : 'AM';
-                const formattedHours = (hour % 12 || 12).toString().padStart(2, '0');
-                const formattedMinutes = minute.toString().padStart(2, '0');
-                
-                return `${formattedHours}:${formattedMinutes}`;
-            }
-
-            // Process Table 1 data
             if (data1) {
                 const rows = data1.table.rows;
                 const table1Data = rows.map(row => {
@@ -397,7 +357,7 @@
                         username: cells[0]?.v || '',
                         shiftNum: cells[1]?.v || '',
                         date: cells[2]?.v || '',
-                        openTime: parseGoogleSheetDate(cells[3]?.v) || ''
+                        openTime: formatTime(cells[3]?.v)
                     };
                 }).filter(item => item.shiftNum == shiftNumber);
                 
@@ -406,25 +366,21 @@
                 ], 'table1');
             }
 
-
-
-
-            // Process Table 2 data
             if (data2) {
                 const rows = data2.table.rows;
                 const table2Data = rows.map(row => {
                     const cells = row.c;
                     return {
                         name: cells[0]?.v || '',
-                        attendance: parseGoogleSheetDate(cells[1]?.v),
-                        departure: parseGoogleSheetDate(cells[2]?.v),
+                        attendance: formatTime(cells[1]?.v),
+                        departure: formatTime(cells[2]?.v),
                         totalDelivery: cells[3]?.v || '',
                         discount: cells[4]?.v || '',
                         addition: cells[5]?.v || '',
                         shiftNumber: cells[6]?.v || '',
                         servicesAbove: cells[7]?.v || '',
                         net: cells[8]?.v || '',
-                        workingHours: parseGoogleSheetDate(cells[9]?.v)
+                        workingHours: formatTime(cells[9]?.v)
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
@@ -434,11 +390,6 @@
                 ], 'table2');
             }
 
-
-
-
-
-            // Process Table 3 data
             if (data3) {
                 const rows = data3.table.rows;
                 const table3Data = rows.map(row => {
@@ -448,7 +399,7 @@
                         statement: cells[1]?.v || '',
                         shiftNumber: cells[2]?.v || '',
                         statementdate: cells[3]?.v || '',
-                        statementtime: parseGoogleSheetDate(cells[4]?.v) || ''
+                        statementtime: formatTime(cells[4]?.v) || ''
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
@@ -457,9 +408,8 @@
                 ], 'table3');
             }
 
-
-                        // معالجة بيانات الجدول الرابع
-                        if (data4) {
+            // معالجة بيانات الجدول الرابع
+            if (data4) {
                 const rows = data4.table.rows;
                 const table4Data = rows.map(row => {
                     const cells = row.c;
@@ -479,15 +429,15 @@
         }
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const shiftNumber = localStorage.getItem('shiftNumber');
-        if (!shiftNumber) {
-            window.location.href = './index.html';
-        } else {
-            console.log('يجب ان تسجل دخول')    
-        }
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
+    </script>
 </body>
 </html>
