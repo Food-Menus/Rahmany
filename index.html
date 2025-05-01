@@ -99,7 +99,7 @@
             const redirectURL = './profile.html'; 
 
             // تخزين البيانات في localStorage
-            localStorage.setItem('shiftNumberber', shiftNumber);
+            localStorage.setItem('shiftNumber', shiftNumber);
             localStorage.setItem('الاسم', الاسم);
             localStorage.setItem('التاريخ', formattedDate);
             localStorage.setItem('وقت_الفتح', وقت_الفتح);
@@ -129,8 +129,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const shiftNumberber = localStorage.getItem('shiftNumberber');
-            if (!shiftNumberber) {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
                 console.log('يجب ان تسجل دخول')
             } else {
                 window.location.href = './profile.html';
