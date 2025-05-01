@@ -479,13 +479,13 @@
             </div>
         
             <div class="form-group">
-                <label for="  الخصم">  الخصم:</label>
-                <input type="number" id="  الخصم" name="  الخصم" class="form-control" onchange="calculateNet()" required>
+                <label for="الخصم">  الخصم:</label>
+                <input type="number" id="الخصم" name="الخصم" class="form-control" onchange="calculateNet()" required>
             </div>
     
             <div class="form-group">
-                <label for=" الإضافة ">الاضافه:</label>
-                <input type="number" id=" الإضافة " name=" الإضافة " class="form-control" onchange="calculateNet()" required>
+                <label for="الإضافة"> الإضافة:</label>
+                <input type="number" id="الإضافة" name="الإضافة" class="form-control" onchange="calculateNet()" required>
             </div>
 
             <div class="form-group">
@@ -580,9 +580,9 @@
     
         function calculateNet() {
             const اجمالي = parseFloat(document.getElementById("إجمالي_التوصيل").value) || 0;
-            const الخصم = parseFloat(document.getElementById("  الخصم").value) || 0;
-            const الاضافه = parseFloat(document.getElementById(" الإضافة ").value) || 0;
-            const الصافي = (اجمالي - الخصم + الاضافه + ((اجمالي - الخصم + الاضافه) > 150  ? 80 : 0));
+            const الخصم = parseFloat(document.getElementById("الخصم").value) || 0;
+            const الإضافة = parseFloat(document.getElementById("الإضافة").value) || 0;
+            const الصافي = (اجمالي - الخصم +  الإضافة + ((اجمالي - الخصم +  الإضافة) > 150  ? 80 : 0));
             document.getElementById("الصافي").value = الصافي;
     
             // حساب عدد_الخدمات_فوق المحدد
@@ -739,7 +739,7 @@
                 const go = row.c?.[2]?.v ? formatGoogleSheetDate(row.c[2].v.toString()) : "غير محدد";
                 const total_delivery = row.c?.[3]?.v ? formatNumber(row.c[3].v) : "غير محدد";
                 const discount = row.c?.[4]?.v ? formatNumber(row.c[4].v) : "0";
-                const Additional = row.c?.[5]?.v ? formatNumber(row.c[5].v) : "غير محدد";
+                const Additional = row.c?.[5]?.v ? formatNumber(row.c[5].v) : "0";
                 const services_num = row.c?.[7]?.v ? formatNumber(row.c[7].v) : "غير محدد";
                 const Net = row.c?.[8]?.v ? formatNumber(row.c[8].v) : "غير محدد";
                 const hours_num = row.c?.[9]?.v ?  formatGoogleSheetDate(row.c[9].v.toString()) : "غير محدد";
