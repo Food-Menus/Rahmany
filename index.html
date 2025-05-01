@@ -17,8 +17,8 @@
     <h1> مرحبا بك </h1>
     <form id="loginForm">
         <p>  برجاء ادخال اسمك و رقم الودية الجديدة  </p><br>
-        <input type="text" id="username" name="username"  placeholder="اسم المستخدم" required>
-        <input type="text" id="shiftNum" name="shiftNum" placeholder="رقم الشيفت" required>
+        <input type="text" id="الاسم" name="الاسم"  placeholder="اسم المستخدم" required>
+        <input type="text" id="shiftNumber" name="shiftNumber" placeholder="رقم الشيفت" required>
         <button type="submit" class="Create-btn" id="submitBtn">بحث</button>
     </form>
 
@@ -47,8 +47,8 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const shiftNum = document.getElementById('shiftNum').value.trim();
+            const الاسم = document.getElementById('الاسم').value.trim();
+            const shiftNumber = document.getElementById('shiftNumber').value.trim();
         
             fetch('https://docs.google.com/spreadsheets/d/1a3pDcgzbcHsl3TNfgNQJGD_CZ3AcL1rvnubuXE8aAVI/gviz/tq?tqx=out:json')
                 .then(response => response.text())
@@ -61,7 +61,7 @@
                     for (let row of rows) {
                         const rowData = row.c;
                         if (rowData && rowData[0] && rowData[1] &&
-                            rowData[1].v.toString().trim() === shiftNum) {
+                            rowData[1].v.toString().trim() === shiftNumber) {
                             shiftExists = true;
                             break;
                         }
@@ -94,13 +94,13 @@
             formData.append('date', formattedDate); // التاريخ فقط
             formData.append('openTime', openTime); // التاريخ والوقت معًا
             
-            const username = document.getElementById('username').value.trim();
-            const shiftNum = document.getElementById('shiftNum').value.trim();
+            const الاسم = document.getElementById('الاسم').value.trim();
+            const shiftNumber = document.getElementById('shiftNumber').value.trim();
             const redirectURL = './profile.html'; 
 
             // تخزين البيانات في localStorage
-            localStorage.setItem('shiftNumber', shiftNum);
-            localStorage.setItem('username', username);
+            localStorage.setItem('shiftNumberber', shiftNumber);
+            localStorage.setItem('الاسم', الاسم);
             localStorage.setItem('date', formattedDate);
             localStorage.setItem('openTime', openTime);
         
@@ -129,8 +129,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const shiftNumber = localStorage.getItem('shiftNumber');
-            if (!shiftNumber) {
+            const shiftNumberber = localStorage.getItem('shiftNumberber');
+            if (!shiftNumberber) {
                 console.log('يجب ان تسجل دخول')
             } else {
                 window.location.href = './profile.html';

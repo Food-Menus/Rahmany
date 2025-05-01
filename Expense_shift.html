@@ -474,8 +474,8 @@
             </div>
         
             <div class="form-group">
-                <label for="إجمالي التوصيل">اجمالي التوصيل:</label>
-                <input type="number" id="إجمالي التوصيل" name="إجمالي التوصيل" class="form-control" onchange="updateTotal()" required>
+                <label for= "إجمالي_التوصيل "> اجملي التوصيل:</label>
+                <input type="number" id="إجمالي_التوصيل" name="إجمالي_التوصيل" class="form-control" onchange="updateTotal()" required>
             </div>
         
             <div class="form-group">
@@ -494,13 +494,13 @@
             </div>
     
             <div class="form-group">
-                <label for="عدد الخدمات فوق">خدمات فوق :</label>
-                <input type="number" id="عدد الخدمات فوق" name="عدد الخدمات فوق" class="form-control1" readonly>
+                <label for="عدد_الخدمات_فوق">خدمات فوق :</label>
+                <input type="number" id="عدد_الخدمات_فوق" name="عدد_الخدمات_فوق" class="form-control1" readonly>
             </div>
     
             <div class="form-group">
-                <label for="عدد ساعات العمل"> ساعات العمل:</label>
-                <input type="text" id="عدد ساعات العمل" name="عدد ساعات العمل" class="form-control1" readonly>
+                <label for="عدد_ساعات_العمل"> ساعات العمل:</label>
+                <input type="text" id="عدد_ساعات_العمل" name="عدد_ساعات_العمل" class="form-control1" readonly>
             </div>
         
             <button type="submit" class="submit-btn" id="submitBtn">تسجيل</button>
@@ -568,33 +568,33 @@
                 const formattedTime = formatDecimalHours(hoursDiff);
                 console.log(formattedTime);                
                 
-                document.getElementById("عدد ساعات العمل").value = formattedTime;
+                document.getElementById("عدد_ساعات_العمل").value = formattedTime;
             }
         }
     
         function updateTotal() {
-            const totalInput = document.getElementById("إجمالي التوصيل");
+            const totalInput = document.getElementById("إجمالي_التوصيل");
             totalInput.value = parseFloat(totalInput.value) ;
             calculateNet();
         }
     
         function calculateNet() {
-            const اجمالي = parseFloat(document.getElementById("إجمالي التوصيل").value) || 0;
+            const اجمالي = parseFloat(document.getElementById("إجمالي_التوصيل").value) || 0;
             const الخصم = parseFloat(document.getElementById("  الخصم").value) || 0;
             const الاضافه = parseFloat(document.getElementById(" الإضافة ").value) || 0;
             const الصافي = (اجمالي - الخصم + الاضافه + ((اجمالي - الخصم + الاضافه) > 150  ? 80 : 0));
             document.getElementById("الصافي").value = الصافي;
     
-            // حساب عدد الخدمات فوق المحدد
+            // حساب عدد_الخدمات_فوق المحدد
             const خدماتفوقالمحدد =( اجمالي - 150) / 10;
-            document.getElementById("عدد الخدمات فوق").value = خدماتفوقالمحدد > 0 ? خدماتفوقالمحدد : 0;
+            document.getElementById("عدد_الخدمات_فوق").value = خدماتفوقالمحدد > 0 ? خدماتفوقالمحدد : 0;
         }
     
         form.addEventListener("submit", (e) => {
             e.preventDefault();
             
             const shiftNumber = localStorage.getItem('shiftNumber');
-            const اجمالي = parseFloat(document.getElementById("إجمالي التوصيل").value) || 0;
+            const اجمالي = parseFloat(document.getElementById("إجمالي_التوصيل").value) || 0;
 
             if (!shiftNumber) {
                 Swal.fire('خطأ', ' لم يتم العثور على رقم الشيفت في النظام سجل خروج وادخل تاني', 'error');
@@ -602,7 +602,7 @@
             }
  
             if (اجمالي < 150) {
-                Swal.fire('خطأ', 'اجمالي التوصيل اقل من 150 لا يسمح له بالتسجيل', 'error');
+                Swal.fire('خطأ', 'اجموصيل اقل من 150 لا يسمح له بالتسجيل', 'error');
                 return;
             }
             
@@ -762,7 +762,7 @@
                     { label: 'وقت الحضور', value: come },
                     { label: 'وقت الانصراف', value: go },
                     { label: 'ساعات العمل', value: hours_num },
-                    { label: 'إجمالي التوصيل', value: total_delivery },
+                    { label: 'إجمالي_التوصيل', value: total_delivery },
                     { label: 'الخصم', value: discount },
                     { label: 'الإضافة', value: Additional },
                     { label: 'عدد الخدمات', value: services_num }

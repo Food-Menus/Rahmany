@@ -17,10 +17,10 @@
         <h1>مرحبا بك</h1>
         <form id="loginForm">
             <p>برجاء ادخال البيانات التالية</p><br>
-            <input type="number" id="TheCost" name="TheCost" placeholder="اجمالي المصاريف" required>
-            <input type="number" id="cash" name="cash" placeholder="النقدية" required>
-            <input type="number" id="Silver" name="Silver" placeholder="الفضية" required>
-            <input type="number" id="backward" name="backward" placeholder="المرتجع" required>
+            <input type="number" id="اجمالي_المصاريف" name="اجمالي_المصاريف" placeholder="اجمالي المصاريف" required>
+            <input type="number" id="النقدية" name="النقدية" placeholder="النقدية" required>
+            <input type="number" id="الفضية" name="الفضية" placeholder="الفضية" required>
+            <input type="number" id="المرتجع" name="المرتجع" placeholder="المرتجع" required>
             <button type="submit" class="Create-btn" id="submitBtn">تسجيل</button>
         </form>
     </div>
@@ -59,16 +59,16 @@
         fetch(scriptURL, { method: "POST", body: formData })
             .then((response) => {
                                 
-                const TheCost = document.getElementById('TheCost').value.trim();
-                const cash = document.getElementById('cash').value.trim();
-                const Silver = document.getElementById('Silver').value.trim();
-                const backward = document.getElementById('backward').value.trim();
+                const اجمالي_المصاريف = document.getElementById('اجمالي_المصاريف').value.trim();
+                const النقدية = document.getElementById('النقدية').value.trim();
+                const الفضية = document.getElementById('الفضية').value.trim();
+                const المرتجع = document.getElementById('المرتجع').value.trim();
                 
-                if(TheCost && cash && Silver && backward) {
-                    localStorage.setItem('TheCost', TheCost);
-                    localStorage.setItem('cash', cash);
-                    localStorage.setItem('Silver', Silver);
-                    localStorage.setItem('backward', backward);
+                if(اجمالي_المصاريف && النقدية && الفضية && المرتجع) {
+                    localStorage.setItem('اجمالي_المصاريف', اجمالي_المصاريف);
+                    localStorage.setItem('النقدية', النقدية);
+                    localStorage.setItem('الفضية', الفضية);
+                    localStorage.setItem('المرتجع', المرتجع);
                     
                     window.location.href = 'printData.html'; // قم بتغيير هذا إلى اسم صفحة الطباعة لديك
                 } else {

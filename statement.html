@@ -501,13 +501,13 @@
         <form id="registration-form" name="registration-form">
     
             <div class="form-group">
-                <label for="name">ألبيان</label>
-                <input type="text" id="name" name="name" class="form-control" required pattern="[\u0600-\u06FF\s]+" title="يُسمح فقط بالحروف العربية">
+                <label for="الاسم">ألبيان</label>
+                <input type="text" id="الاسم" name="الاسم" class="form-control" required pattern="[\u0600-\u06FF\s]+" title="يُسمح فقط بالحروف العربية">
             </div>
             
             <div class="form-group">
-                <label for="statement"> القيمة</label>
-                <input type="number" id="statement" name="statement" class="form-control" required onchange="calculateWorkHours()">
+                <label for="البيان"> القيمة</label>
+                <input type="number" id="البيان" name="البيان" class="form-control" required onchange="calculateWorkHours()">
             </div>
         
         
@@ -629,12 +629,12 @@
                     // عرض النتائج
                     if (filteredRecords.length > 0) {
                         filteredRecords.forEach(row => {
-                            const name = row.c[0] ? row.c[0].v : "غير متوفر";
-                            const statement = row.c[1] ? row.c[1].v : "غير متوفر";
+                            const الاسم = row.c[0] ? row.c[0].v : "غير متوفر";
+                            const البيان = row.c[1] ? row.c[1].v : "غير متوفر";
 
                             const recordDiv = document.createElement('div');
                             recordDiv.className = 'record';
-                            recordDiv.innerHTML = `<strong>الاسم:</strong> ${name} <br> <strong>البيان:</strong> ${statement}`;
+                            recordDiv.innerHTML = `<strong>الاسم:</strong> ${الاسم} <br> <strong>البيان:</strong> ${البيان}`;
                             recordsContainer.appendChild(recordDiv);
                         });
                     } else {
@@ -663,7 +663,7 @@
             return `
                 <h3>بيانات الشيفت رقم: ${shiftNumber}</h3>
                 <p>تاريخ اليوم: ${dateStr}</p>
-                <p>مسؤول الجرد: ${localStorage.getItem('username') || 'غير محدد'}</p>
+                <p>مسؤول الجرد: ${localStorage.getItem('الاسم') || 'غير محدد'}</p>
             `;
         }
 
