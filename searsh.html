@@ -1,71 +1,80 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بحث عن الشيفت نبر</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: white;
-            margin: 0;
-            font-weight: bold;
-            padding: 0;
-            color: black;
-            width: 380px;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>بحث عن الشيفت نبر</title>
+        <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            body {
+                font-family: 'Tajawal', sans-serif;
+                background-color: white;
+                margin: 0;
+                font-weight: bold;
+                padding: 0;
+                color: black;
+                width: 400px;
+            }
+        
+            .invoice-container {
+                width:400px;
+                margin: 0 auto;
+                padding: 10px;
+            }
+        
+            .search-box {
+                background-color: white;
+                padding: 20px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+        
+            .search-box input {
+                padding: 10px;
+                margin-left: 10px;
+                border: 2px solid black;
+                font-family: 'Tajawal', sans-serif;
+                font-weight: bold;
+            }
+        
+            .search-box button {
+                padding: 10px 20px;
+                background-color: black;
+                color: white;
+                border: none;
+                font-family: 'Tajawal', sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+            }
+        
+            /* Table Styles - أبيض وأسود */
+            .table-container {
+                overflow-x: auto;
+                margin-bottom: 10px;
+            }
     
-        .invoice-container {
-            width: 380px;
-            margin: 0 auto;
-            padding: 10px;
-        }
+            .table1, .table2, .table3, .table4 {
+                width: 100%;
+                border-collapse: collapse;
+                border: 2px solid black !important;
+                text-align: center;
+                border: 2px solid black !important;
     
-        .search-box {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+            }
     
-        .search-box input {
-            padding: 10px;
-            margin-left: 10px;
-            border: 2px solid black;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: bold;
-        }
-    
-        .search-box button {
-            padding: 10px 20px;
-            background-color: black;
-            color: white;
-            border: none;
-            font-family: 'Tajawal', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    
-        /* Table Styles - أبيض وأسود */
-        .table-container {
-            overflow-x: auto;
-            margin-bottom: 10px;
-        }
 
-        .table1, .table2, .table3, .table4 {
-            width: 100%;
-            border-collapse: collapse;
+            .table2 th, 
+        .table2 td {
             border: 2px solid black !important;
+            padding: 2px 2px;
             text-align: center;
-            border: 2px solid black !important;
-
+            font-size: 11px;
+            font-weight: bold;
+            background-color: white !important;
+            color: black !important;
         }
-    
         .table1 th, 
         .table1 td,
-        .table2 th, 
-        .table2 td,
         .table3 th,
         .table3 td,
         .table4 th, 
@@ -73,7 +82,7 @@
             border: 2px solid black !important;
             padding: 2px 2px;
             text-align: center;
-            font-size: 10px;
+            font-size: 20px;
             font-weight: bold;
             background-color: white !important;
             color: black !important;
@@ -89,164 +98,163 @@
             padding-top: 10px;
             padding-bottom: 10px;
             vertical-align: center;
-            font-size: 13px;
+            font-size: 18px;
         }
-    
-        /* إزالة أي تأثيرات غير ضرورية */
-        .table1 tr:hover, 
-        .table2 tr:hover,
-        .table3 tr:hover,
-        .table4 tr:hover {
-            background-color: white !important;
-        }
-    
-        h2 {
-            text-align: center;
-            margin: 10px 0;
-            font-size: 20px;
-        }
-    
-        .no-data {
-            text-align: center;
-            padding: 20px;
-            font-weight: bold;
-        }
-
-        /* تنسيق خاص بحقول الوقت */
-        .time-cell {
-            font-family: monospace;
-            white-space: nowrap;
-            direction: ltr;
-            padding: 5px;
-        }
-
-
-
-
-
-                
-        .printDiv {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
-            margin-right: 38%;
-        }
+            /* إزالة أي تأثيرات غير ضرورية */
+            .table1 tr:hover, 
+            .table2 tr:hover,
+            .table3 tr:hover,
+            .table4 tr:hover {
+                background-color: white !important;
+            }
         
-        .printDiv:hover {
-            background-color: #0056b3;
-        }
+            h2 {
+                text-align: center;
+                margin: 10px 0;
+                font-size: 10px;
+            }
         
-
-
-        @media print {
-    @page {
-        size: auto;
-        margin: 0mm;
+            .no-data {
+                text-align: center;
+                padding: 20px;
+                font-weight: bold;
+            }
+    
+            /* تنسيق خاص بحقول الوقت */
+            .time-cell {
+                font-family: monospace;
+                white-space: nowrap;
+                direction: ltr;
+                padding: 5px;
+            }
+    
+    
+    
+    
+    
+                    
+            .printDiv {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 10px;
+                margin-bottom: 20px;
+                margin-right: 38%;
+            }
+            
+            .printDiv:hover {
+                background-color: #0056b3;
+            }
+            
+    
+    
+            @media print {
+        @page {
+            size: auto;
+            margin: 0mm;
+        }
+    
+        body * {
+                    visibility: hidden;
+                }
+                #table1-container, #table1-container * {
+                    visibility: visible;
+                }
+                #table1-container {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                }
+    
+        .invoice-container {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+    
+        /* إجبار الطباعة بخلفية بيضاء */
+        table, tr, td, th {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+    
+        /* منع تقسيم الصفوف بين الصفحات */
+        tr {
+            page-break-inside: avoid;
+            border: 2px solid black !important;
+        }
+    
+        /* تحسين حجم الخطوط للطباعة */
+        .table1, .table2 {
+            font-size: 12px !important;
+        }
+    
+        .table1 th, .table1 td,
+        .table2 th, .table2 td {
+            padding: 4px 0px !important;
+            height: auto; /* جعل ارتفاع الخلايا يتناسب مع المحتوى */
+        }
+    
+        /* إخفاء العناصر غير الضرورية */
+        button, .logout-btn {
+            display: none !important;
+        }
     }
-
-    body * {
-                visibility: hidden;
-            }
-            #table1-container, #table1-container * {
-                visibility: visible;
-            }
-            #table1-container {
-                position: absolute;
-                left: 0;
+    
+    
+    
+    
+    
+                            /* تنسيق الناف بار */
+            .navbar {
+                width: 380px;
+                background: linear-gradient(135deg, #b21f1f, #fdbb2d);
+                backdrop-filter: blur(10px);
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                position: sticky;
                 top: 0;
-                width: 100%;
+                font-weight: bold;
+                font-size: 20px;
+                z-index: 100;
+                color: #ffffff;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
-
-    .invoice-container {
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        box-shadow: none;
-    }
-
-    /* إجبار الطباعة بخلفية بيضاء */
-    table, tr, td, th {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
-
-    /* منع تقسيم الصفوف بين الصفحات */
-    tr {
-        page-break-inside: avoid;
-        border: 2px solid black !important;
-    }
-
-    /* تحسين حجم الخطوط للطباعة */
-    .table1, .table2 {
-        font-size: 12px !important;
-    }
-
-    .table1 th, .table1 td,
-    .table2 th, .table2 td {
-        padding: 4px 0px !important;
-        height: auto; /* جعل ارتفاع الخلايا يتناسب مع المحتوى */
-    }
-
-    /* إخفاء العناصر غير الضرورية */
-    button, .logout-btn {
-        display: none !important;
-    }
-}
-
-
-
-
-
-                        /* تنسيق الناف بار */
-        .navbar {
-            width: 380px;
-            background: linear-gradient(135deg, #b21f1f, #fdbb2d);
-            backdrop-filter: blur(10px);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            font-weight: bold;
-            font-size: 20px;
-            z-index: 100;
-            color: #ffffff;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-        }
-
-        .nav-links a:hover {
-            background: rgba(255, 61, 61, 0.2);
-        }
-
-    </style>
-</head>
+    
+            .logo {
+                font-size: 1.5rem;
+                font-weight: bold;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            }
+    
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+    
+            .nav-links a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+            }
+    
+            .nav-links a:hover {
+                background: rgba(255, 61, 61, 0.2);
+            }
+    
+        </style>
+    </head>
 <body>
     <!-- الناف بار -->
     <nav class="navbar">
@@ -395,20 +403,17 @@
                 const table1Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        username: cells[0]?.v || '',
+                        الاسم: cells[0]?.v || '',
                         shiftNum: cells[1]?.v || '',
-                        date: cells[2]?.v || '',
-                        openTime: parseGoogleSheetDate(cells[3]?.v) || ''
+                        التاريخ: cells[2]?.v || '',
+                        وقت_الفتح: parseGoogleSheetDate(cells[3]?.v) || ''
                     };
                 }).filter(item => item.shiftNum == shiftNumber);
                 
                 document.getElementById('table1-data').innerHTML = createTable(table1Data, [
-                    'username', 'date', 'openTime'
+                    'الاسم', 'التاريخ', 'وقت_الفتح'
                 ], 'table1');
             }
-
-
-
 
             // Process Table 2 data
             if (data2) {
@@ -416,68 +421,88 @@
                 const table2Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        name: cells[0]?.v || '',
-                        attendance: parseGoogleSheetDate(cells[1]?.v),
-                        departure: parseGoogleSheetDate(cells[2]?.v),
-                        totalDelivery: cells[3]?.v || '',
-                        discount: cells[4]?.v || '',
-                        addition: cells[5]?.v || '',
+                        الاسم: cells[0]?.v || '',
+                        حضور: parseGoogleSheetDate(cells[1]?.v),
+                        انصراف: parseGoogleSheetDate(cells[2]?.v),
+                        إجمالي_التوصيل: cells[3]?.v || '',
+                        الخصم: cells[4]?.v || '',
+                        الإضافة: cells[5]?.v || '',
                         shiftNumber: cells[6]?.v || '',
-                        servicesAbove: cells[7]?.v || '',
-                        net: cells[8]?.v || '',
-                        workingHours: parseGoogleSheetDate(cells[9]?.v)
+                        عدد_الخدمات_فوق: cells[7]?.v || '',
+                        الصافي: cells[8]?.v || '',
+                        عدد_ساعات_العمل: parseGoogleSheetDate(cells[9]?.v)
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
-                
+
+                // حساب مجموع الصافي (رقم واحد فقط)
+                const صافي = table2Data.reduce((sum, item) => {
+                    return sum + (parseFloat(item.الصافي) || 0);
+                }, 0);
+
+                // تخزين القيمة الرقمية في localStorage
+                localStorage.setItem('صافي', صافي.toString());
+
                 document.getElementById('table2-data').innerHTML = createTable(table2Data, [
-                    'name', 'attendance', 'departure', 'totalDelivery', 'discount', 
-                    'addition',  'servicesAbove', 'net', 'workingHours'
+                    'الاسم', 'حضور', 'انصراف', 'عدد_ساعات_العمل', 'إجمالي_التوصيل', 
+                    'الخصم', 'الإضافة', 'عدد_الخدمات_فوق', 'الصافي'
                 ], 'table2');
-            }
-
-
-
-
-
+            }               
+                        
             // Process Table 3 data
             if (data3) {
                 const rows = data3.table.rows;
                 const table3Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        name: cells[0]?.v || '',
-                        statement: cells[1]?.v || '',
+                        الاسم: cells[0]?.v || '',
+                        البيان: cells[1]?.v || '',
                         shiftNumber: cells[2]?.v || '',
                         statementdate: cells[3]?.v || '',
                         statementtime: parseGoogleSheetDate(cells[4]?.v) || ''
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
+                // هنا نضيف المتغير الجديد الذي يجمع جميع قيم البيان
+                const allStatements = table3Data.reduce((sum, item) => sum + (parseFloat(item.البيان) || 0), 0);
+                
                 document.getElementById('table3-data').innerHTML = createTable(table3Data, [
-                    'name', 'statement'
+                    'الاسم', 'البيان'
                 ], 'table3');
+                localStorage.setItem('allStatements', allStatements.toString());
+
+                console.log('جميع البيانات:', allStatements);
             }
-
-
-                        // معالجة بيانات الجدول الرابع
-                        if (data4) {
+            
+            // Process Table 4 data
+            if (data4) {
                 const rows = data4.table.rows;
                 const table4Data = rows.map(row => {
+                    const allStatements = parseFloat(localStorage.getItem('allStatements')) || 0;
+                    const صافي = parseFloat(localStorage.getItem('صافي')) || 0;
                     const cells = row.c;
+                    
+                    // استخراج القيم أولاً
+                    const اجمالي = parseFloat(cells[0]?.v) || 0;
+                    const النقدية = parseFloat(cells[1]?.v) || 0;
+                    const الفضية = parseFloat(cells[2]?.v) || 0;
+                    const المرتجع = parseFloat(cells[3]?.v) || 0;
+                    const shiftNumber = cells[4]?.v || '';
+
                     return {
-                        TheCost: cells[0]?.v || '',
-                        cash: cells[1]?.v || '',
-                        Silver: cells[2]?.v || '',
-                        backward: cells[3]?.v || '',
-                        shiftNumber: cells[4]?.v || ''
+                        اجمالي: اجمالي,
+                        النقدية: النقدية,
+                        الفضية: الفضية,
+                        المرتجع: المرتجع,
+                        shiftNumber: shiftNumber,
+                        الكلي: allStatements + المرتجع + الفضية + النقدية + اجمالي + صافي
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
                 document.getElementById('table4-data').innerHTML = createTable(table4Data, [
-                    'TheCost', 'cash', 'Silver', 'backward'
+                    'اجمالي', 'النقدية', 'الفضية', 'المرتجع', 'الكلي'
                 ], 'table4');
-            }
-        }
+            }}
+
     </script>
 
 <script>
