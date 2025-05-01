@@ -89,10 +89,10 @@
             const formattedDate = now.toLocaleDateString('ar-EG'); // التاريخ بتنسيق عربي
             const hours = String(now.getHours()).padStart(2, '0'); // الساعة (24)
             const minutes = String(now.getMinutes()).padStart(2, '0'); // الدقائق
-            const openTime = ` ${hours}:${minutes}`; // تنسيق: "٢٥/١٠/٢٠٢٣ - 14:30"
+            const وقت_الفتح = ` ${hours}:${minutes}`; // تنسيق: "٢٥/١٠/٢٠٢٣ - 14:30"
             
-            formData.append('date', formattedDate); // التاريخ فقط
-            formData.append('openTime', openTime); // التاريخ والوقت معًا
+            formData.append('التاريخ', formattedDate); // التاريخ فقط
+            formData.append('وقت_الفتح', وقت_الفتح); // التاريخ والوقت معًا
             
             const الاسم = document.getElementById('الاسم').value.trim();
             const shiftNumber = document.getElementById('shiftNumber').value.trim();
@@ -101,8 +101,8 @@
             // تخزين البيانات في localStorage
             localStorage.setItem('shiftNumberber', shiftNumber);
             localStorage.setItem('الاسم', الاسم);
-            localStorage.setItem('date', formattedDate);
-            localStorage.setItem('openTime', openTime);
+            localStorage.setItem('التاريخ', formattedDate);
+            localStorage.setItem('وقت_الفتح', وقت_الفتح);
         
             fetch(scriptURL, {
                 method: "POST",
@@ -142,3 +142,4 @@
 </body>
 
 </html>
+

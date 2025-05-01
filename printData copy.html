@@ -421,18 +421,18 @@
                     const totalRow4 = document.createElement('tr');
 
                     const totalStatementsSum = parseFloat(localStorage.getItem('totalStatementsSum')) || 0;
-                    const TheCost = parseFloat(localStorage.getItem('TheCost')) || 0;
-                    const Silver = parseFloat(localStorage.getItem('Silver')) || 0;
-                    const cash = parseFloat(localStorage.getItem('cash')) || 0;
-                    const backward = parseFloat(localStorage.getItem('backward')) || 0;
+                    const اجمالي_المصاريف = parseFloat(localStorage.getItem('اجمالي_المصاريف')) || 0;
+                    const الفضية = parseFloat(localStorage.getItem('الفضية')) || 0;
+                    const النقدية = parseFloat(localStorage.getItem('النقدية')) || 0;
+                    const المرتجع = parseFloat(localStorage.getItem('المرتجع')) || 0;
 
                     // حساب الإجمالي الكلي
-                    const grandTotal = totalNet  + TheCost + Silver + cash + backward + totalStatementsSum; 
+                    const grandTotal = totalNet  + اجمالي_المصاريف + الفضية + النقدية + المرتجع + totalStatementsSum; 
                     console.log(totalNet);
-                    console.log(TheCost);
-                    console.log(Silver);
-                    console.log(cash);
-                    console.log(backward);
+                    console.log(اجمالي_المصاريف);
+                    console.log(الفضية);
+                    console.log(النقدية);
+                    console.log(المرتجع);
                     console.log(totalStatementsSum);
                     
                     totalRow.innerHTML = `
@@ -443,24 +443,24 @@
                     dataContainer.appendChild(totalRow);
                     totalRow1.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( مصروفات خارج الجرد ):</h2></td>
-                        <td>${TheCost}</td>
+                        <td>${اجمالي_المصاريف}</td>
                     `;
                     dataContainer.appendChild(totalRow1);
                     totalRow2.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>النقدية : </h2></td>
-                        <td>${cash}</td>
+                        <td>${النقدية}</td>
                         
                     `;
                     dataContainer.appendChild(totalRow2);
                     totalRow3.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>الفضية</h2></td>
-                        <td>${Silver}</td>
+                        <td>${الفضية}</td>
                         
                     `;
                     dataContainer.appendChild(totalRow3);
                     totalRow4.innerHTML = `
                         <td colspan="8" style="text-align: center;"><h2>المرتجع</h2></td>
-                        <td>${backward}</td>
+                        <td>${المرتجع}</td>
                         
                     `;
                     dataContainer.appendChild(totalRow4);
@@ -471,14 +471,14 @@
                 // عرض بيانات الجدول الأول (تقارير)
                 dataContainer2.innerHTML = '';
     
-                const username = localStorage.getItem('username') || "غير محدد";
-                const date = localStorage.getItem('date') || "غير محدد";
-                const openTime = localStorage.getItem('openTime') || "غير محدد";
+                const الاسم = localStorage.getItem('الاسم') || "غير محدد";
+                const التاريخ = localStorage.getItem('التاريخ') || "غير محدد";
+                const وقت_الفتح = localStorage.getItem('وقت_الفتح') || "غير محدد";
 
                 const reportRow1 = document.createElement('tr');
                 reportRow1.innerHTML = `
                     <td>مسؤول الجرد:</td>
-                    <td>${username}</td>
+                    <td>${الاسم}</td>
                 `;
                 dataContainer2.appendChild(reportRow1);
 
@@ -492,14 +492,14 @@
                 const reportRow3 = document.createElement('tr');
                 reportRow3.innerHTML = `
                     <td>تاريخ الوردية:</td>
-                    <td>${date}</td>
+                    <td>${التاريخ}</td>
                 `;
                 dataContainer2.appendChild(reportRow3);
 
                 const reportRow4 = document.createElement('tr');
                 reportRow4.innerHTML = `
                     <td>وقت فتح الوردية:</td>
-                    <td>${openTime}</td>
+                    <td>${وقت_الفتح}</td>
                 `;
                 dataContainer2.appendChild(reportRow4);
 
@@ -521,18 +521,18 @@
         const logoutButton = document.getElementById('logoutButton');
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
-                    localStorage.removeItem('username');
+                    localStorage.removeItem('الاسم');
                     localStorage.removeItem('shiftNumber');
                     localStorage.removeItem('totalStatementsSum');
                     localStorage.removeItem('statementtime');
                     localStorage.removeItem('statementdate');
-                    localStorage.removeItem('openTime');
+                    localStorage.removeItem('وقت_الفتح');
                     localStorage.removeItem('password');
-                    localStorage.removeItem('date');
-                    localStorage.removeItem('cash');
-                    localStorage.removeItem('backward');
-                    localStorage.removeItem('TheCost');
-                    localStorage.removeItem('Silver');
+                    localStorage.removeItem('التاريخ');
+                    localStorage.removeItem('النقدية');
+                    localStorage.removeItem('المرتجع');
+                    localStorage.removeItem('اجمالي_المصاريف');
+                    localStorage.removeItem('الفضية');
                     window.location.href = './index.html';
                     swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
                 });
@@ -543,3 +543,30 @@
 </body>
 
 </html>
+
+<!-- 
+localStorage.removeItem('الاسم');
+localStorage.removeItem('shiftNumber');
+localStorage.removeItem('totalStatementsSum');
+localStorage.removeItem('statementtime');
+localStorage.removeItem('statementdate');
+localStorage.removeItem('وقت_الفتح');
+localStorage.removeItem('password');
+localStorage.removeItem('date');
+localStorage.removeItem('النقدية');
+localStorage.removeItem('backward');
+localStorage.removeItem('اجمالي_المصاريف');
+localStorage.removeItem('Silver'); -->
+<!-- 
+localStorage.removeItem('الاسم');
+localStorage.removeItem('shiftNumber');
+localStorage.removeItem('totalStatementsSum');
+localStorage.removeItem('statementtime');
+localStorage.removeItem('statementdate');
+localStorage.removeItem('وقت_الفتح');
+localStorage.removeItem('password');
+localStorage.removeItem('date');
+localStorage.removeItem('النقدية');
+localStorage.removeItem('المرتجع');
+localStorage.removeItem('اجمالي_المصاريف');
+localStorage.removeItem('الفضية'); -->
