@@ -13,11 +13,10 @@
                 font-weight: bold;
                 padding: 0;
                 color: black;
-                width: 400px;
             }
         
             .invoice-container {
-                width:400px;
+                width: 450px;
                 margin: 0 auto;
                 padding: 10px;
             }
@@ -411,7 +410,7 @@
                 }).filter(item => item.shiftNum == shiftNumber);
                 
                 document.getElementById('table1-data').innerHTML = createTable(table1Data, [
-                    'الاسم', 'التاريخ', 'وقت_الفتح'
+                    'الاسم', 'التاريخ', 'وقت_الفتح', 'shiftNum'
                 ], 'table1');
             }
 
