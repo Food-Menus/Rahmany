@@ -119,7 +119,7 @@
             padding: 20px;
             font-weight: bold;
         }
- 
+
         /* تنسيق خاص بحقول الوقت */
         .time-cell {
             font-family: monospace;
@@ -140,7 +140,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 26px;
             margin-bottom: 20px;
             margin-right: 38%;
         }
@@ -212,7 +212,7 @@
 
                         /* تنسيق الناف بار */
         .navbar {
-            width: 100%;
+            width: 115vw;
             background: linear-gradient(135deg, #b21f1f, #fdbb2d);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
@@ -253,6 +253,18 @@
             background: rgba(255, 61, 61, 0.2);
         }
 
+        .logout-btn {
+            padding: 10px 20px;
+            background-color: #ff3535;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 27px;
+            margin-bottom: 20px;
+            margin-right: 38%;
+        }
+
     </style>
 </head>
 <body>
@@ -276,8 +288,9 @@
             <div id="table4-data" class="no-data">جارٍ تحميل البيانات...</div>
         </div>
     </div>
-
-    <button onclick="printDiv()" class="printDiv">طباعة الجداول</button>
+    <button onclick="printDiv()" class="printDiv">طبـاعة الجداول</button>
+    <br><hr><br>
+    <button id="logoutButton" class="logout-btn" >انـهـاء الشـيـفت</button><br>  
 
     <script>
         function printDiv() {
@@ -500,6 +513,29 @@
 
         // تحميل البيانات عند فتح الصفحة
         document.addEventListener('DOMContentLoaded', loadData);
+
+        const logoutButton = document.getElementById('logoutButton');
+            if(logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.removeItem('allStatements');
+                    localStorage.removeItem('shiftNumber');
+                    localStorage.removeItem('التاريخ');
+                    localStorage.removeItem('الاسم');
+                    localStorage.removeItem('وقت_الفتح');
+                    localStorage.removeItem('statementdate');
+                    localStorage.removeItem('statementtime');
+                    localStorage.removeItem('totalStatementsSum');
+                    localStorage.removeItem('password');
+                    localStorage.removeItem('النقدية');
+                    localStorage.removeItem('المرتجع');
+                    localStorage.removeItem('اجمالي_المصاريف');
+                    localStorage.removeItem('الفضية');
+                    localStorage.removeItem('صافي');
+                    window.location.href = './index.html';
+                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+                });
+            }
+   
     </script>
 </body>
 </html>

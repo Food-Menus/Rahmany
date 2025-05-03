@@ -261,7 +261,7 @@
         const logoutButton = document.getElementById('logoutButton');
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
-                    localStorage.removeItem('inventoryOfficer');
+                    localStorage.removeItem('allStatements');
                     localStorage.removeItem('shiftNumber');
                     localStorage.removeItem('التاريخ');
                     localStorage.removeItem('الاسم');
@@ -271,13 +271,15 @@
                     localStorage.removeItem('totalStatementsSum');
                     localStorage.removeItem('password');
                     localStorage.removeItem('النقدية');
-                    localStorage.removeItem('backward');
-                    localStorage.removeItem('TheCost');
-                    localStorage.removeItem('Silver');
+                    localStorage.removeItem('المرتجع');
+                    localStorage.removeItem('اجمالي_المصاريف');
+                    localStorage.removeItem('الفضية');
+                    localStorage.removeItem('صافي');
                     window.location.href = './index.html';
                     swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
                 });
             }
+   
     </script>
 
     <script>
