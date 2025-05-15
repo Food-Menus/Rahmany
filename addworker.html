@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تسجيل بيانات العمال</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* تنسيق عام للصفحة */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    margin: 0;
+    min-height: 100vh;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* تنسيق الحاوية الرئيسية */
+.container {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 1s ease;
+}
+
+/* تنسيق العنوان */
+.container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+.container h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: #fff;
+    border-radius: 2px;
+}
+
+/* تنسيق مجموعة الحقول */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 93%;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* تنسيق الزر */
+button[type="submit"] {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+}
+
+button[type="submit"]:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* تنسيق رسائل النظام */
+.message {
+    color: #ff6b6b;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    display: none;
+}
+
+/* تأثيرات الحركة */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* تنسيق للهواتف */
+@media (max-width: 768px) {
+    .container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .container h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* تنسيق خيارات القائمة المنسدلة */
+select option {
+    background: #333;
+    color: white;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل بيانات العامل</h2>
+        <form id="workerForm">
+            <div class="form-group">
+                <label for="workerName">اسم العامل</label>
+                <input type="text" id="workerName" name="workerName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="jobType">نوع العمل</label>
+                <select id="jobType" name="jobType" required>
+                    <option value="">اختر نوع العمل</option>
+                    <option value="فرش">فرش</option>
+                    <option value="حريم حوض">حريم حوض</option>
+                    <option value="كهرباء">كهرباء</option>
+                    <option value="كاشير">كاشير</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="hourlyRate">المصروف بالساعة (جنيه)</label>
+                <input type="number" id="hourlyRate" name="hourlyRate" min="1" required>
+            </div>
+            
+            <button type="submit">حفظ البيانات</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('workerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const scriptURL = "https://script.google.com/macros/s/AKfycbzvvxCA02dEznT218GdpG2HX3ZdcHMNbykRUyXCgsiVYKpFpkZHcbHsKB9Q8mRpCSzn/exec";
+            const form = document.forms["workerForm"];
+            const submitBtn = document.querySelector("#workerForm button[type='submit']");
+            const formData = new FormData(form);
+            
+            // تعطيل الزر أثناء الإرسال
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الحفظ...';
+            
+            // إضافة التاريخ والوقت
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('ar-EG');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const وقت_التسجيل = `${hours}:${minutes}`;
+            
+            formData.append('تاريخ_التسجيل', formattedDate);
+            formData.append('وقت_التسجيل', وقت_التسجيل);
+
+            fetch(scriptURL, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'تم بنجاح',
+                        text: 'تم تسجيل بيانات العامل بنجاح',
+                        icon: 'success',
+                        confirmButtonText: 'حسناً'
+                    });
+                    form.reset();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء محاولة التسجيل',
+                    icon: 'error',
+                    confirmButtonText: 'حسناً'
+                });
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'حفظ البيانات';
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminName = localStorage.getItem('adminName');
+            if (!adminName) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
+    </script>
+
+</body>
+</html>

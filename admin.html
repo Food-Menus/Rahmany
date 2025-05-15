@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تسجيل الدخول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* تنسيق عام للصفحة */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* تنسيق الناف بار */
+        .navbar {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تنسيق نموذج تسجيل الدخول */
+        .login-container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .login-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 90%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تنسيق للهواتف */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* صفحة الترحيب بعد تسجيل الدخول */
+        .welcome-container {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .welcome-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">نظام التسجيل</div>
+    </nav>
+
+    <div class="login-container" id="loginForm">
+        <h2 class="login-title">تسجيل الدخول</h2>
+        <form id="loginFormElement">
+            <div class="input-group">
+                <label for="username">اسم المستخدم</label>
+                <input type="text" id="username" name="username" required>
+                <div class="error-message" id="usernameError">اسم المستخدم غير صحيح</div>
+            </div>
+            <div class="input-group">
+                <label for="password">كلمة المرور</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="passwordError">كلمة المرور غير صحيحة</div>
+            </div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+        </form>
+    </div>
+
+    <div class="login-container welcome-container" id="welcomeScreen">
+        <h2 class="welcome-title">مرحباً بك!</h2>
+        <p class="welcome-message">لقد سجلت دخولك بنجاح إلى النظام</p>
+        <button class="logout-btn" id="logoutButton">تسجيل الخروج</button>
+    </div>
+
+    <script>
+        // بيانات المستخدمين المسجلين
+        const users = [
+            { username: "admin", password: "admin123" },
+            { username: "user1", password: "password1" },
+            { username: "user2", password: "password2" }
+        ];
+
+        // عناصر DOM
+        const loginForm = document.getElementById('loginForm');
+        const loginFormElement = document.getElementById('loginFormElement');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const usernameError = document.getElementById('usernameError');
+        const passwordError = document.getElementById('passwordError');
+        const logoutButton = document.getElementById('logoutButton');
+
+        // معالجة تسجيل الدخول
+        loginFormElement.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // إخفاء رسائل الخطأ
+            usernameError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // البحث عن المستخدم
+            const user = users.find(u => u.username === username);
+            
+            if (!user) {
+                // اسم المستخدم غير صحيح
+                usernameError.style.display = 'block';
+                usernameInput.focus();
+                return;
+            }
+            
+            if (user.password !== password) {
+                // كلمة المرور غير صحيحة
+                passwordError.style.display = 'block';
+                passwordInput.focus();
+                return;
+            }
+            
+            // تسجيل الدخول ناجح
+            loginForm.style.display = 'none';
+            welcomeScreen.style.display = 'block';
+            window.location.href = './adminprofile.html';
+            localStorage.setItem('adminName', username);
+            localStorage.setItem('adminPassword', password);
+        });
+
+
+    </script>
+</body>
+</html>

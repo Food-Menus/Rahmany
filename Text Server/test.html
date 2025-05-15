@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <title>بحث عن الشيفت نبر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -13,10 +13,11 @@
             font-weight: bold;
             padding: 0;
             color: black;
+            width: 380px;
         }
     
         .invoice-container {
-            width: 450px;
+            width: 380px;
             margin: 0 auto;
             padding: 10px;
         }
@@ -49,11 +50,11 @@
         /* Table Styles - أبيض وأسود */
         .table-container {
             overflow-x: auto;
-            margin-bottom: 10px;
+            margin-bottom: 30px;
         }
 
         .table1, .table2, .table3, .table4 {
-            width: 400px;
+            width: 100%;
             border-collapse: collapse;
             border: 2px solid black !important;
             text-align: center;
@@ -61,27 +62,18 @@
 
         }
     
-
-        .table2 th, 
-        .table2 td {
-            border: 2px solid black !important;
-            padding: 2px 2px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            background-color: white !important;
-            color: black !important;
-        }
         .table1 th, 
         .table1 td,
+        .table2 th, 
+        .table2 td,
         .table3 th,
         .table3 td,
         .table4 th, 
         .table4 td {
             border: 2px solid black !important;
-            padding: 2px 2px;
+            padding: 8px 2px;
             text-align: center;
-            font-size: 20px;
+            font-size: 10px;
             font-weight: bold;
             background-color: white !important;
             color: black !important;
@@ -94,10 +86,9 @@
             background-color: #f0f0f0;
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            padding-top: 10px;
-            padding-bottom: 10px;
+            height: 100px;
             vertical-align: center;
-            font-size: 18px;
+            font-size: 13px;
         }
     
         /* إزالة أي تأثيرات غير ضرورية */
@@ -110,7 +101,7 @@
     
         h2 {
             text-align: center;
-            margin: 10px 0;
+            margin: 20px 0;
             font-size: 20px;
         }
     
@@ -140,7 +131,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 26px;
+            font-size: 16px;
             margin-bottom: 20px;
             margin-right: 38%;
         }
@@ -212,7 +203,7 @@
 
                         /* تنسيق الناف بار */
         .navbar {
-            width: 115vw;
+            width: 380px;
             background: linear-gradient(135deg, #b21f1f, #fdbb2d);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
@@ -253,44 +244,32 @@
             background: rgba(255, 61, 61, 0.2);
         }
 
-        .logout-btn {
-            padding: 10px 20px;
-            background-color: #ff3535;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 27px;
-            margin-bottom: 20px;
-            margin-right: 38%;
-        }
-
     </style>
 </head>
 <body>
-    <!-- الناف بار -->
     <nav class="navbar">
         <div class="logo">نظام ادارة بيانات الرحماني</div>
         <div class="nav-links">
-            <a href="./index.html"> رجوع  </a>
+            <a href="./index.html"> رجوع </a>
         </div>
     </nav>
-    
+
     <div class="invoice-container">
         <div class="search-box">
-            <h1>بيانات الوردية</h1>
+            <h1> البحث عن وردية قديمة </h1>
+            <input type="text" id="shiftNumber" placeholder="أدخل رقم الوردية">
+            <button onclick="searchData()">بحث</button>
         </div>
 
         <div id="table1-container" class="table-container">
-            <div id="table1-data" class="no-data">جارٍ تحميل البيانات...</div>
-            <div id="table2-data" class="no-data">جارٍ تحميل البيانات...</div>
-            <div id="table3-data" class="no-data">جارٍ تحميل البيانات...</div>
-            <div id="table4-data" class="no-data">جارٍ تحميل البيانات...</div>
+            <div id="table1-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table2-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table3-data" class="no-data">لا توجد بيانات لعرضها</div>
+            <div id="table4-data" class="no-data">لا توجد بيانات لعرضها</div> <!-- الجدول الرابع -->
         </div>
     </div>
-    <button onclick="printDiv()" class="printDiv">طبـاعة الجداول</button>
-    <br><hr><br>
-    <button id="logoutButton" class="logout-btn" >انـهـاء الشـيـفت</button><br>  
+
+    <button onclick="printDiv()" class="printDiv">طباعة الجداول</button>
 
     <script>
         function printDiv() {
@@ -311,13 +290,9 @@
 
         function formatTime(timeValue) {
             if (!timeValue) return '';
-            
-            // إذا كان الوقت في صيغة ساعة:دقيقة (مثل 14:30)
             if (typeof timeValue === 'string' && timeValue.includes(':')) {
                 return timeValue;
             }
-            
-            // إذا كان الوقت رقم (مثل 0.5 لتمثل 12:00)
             if (typeof timeValue === 'number') {
                 const date = new Date(timeValue * 24 * 60 * 60 * 1000);
                 return date.toLocaleTimeString('en-US', {
@@ -326,7 +301,6 @@
                     hour12: false
                 });
             }
-            
             return timeValue;
         }
 
@@ -336,20 +310,14 @@
             }
 
             let table = `<table class="${tableClass}"><thead><tr>`;
-            
-            // Create table headers
             columns.forEach(col => {
                 table += `<th>${col}</th>`;
             });
-            
             table += '</tr></thead><tbody>';
-            
-            // Create table rows
             data.forEach(row => {
                 table += '<tr>';
                 columns.forEach(col => {
                     const cellValue = row[col] || '';
-                    // تطبيق تنسيق خاص على حقول الوقت
                     if (col.toLowerCase().includes('time') || col.toLowerCase().includes('attendance') || col.toLowerCase().includes('departure')) {
                         table += `<td class="time-cell">${formatTime(cellValue)}</td>`;
                     } else {
@@ -358,45 +326,22 @@
                 });
                 table += '</tr>';
             });
-            
             table += '</tbody></table>';
             return table;
         }
 
-        function parseGoogleSheetDate(dateStr) {
-            if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
-            
-            const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
-            if (!parts) return "غير محدد";
-            
-            const year = 1899 + parseInt(parts[1], 10);
-            const month = parseInt(parts[2], 10);
-            const day = parseInt(parts[3], 10);
-            const hour = parseInt(parts[4], 10);
-            const minute = parseInt(parts[5], 10);
-            
-            const date = new Date(year, month, day, hour, minute);
-            
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            const formattedHours = (hour % 12 || 12).toString().padStart(2, '0');
-            const formattedMinutes = minute.toString().padStart(2, '0');
-            
-            return `${formattedHours}:${formattedMinutes}`;
-        }
-
-        async function loadData() {
-            const shiftNumber = localStorage.getItem('shiftNumber');
+        async function searchData() {
+            const shiftNumber = document.getElementById('shiftNumber').value.trim();
             if (!shiftNumber) {
-                window.location.href = './index.html';
+                alert('الرجاء إدخال رقم الشيفت');
                 return;
             }
 
-            // URLs for the Google Sheets
             const url1 = 'https://docs.google.com/spreadsheets/d/1a3pDcgzbcHsl3TNfgNQJGD_CZ3AcL1rvnubuXE8aAVI/gviz/tq?tqx=out:json';
             const url2 = 'https://docs.google.com/spreadsheets/d/1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes/gviz/tq?tqx=out:json';
             const url3 = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
             const url4 = 'https://docs.google.com/spreadsheets/d/1j2t2tPqbXxfzhl9OL-L3VmH5al3edvUEfNRcG96q_9c/gviz/tq?tqx=out:json';
-            // Fetch data from all tables
+
             const [data1, data2, data3, data4] = await Promise.all([
                 fetchData(url1),
                 fetchData(url2),
@@ -404,137 +349,95 @@
                 fetchData(url4)
             ]);
 
-            // Process Table 1 data
             if (data1) {
                 const rows = data1.table.rows;
                 const table1Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        الاسم: cells[0]?.v || '',
+                        username: cells[0]?.v || '',
                         shiftNum: cells[1]?.v || '',
-                        التاريخ: cells[2]?.v || '',
-                        وقت_الفتح: parseGoogleSheetDate(cells[3]?.v) || ''
+                        date: cells[2]?.v || '',
+                        openTime: formatTime(cells[3]?.v)
                     };
                 }).filter(item => item.shiftNum == shiftNumber);
                 
                 document.getElementById('table1-data').innerHTML = createTable(table1Data, [
-                    'الاسم', 'التاريخ', 'وقت_الفتح' , 'shiftNum'
+                    'username', 'date', 'openTime'
                 ], 'table1');
             }
 
-            // Process Table 2 data
             if (data2) {
                 const rows = data2.table.rows;
                 const table2Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        الاسم: cells[0]?.v || '',
-                        حضور: parseGoogleSheetDate(cells[1]?.v),
-                        انصراف: parseGoogleSheetDate(cells[2]?.v),
-                        إجمالي_التوصيل: cells[3]?.v || '',
-                        الخصم: cells[4]?.v || '',
-                        الإضافة: cells[5]?.v || '',
+                        name: cells[0]?.v || '',
+                        attendance: formatTime(cells[1]?.v),
+                        departure: formatTime(cells[2]?.v),
+                        totalDelivery: cells[3]?.v || '',
+                        discount: cells[4]?.v || '',
+                        addition: cells[5]?.v || '',
                         shiftNumber: cells[6]?.v || '',
-                        عدد_الخدمات_فوق: cells[7]?.v || '',
-                        الصافي: cells[8]?.v || '',
-                        عدد_ساعات_العمل: parseGoogleSheetDate(cells[9]?.v)
+                        servicesAbove: cells[7]?.v || '',
+                        net: cells[8]?.v || '',
+                        workingHours: formatTime(cells[9]?.v)
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
-
-                // حساب مجموع الصافي (رقم واحد فقط)
-                const صافي = table2Data.reduce((sum, item) => {
-                    return sum + (parseFloat(item.الصافي) || 0);
-                }, 0);
-
-                // تخزين القيمة الرقمية في localStorage
-                localStorage.setItem('صافي', صافي.toString());
-
+                
                 document.getElementById('table2-data').innerHTML = createTable(table2Data, [
-                    'الاسم', 'حضور', 'انصراف', 'عدد_ساعات_العمل', 'إجمالي_التوصيل', 
-                    'الخصم', 'الإضافة',  'الصافي'
+                    'name', 'attendance', 'departure', 'totalDelivery', 'discount', 
+                    'addition',  'servicesAbove', 'net', 'workingHours'
                 ], 'table2');
-            }               
-                        
-            // Process Table 3 data
+            }
+
             if (data3) {
                 const rows = data3.table.rows;
                 const table3Data = rows.map(row => {
                     const cells = row.c;
                     return {
-                        الاسم: cells[0]?.v || '',
-                        البيان: cells[1]?.v || '',
+                        name: cells[0]?.v || '',
+                        statement: cells[1]?.v || '',
                         shiftNumber: cells[2]?.v || '',
                         statementdate: cells[3]?.v || '',
-                        statementtime: parseGoogleSheetDate(cells[4]?.v) || ''
+                        statementtime: formatTime(cells[4]?.v) || ''
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
-                // هنا نضيف المتغير الجديد الذي يجمع جميع قيم البيان
-                const allStatements = table3Data.reduce((sum, item) => sum + (parseFloat(item.البيان) || 0), 0);
-                
                 document.getElementById('table3-data').innerHTML = createTable(table3Data, [
-                    'الاسم', 'البيان'
+                    'name', 'statement'
                 ], 'table3');
-                localStorage.setItem('allStatements', allStatements.toString());
-
-                console.log('جميع البيانات:', allStatements);
             }
-            
-            // Process Table 4 data
+
+            // معالجة بيانات الجدول الرابع
             if (data4) {
                 const rows = data4.table.rows;
                 const table4Data = rows.map(row => {
-                    const allStatements = parseFloat(localStorage.getItem('allStatements')) || 0;
-                    const صافي = parseFloat(localStorage.getItem('صافي')) || 0;
                     const cells = row.c;
-                    
-                    // استخراج القيم أولاً
-                    const اجمالي = parseFloat(cells[0]?.v) || 0;
-                    const النقدية = parseFloat(cells[1]?.v) || 0;
-                    const الفضية = parseFloat(cells[2]?.v) || 0;
-                    const المرتجع = parseFloat(cells[3]?.v) || 0;
-                    const shiftNumber = cells[4]?.v || '';
-
                     return {
-                        اجمالي: اجمالي,
-                        النقدية: النقدية,
-                        الفضية: الفضية,
-                        المرتجع: المرتجع,
-                        shiftNumber: shiftNumber,
-                        الكلي: allStatements + المرتجع + الفضية + النقدية + اجمالي + صافي
+                        TheCost: cells[0]?.v || '',
+                        cash: cells[1]?.v || '',
+                        Silver: cells[2]?.v || '',
+                        backward: cells[3]?.v || '',
+                        shiftNumber: cells[4]?.v || ''
                     };
                 }).filter(item => item.shiftNumber == shiftNumber);
                 
                 document.getElementById('table4-data').innerHTML = createTable(table4Data, [
-                    'اجمالي', 'النقدية', 'الفضية', 'المرتجع', 'الكلي'
+                    'TheCost', 'cash', 'Silver', 'backward'
                 ], 'table4');
-            }}
-
-        // تحميل البيانات عند فتح الصفحة
-        document.addEventListener('DOMContentLoaded', loadData);
-
-        const logoutButton = document.getElementById('logoutButton');
-            if(logoutButton) {
-                logoutButton.addEventListener('click', () => {
-                    localStorage.removeItem('allStatements');
-                    localStorage.removeItem('shiftNumber');
-                    localStorage.removeItem('التاريخ');
-                    localStorage.removeItem('الاسم');
-                    localStorage.removeItem('وقت_الفتح');
-                    localStorage.removeItem('statementdate');
-                    localStorage.removeItem('statementtime');
-                    localStorage.removeItem('totalStatementsSum');
-                    localStorage.removeItem('password');
-                    localStorage.removeItem('النقدية');
-                    localStorage.removeItem('المرتجع');
-                    localStorage.removeItem('اجمالي_المصاريف');
-                    localStorage.removeItem('الفضية');
-                    localStorage.removeItem('صافي');
-                    window.location.href = './index.html';
-                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
-                });
             }
-   
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
     </script>
 </body>
 </html>

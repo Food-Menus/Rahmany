@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة مصروفات العمال</title>
+    <style>
+        /* تنسيق عام للصفحة */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* تنسيق الحاوية الرئيسية */
+        .container {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease;
+        }
+
+        /* تنسيق العنوان */
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        /* تنسيق مجموعة الحقول */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        /* تنسيق الزر */
+        .submit-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تنسيق رسائل النظام */
+        .message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background: rgba(46, 125, 50, 0.3);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+        }
+
+        .error {
+            background: rgba(211, 47, 47, 0.3);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+        }
+
+        /* تأثيرات الحركة */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تنسيق للهواتف */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* تنسيق خيارات القائمة المنسدلة */
+        select option {
+            background: #333;
+            color: white;
+        }
+
+        /* تنسيق حقق الخصم والساعات */
+        .input-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .input-group .form-group {
+            flex: 1;
+        }
+
+                /* تنسيق زر التنقل */
+        .main-nav-buttons {
+            text-align: center;
+            margin: 30px auto;
+            max-width: 800px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+    </style>
+    <!-- إضافة مكتبة SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <h2 class="page-title">تسجيل مصروفات العمال</h2>
+        
+        <form id="expenseForm">
+            <div class="form-group">
+                <label for="jobType">نوع العمل</label>
+                <select id="jobType" name="jobType" required>
+                    <option value="">جاري تحميل أنواع العمل...</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="workerName">اسم العامل</label>
+                <select id="workerName" name="workerName" required disabled>
+                    <option value="">اختر نوع العمل أولاً</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="hoursWorked">عدد ساعات العمل</label>
+                    <input type="number" id="hoursWorked" name="hoursWorked" min="1" required>
+                </div>
+            </div>
+            <div class="input-group"> 
+                <div class="form-group">
+                    <label for="discount">الخصم (جنيه)</label>
+                    <input type="number" id="discount" name="discount" min="0" value="0">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="hourlyRate">ثمن الساعة (جنيه)</label>
+                <input type="number" id="hourlyRate" name="hourlyRate" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="dayExpense">مصاريف اليوم (جنيه)</label>
+                <input type="number" id="dayExpense" name="dayExpense" readonly>
+            </div>
+            
+            <button type="submit" class="submit-btn">حفظ البيانات</button>
+        </form>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <div class="main-nav-buttons">
+        <a href="./printwokerExpences.html" class="nav-btn">
+            <i class="fas fa-utensils"></i>
+            <span>  طباعه مصاريف العمال  </span>
+        </a>
+    </div>
+
+    <script>
+        // روابط الجداول
+        const WORKERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
+        const EXPENSES_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV1pQizIbiTEOxDMzvIatE8xJO4kYhx23kGiptz4BK7b32lQsb9jrC4DJEcUFE7amI/exec';
+        
+        // عناصر DOM
+        const jobTypeSelect = document.getElementById('jobType');
+        const workerNameSelect = document.getElementById('workerName');
+        const hoursWorkedInput = document.getElementById('hoursWorked');
+        const discountInput = document.getElementById('discount');
+        const hourlyRateInput = document.getElementById('hourlyRate');
+        const dayExpenseInput = document.getElementById('dayExpense');
+        const expenseForm = document.getElementById('expenseForm');
+        const messageDiv = document.getElementById('message');
+        
+        // بيانات العمال
+        let workersData = [];
+        let uniqueJobTypes = [];
+        
+        // تحميل بيانات العمال من جوجل شيت
+        function loadWorkersData() {
+            fetch(WORKERS_SHEET_URL)
+                .then(res => res.text())
+                .then(text => {
+                    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
+                    const data = JSON.parse(jsonStr);
+                    
+                    workersData = data.table.rows.map(row => {
+                        return {
+                            workerName: row.c[0]?.v || '',
+                            jobType: row.c[1]?.v || '',
+                            hourlyRate: row.c[2]?.v || 0
+                        };
+                    });
+                    
+                    // استخراج أنواع العمل الفريدة
+                    uniqueJobTypes = [...new Set(workersData.map(worker => worker.jobType))];
+                    
+                    // تعبئة قائمة أنواع العمل
+                    jobTypeSelect.innerHTML = '<option value="">اختر نوع العمل</option>' + 
+                        uniqueJobTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading workers data:', error);
+                    jobTypeSelect.innerHTML = '<option value="">حدث خطأ في تحميل البيانات</option>';
+                });
+        }
+        
+        // عند اختيار نوع العمل
+        jobTypeSelect.addEventListener('change', function() {
+            const selectedJobType = this.value;
+            workerNameSelect.disabled = !selectedJobType;
+            
+            if (selectedJobType) {
+                // تصفية العمال حسب نوع العمل المختار
+                const filteredWorkers = workersData.filter(worker => worker.jobType === selectedJobType);
+                
+                // تعبئة قائمة أسماء العمال
+                workerNameSelect.innerHTML = '<option value="">اختر اسم العامل</option>' + 
+                    filteredWorkers.map(worker => `<option value="${worker.workerName}" data-hourly-rate="${worker.hourlyRate}">${worker.workerName}</option>`).join('');
+            } else {
+                workerNameSelect.innerHTML = '<option value="">اختر نوع العمل أولاً</option>';
+            }
+            
+            // إعادة تعيين الحقول
+            hourlyRateInput.value = '';
+            dayExpenseInput.value = '';
+        });
+        
+        // عند اختيار اسم العامل
+        workerNameSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const hourlyRate = selectedOption.getAttribute('data-hourly-rate') || 0;
+            
+            hourlyRateInput.value = hourlyRate;
+            calculateDayExpense();
+        });
+        
+        // حساب مصاريف اليوم
+        function calculateDayExpense() {
+            const hours = parseFloat(hoursWorkedInput.value) || 0;
+            const rate = parseFloat(hourlyRateInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            
+            const total = (hours * rate) - discount;
+            dayExpenseInput.value = total.toFixed(2);
+        }
+        
+        // استماع لتغيير عدد الساعات أو الخصم
+        hoursWorkedInput.addEventListener('input', calculateDayExpense);
+        discountInput.addEventListener('input', calculateDayExpense);
+        
+        // إرسال البيانات
+        expenseForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'جاري الحفظ...';
+            
+            // إضافة التاريخ والوقت
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('ar-EG');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const time = `${hours}:${minutes}`;
+            
+            const formData = new FormData();
+            formData.append('workerName', workerNameSelect.value);
+            formData.append('jobType', jobTypeSelect.value);
+            formData.append('hourlyRate', hourlyRateInput.value);
+            formData.append('NumOfHours', hoursWorkedInput.value);
+            formData.append('discountWorker', discountInput.value);
+            formData.append('dayExpence', dayExpenseInput.value);
+            formData.append('تاريخ_التسجيل', formattedDate);
+            formData.append('وقت_التسجيل', time);
+
+            fetch(EXPENSES_SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    Swal.fire({
+                        title: 'تم بنجاح',
+                        text: 'تم تسجيل مصروفات العامل بنجاح',
+                        icon: 'success',
+                        confirmButtonText: 'حسناً'
+                    });
+                    this.reset();
+                    hourlyRateInput.value = '';
+                    dayExpenseInput.value = '';
+                    workerNameSelect.disabled = true;
+                    workerNameSelect.innerHTML = '<option value="">اختر نوع العمل أولاً</option>';
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء محاولة التسجيل',
+                    icon: 'error',
+                    confirmButtonText: 'حسناً'
+                });
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'حفظ البيانات';
+            });
+        });
+        
+        // تحميل البيانات عند فتح الصفحة
+        loadWorkersData();
+    </script>
+</body>
+</html>

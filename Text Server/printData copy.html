@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: white;
+            margin: 0;
+            font-weight: bold;
+            padding: 0;
+            color: black;
+            width: 380px;
+        }
+    
+        .invoice-container {
+            width: 380px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+    
+        /* Table Styles - أبيض وأسود للطباعة */
+        .table1, .table2 {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            border: 2px solid black !important;
+            page-break-inside: avoid;
+            text-align: center;
+        }
+    
+        .table1 th, 
+        .table1 td{
+            border: 2px solid black !important;
+            padding: 8px 0px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            background-color: white !important;
+            color: black !important;
+            font-size: 20px;
+            width: 50%;
+        }
+
+        .table2 th, 
+        .table2 td {
+            border: 2px solid black !important;
+            padding: 8px 0px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: bold;
+            background-color: white !important;
+            color: black !important;
+        }
+    
+        .table1 th, 
+        .table2 th {
+            border: 2px solid black !important;
+            background-color: #f0f0f0;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            height: 100px;
+            vertical-align: center;
+            font-size: 13px;
+        }
+    
+        /* إزالة أي تأثيرات غير ضرورية للطباعة */
+        .table1 tr:hover, 
+        .table2 tr:hover {
+            background-color: white !important;
+        }
+    
+
+        /* تحديد عرض الأعمدة */
+        .table2 th:nth-child(1), .table2 td:nth-child(1) { width: 12%; }
+        .table2 th:nth-child(2), .table2 td:nth-child(2) { width: 10%; }
+        .table2 th:nth-child(3), .table2 td:nth-child(3) { width: 10%; }
+        .table2 th:nth-child(4), .table2 td:nth-child(4) { width: 10%; }
+        .table2 th:nth-child(5), .table2 td:nth-child(5) { width: 5%; }
+        .table2 th:nth-child(6), .table2 td:nth-child(6) { width: 3%; }
+        .table2 th:nth-child(7), .table2 td:nth-child(7) { width: 3%; }
+        .table2 th:nth-child(8), .table2 td:nth-child(8) { width: 5%; }
+        .table2 th:nth-child(9), .table2 td:nth-child(9) { width: 5%; }
+        /* طباعة التنسيقات */
+        @media print {
+    @page {
+        size: auto;
+        margin: 0mm;
+    }
+
+    body {
+        font-family: 'Tajawal', sans-serif;
+        padding: 0;
+        margin: 0;
+        background-color: white;
+        width: 100%;
+    }
+
+    .invoice-container {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    /* إجبار الطباعة بخلفية بيضاء */
+    table, tr, td, th {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* منع تقسيم الصفوف بين الصفحات */
+    tr {
+        page-break-inside: avoid;
+        border: 2px solid black !important;
+    }
+
+    /* تحسين حجم الخطوط للطباعة */
+    .table1, .table2 {
+        font-size: 12px !important;
+    }
+
+    .table1 th, .table1 td,
+    .table2 th, .table2 td {
+        padding: 4px 0px !important;
+        height: auto; /* جعل ارتفاع الخلايا يتناسب مع المحتوى */
+    }
+
+    /* إخفاء العناصر غير الضرورية */
+    button, .logout-btn {
+        display: none !important;
+    }
+}
+        /* تنسيق عام للأزرار */
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* زر طباعة الفاتورة */
+        button[onclick="printInvoice()"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button[onclick="printInvoice()"]:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button[onclick="printInvoice()"]:active {
+            transform: translateY(0);
+        }
+
+        /* زر إنهاء الشيفت */
+        #logoutButton {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #logoutButton:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #logoutButton:active {
+            transform: translateY(0);
+        }
+
+        /* تنسيق div المحتوي على زر إنهاء الشيفت */
+        .logout-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    
+</head>
+
+<body>
+
+
+    <div class="invoice-container"id="invoice-container">
+
+        <table class="table1">
+            <tbody id="data-container2">
+            </tbody>
+        </table>
+    
+        <!-- الجدول الثاني -->
+        <table class="table2" >
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th> وقت الحضور </th>
+                    <th> وقت الانصراف </th>
+                    <th>عدد ساعات الخدمة</th>
+                    <th> اجمال التوصيل </th>
+                    <th>الخصم </th>
+                    <th>الاضافه </th>
+                    <th>عدد الخدمات فوق</th>
+                    <th>الصافي + 80ج</th>
+                </tr>
+            </thead>
+            <tbody id="data-container">
+                <!-- البيانات ستضاف هنا عبر الجافا سكريبت -->
+            </tbody>
+        </table>
+
+        <table class="table1">
+            <tbody id="data-container1">
+            </tbody>
+        </table>
+    
+    </div> 
+
+    <button onclick="printInvoice()">طباعة الفاتورة</button>
+    
+    <div class="logout-btn">
+        <button id="logoutButton" > انهاء الشيفت </button><br>
+    </div>  
+
+    <script>
+        function printInvoice() {
+            const invoiceContent = document.getElementById('invoice-container').innerHTML;
+            const originalContent = document.body.innerHTML;
+
+            document.body.innerHTML = invoiceContent;
+
+            window.print();
+
+            document.body.innerHTML = originalContent;
+            location.reload(); // إعادة تحميل الصفحة لضمان استعادة الحالة الأصلية
+        }
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const shiftNumber = localStorage.getItem('shiftNumber');
+    
+    if (!shiftNumber) {
+        console.error('لم يتم العثور على رقم الشيفت في localStorage');
+        return;
+    }
+
+    const url = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
+    
+    let totalStatementsSum = 0;
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(data => {
+            const jsonData = JSON.parse(data.substring(47).slice(0, -2));
+            const rows = jsonData.table.rows;
+            
+            const filteredRows = rows.filter(row => {
+                const rowShiftNumber = row.c[2]?.v;
+                return rowShiftNumber == shiftNumber;
+            });
+            
+            filteredRows.forEach(row => {
+                const statementValue = row.c[1]?.v;
+                const numericValue = parseFloat(statementValue) || 0;
+                totalStatementsSum += numericValue;
+            });
+            
+            // تخزين المجموع في localStorage
+            localStorage.setItem('totalStatementsSum', totalStatementsSum.toString());
+            console.log('تم تخزين المجموع في localStorage:', totalStatementsSum);
+            
+            const container = document.getElementById('data-container1');
+            
+            filteredRows.forEach(row => {
+                const name = row.c[0]?.v || '';
+                const statement = row.c[1]?.v || '';
+                
+                const tr = document.createElement('tr');
+                
+                const tdName = document.createElement('td');
+                tdName.textContent = name;
+                tr.appendChild(tdName);
+                
+                const tdStatement = document.createElement('td');
+                tdStatement.textContent = statement;
+                tr.appendChild(tdStatement);
+                
+                container.appendChild(tr);
+            });
+            
+            console.log('المجموع الكلي لقيم البيان:', totalStatementsSum);
+            
+            // يمكنك الآن استرجاع القيمة في أي وقت باستخدام:
+            // const savedTotal = localStorage.getItem('totalStatementsSum');
+        })
+        .catch(error => {
+            console.error('حدث خطأ أثناء جلب البيانات:', error);
+        });
+});
+
+        
+   </script>
+
+    <script>
+
+        // جلب وعرض بيانات العملاء من Google Sheets 
+        const sheetID = '1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes';
+        const base = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+        fetch(base)
+            .then(response => response.text())
+            .then(data => {
+                const json = JSON.parse(data.substring(47).slice(0, -2));
+                const tableData = json.table.rows;
+                const dataContainer = document.getElementById('data-container');
+                const dataContainer2 = document.getElementById('data-container2');
+//************************************************************************************************//
+//************************************************************************************************//
+//************************************************************************************************//
+
+                dataContainer.innerHTML = '';
+    
+                // جلب قيمة الشيفت من اللوكل ستوريج
+                const shiftNumber = localStorage.getItem('shiftNumber');
+    
+                // التحقق من وجود القيمة
+                if (!shiftNumber) {
+                    dataContainer.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red;">لم يتم تحديد رقم الشيفت!</td></tr>';
+                    return;
+                }
+    
+                // فلترة البيانات حسب رقم الشيفت
+                const filteredData = tableData.filter(row => {
+                    const rowShiftNumber = row.c && row.c[6] ? row.c[6].v.toString() : null;
+                    return rowShiftNumber === shiftNumber;
+                });
+    
+                // إذا لم توجد بيانات بعد الفلترة
+                if (filteredData.length === 0) {
+                    dataContainer.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد بيانات لهذا الشيفت</td></tr>';
+                    return;
+                }
+    
+                // متغير لحساب إجمالي الـ net
+                let totalNet = 0;
+    
+                // عرض البيانات المفلترة
+                filteredData.forEach((row) => {
+                    const tr = document.createElement('tr');
+    
+                    const name = row.c && row.c[0] ? row.c[0].v : "0";
+                    const time1 = row.c && row.c[1] ? row.c[1].v : null;
+                    const time2 = row.c && row.c[2] ? row.c[2].v : null;
+                    const total_delivery = row.c && row.c[3] ? row.c[3].v : "غير متوفر";
+                    const discount = row.c && row.c[4] ?  row.c[4].v : "غير محدد" ;
+                    const Additional = row.c && row.c[5] ? row.c[5].v : "غير محدد";
+                    const Services = row.c && row.c[7] ? row.c[7].v :  "غير محدد";
+                    const net = row.c && row.c[8] ? row.c[8].v : "غير محدد";
+                    const time3 = row.c && row.c[9] ? row.c[9].v : "غير محدد";
+    
+                    function parseGoogleSheetDate(dateStr) {
+                        if (!dateStr || !dateStr.startsWith('Date(')) return "غير محدد";
+                        
+                        const parts = dateStr.match(/Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)/);
+                        if (!parts) return "غير محدد";
+                        
+                        const year = 1899 + parseInt(parts[1], 10);
+                        const month = parseInt(parts[2], 10);
+                        const day = parseInt(parts[3], 10);
+                        const hour = parseInt(parts[4], 10);
+                        const minute = parseInt(parts[5], 10);
+                        
+                        const date = new Date(year, month, day, hour, minute);
+                        
+                        const ampm = hour >= 12 ? 'PM' : 'AM';
+                        const formattedHours = (hour % 12 || 12).toString().padStart(2, '0');
+                        const formattedMinutes = minute.toString().padStart(2, '0');
+                        const formattedSeconds = '00';
+                        
+                        return `${formattedHours}:${formattedMinutes}`;
+                    }
+    
+                    const come = time1 ? parseGoogleSheetDate(time1) : "غير محدد";
+                    const go = time2 ? parseGoogleSheetDate(time2) : "غير محدد";
+                    const total_hours = time3 ? parseGoogleSheetDate(time3) : "غير محدد";
+    
+                    // حساب إجمالي الـ net
+                    const netValue = parseFloat(net) || 0;
+                    totalNet += netValue;
+                    
+                    tr.innerHTML = `
+                        <td>${name}</td>
+                        <td>${come}</td>
+                        <td>${go}</td>
+                        <td>${total_hours}</td>
+                        <td>${total_delivery}</td>
+                        <td>${discount}</td>
+                        <td>${Additional}</td>
+                        <td>${Services}</td>
+                        <td>${net}</td>
+                    `;
+    
+                    dataContainer.appendChild(tr);
+                });
+    
+                    // إضافة صف الإجمالي
+                    const totalRow = document.createElement('tr');
+                    const totalRow1 = document.createElement('tr');
+                    const totalRow2 = document.createElement('tr');
+                    const totalRow3 = document.createElement('tr');
+                    const totalRow4 = document.createElement('tr');
+
+                    const totalStatementsSum = parseFloat(localStorage.getItem('totalStatementsSum')) || 0;
+                    const اجمالي_المصاريف = parseFloat(localStorage.getItem('اجمالي_المصاريف')) || 0;
+                    const الفضية = parseFloat(localStorage.getItem('الفضية')) || 0;
+                    const النقدية = parseFloat(localStorage.getItem('النقدية')) || 0;
+                    const المرتجع = parseFloat(localStorage.getItem('المرتجع')) || 0;
+
+                    // حساب الإجمالي الكلي
+                    const grandTotal = totalNet  + اجمالي_المصاريف + الفضية + النقدية + المرتجع + totalStatementsSum; 
+                    console.log(totalNet);
+                    console.log(اجمالي_المصاريف);
+                    console.log(الفضية);
+                    console.log(النقدية);
+                    console.log(المرتجع);
+                    console.log(totalStatementsSum);
+                    
+                    totalRow.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( البيان + مجموع الصافي ):</h2></td>
+                        <td>${grandTotal.toFixed(2)}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow);
+                    totalRow1.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>اجمالي المصروفات ( مصروفات خارج الجرد ):</h2></td>
+                        <td>${اجمالي_المصاريف}</td>
+                    `;
+                    dataContainer.appendChild(totalRow1);
+                    totalRow2.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>النقدية : </h2></td>
+                        <td>${النقدية}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow2);
+                    totalRow3.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>الفضية</h2></td>
+                        <td>${الفضية}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow3);
+                    totalRow4.innerHTML = `
+                        <td colspan="8" style="text-align: center;"><h2>المرتجع</h2></td>
+                        <td>${المرتجع}</td>
+                        
+                    `;
+                    dataContainer.appendChild(totalRow4);
+
+//************************************************************************************************//
+//************************************************************************************************//
+//************************************************************************************************//
+                // عرض بيانات الجدول الأول (تقارير)
+                dataContainer2.innerHTML = '';
+    
+                const الاسم = localStorage.getItem('الاسم') || "غير محدد";
+                const التاريخ = localStorage.getItem('التاريخ') || "غير محدد";
+                const وقت_الفتح = localStorage.getItem('وقت_الفتح') || "غير محدد";
+
+                const reportRow1 = document.createElement('tr');
+                reportRow1.innerHTML = `
+                    <td>مسؤول الجرد:</td>
+                    <td>${الاسم}</td>
+                `;
+                dataContainer2.appendChild(reportRow1);
+
+                const reportRow2 = document.createElement('tr');
+                reportRow2.innerHTML = `
+                    <td> رقم الوردية:</td>
+                    <td>${shiftNumber}</td>
+                `;
+                dataContainer2.appendChild(reportRow2);
+
+                const reportRow3 = document.createElement('tr');
+                reportRow3.innerHTML = `
+                    <td>تاريخ الوردية:</td>
+                    <td>${التاريخ}</td>
+                `;
+                dataContainer2.appendChild(reportRow3);
+
+                const reportRow4 = document.createElement('tr');
+                reportRow4.innerHTML = `
+                    <td>وقت فتح الوردية:</td>
+                    <td>${وقت_الفتح}</td>
+                `;
+                dataContainer2.appendChild(reportRow4);
+
+    
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('data-container').innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; color: var(--primary);">
+                            حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً
+                        </td>
+                    </tr>
+                `;
+            });
+    </script>
+
+    <script>
+        const logoutButton = document.getElementById('logoutButton');
+            if(logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    localStorage.removeItem('الاسم');
+                    localStorage.removeItem('shiftNumber');
+                    localStorage.removeItem('totalStatementsSum');
+                    localStorage.removeItem('statementtime');
+                    localStorage.removeItem('statementdate');
+                    localStorage.removeItem('وقت_الفتح');
+                    localStorage.removeItem('password');
+                    localStorage.removeItem('التاريخ');
+                    localStorage.removeItem('النقدية');
+                    localStorage.removeItem('المرتجع');
+                    localStorage.removeItem('اجمالي_المصاريف');
+                    localStorage.removeItem('الفضية');
+                    window.location.href = './index.html';
+                    swal("تم تسجيل الخروج", "تم تسجيل الخروج بنجاح.", "success");
+                });
+            };
+    </script>
+
+
+</body>
+
+</html>
+
+<!-- 
+localStorage.removeItem('الاسم');
+localStorage.removeItem('shiftNumber');
+localStorage.removeItem('totalStatementsSum');
+localStorage.removeItem('statementtime');
+localStorage.removeItem('statementdate');
+localStorage.removeItem('وقت_الفتح');
+localStorage.removeItem('password');
+localStorage.removeItem('date');
+localStorage.removeItem('النقدية');
+localStorage.removeItem('backward');
+localStorage.removeItem('اجمالي_المصاريف');
+localStorage.removeItem('Silver'); -->
+<!-- 
+localStorage.removeItem('الاسم');
+localStorage.removeItem('shiftNumber');
+localStorage.removeItem('totalStatementsSum');
+localStorage.removeItem('statementtime');
+localStorage.removeItem('statementdate');
+localStorage.removeItem('وقت_الفتح');
+localStorage.removeItem('password');
+localStorage.removeItem('date');
+localStorage.removeItem('النقدية');
+localStorage.removeItem('المرتجع');
+localStorage.removeItem('اجمالي_المصاريف');
+localStorage.removeItem('الفضية'); -->

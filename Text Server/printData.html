@@ -396,6 +396,7 @@
             const url2 = 'https://docs.google.com/spreadsheets/d/1H8zI1W48HTHZGMIIibFQIeDBd9b7oWGiDnPrl4I3xes/gviz/tq?tqx=out:json';
             const url3 = 'https://docs.google.com/spreadsheets/d/1Kj5glJmhoslgovFEaYfZwVsNxMpRtElXdySEMlbFu2c/gviz/tq?tqx=out:json';
             const url4 = 'https://docs.google.com/spreadsheets/d/1j2t2tPqbXxfzhl9OL-L3VmH5al3edvUEfNRcG96q_9c/gviz/tq?tqx=out:json';
+
             // Fetch data from all tables
             const [data1, data2, data3, data4] = await Promise.all([
                 fetchData(url1),

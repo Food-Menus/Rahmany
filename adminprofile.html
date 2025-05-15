@@ -214,32 +214,30 @@
         
         <div class="buttons-grid">
             
-            <a href="Expense_shift.html" class="main-btn">
-            <i class="fas fa-table"></i>
-                قائمة الشيفتات
+            <a href="./addworker" class="main-btn">
+            <i class="fas fa-users"></i>
+            اضافه عمال
             </a>
 
-            <a href="./statement.html" class="main-btn">
-            <i class="fas fa-list-alt"></i>
+            <!-- <a href="./statement.html" class="main-btn">
+                <i class="fas fa-list-alt"></i>
                 اضافه بيان
             </a>
 
-            <a href="./searsh.html" class="main-btn">
-            <i class="fas fa-search"></i>
+            <a href="searsh.html" class="main-btn">
+                <i class="fas fa-search"></i>
                 البحث عن الشيفت نمبر
-            </a>
-
-            <a href="./workerexpence.html" class="main-btn">
-            <i class="fas fa-users"></i>
-                إدارة المستخدمين
-            </a> 
+            </a> -->
 
             <!-- <a href="page3.html" class="main-btn">
                 <i class="fas fa-chart-line"></i>
                 التقارير والإحصائيات
-            </a>-->
+            </a>
             
-
+            <a href="page4.html" class="main-btn">
+                <i class="fas fa-users"></i>
+                إدارة المستخدمين
+            </a> -->
 
         </div>
     </div>
@@ -264,7 +262,7 @@
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
                     localStorage.removeItem('allStatements');
-                    localStorage.removeItem('shiftNumber');
+                    localStorage.removeItem('adminName');
                     localStorage.removeItem('التاريخ');
                     localStorage.removeItem('الاسم');
                     localStorage.removeItem('وقت_الفتح');
@@ -309,8 +307,8 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const shiftNumber = localStorage.getItem('shiftNumber');
-            if (!shiftNumber) {
+            const adminName = localStorage.getItem('adminName');
+            if (!adminName) {
                 window.location.href = './index.html';
             } else {
                 console.log('يجب ان تسجل دخول')    

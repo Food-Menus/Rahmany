@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <title>The Rahmany Management</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div class="startform">
+        <h1>مرحبا بك</h1>
+        <form id="loginForm">
+            <p>برجاء ادخال البيانات التالية</p><br>
+            <input type="number" id="اجمالي_المصاريف" name="اجمالي_المصاريف" placeholder="اجمالي المصاريف" required>
+            <input type="number" id="النقدية" name="النقدية" placeholder="النقدية" required>
+            <input type="number" id="الفضية" name="الفضية" placeholder="الفضية" required>
+            <input type="number" id="المرتجع" name="المرتجع" placeholder="المرتجع" required>
+            <button type="submit" class="Create-btn" id="submitBtn">تسجيل</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // تعطيل الزر وإظهار حالة التحميل
+    submitBtn.classList.add('loading');
+    
+  
+    
+    // محاكاة انتظار الطلب (استبدل هذا بالوظيفة الفعلية)
+    setTimeout(function() {
+        submitBtn.classList.remove('loading');
+        loadingMessage.style.display = 'none';
+        
+    }, 3000);
+});
+    </script>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwbTu5aaB4K6EcMNtrPZCQy5tOVWPb7yeizbOH9A77r66YW_V8YKb2JnB9S2b4hyhIS/exec";
+        const form = document.forms["loginForm"];
+        const shiftNumber = localStorage.getItem('shiftNumber');
+
+        form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        formData.append('shiftNumber', shiftNumber);
+
+        fetch(scriptURL, { method: "POST", body: formData })
+            .then((response) => {
+                                
+                const اجمالي_المصاريف = document.getElementById('اجمالي_المصاريف').value.trim();
+                const النقدية = document.getElementById('النقدية').value.trim();
+                const الفضية = document.getElementById('الفضية').value.trim();
+                const المرتجع = document.getElementById('المرتجع').value.trim();
+                
+                if(اجمالي_المصاريف && النقدية && الفضية && المرتجع) {
+                    localStorage.setItem('اجمالي_المصاريف', اجمالي_المصاريف);
+                    localStorage.setItem('النقدية', النقدية);
+                    localStorage.setItem('الفضية', الفضية);
+                    localStorage.setItem('المرتجع', المرتجع);
+                    
+                    window.location.href = 'printData.html'; // قم بتغيير هذا إلى اسم صفحة الطباعة لديك
+                } else {
+                    Swal.fire('خطأ', 'برجاء ادخال القيم المطلوبة', 'error');
+
+                }
+
+                Swal.fire('تم بنجاح', 'تم تسجيل البيانات بنجاح', 'success');
+                form.reset();
+            })
+            .catch((error) => {
+            alert("في مشكله", "فشل تسجيل البيانات", "error");
+            });
+        });
+
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumber = localStorage.getItem('shiftNumber');
+            if (!shiftNumber) {
+                window.location.href = './index.html';
+            } else {
+                console.log('يجب ان تسجل دخول')    
+            }
+        });
+    </script>
+    
+</body>
+
+</html>
