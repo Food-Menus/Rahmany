@@ -6,7 +6,7 @@
     <title>نظام طباعة فواتير العمال</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Tajawal', sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
@@ -26,36 +26,28 @@
             margin-bottom: 30px;
         }
         
-        .invoice-section {
-            margin-bottom: 10px;
-            page-break-after: always;
-        }
-        
-        .job-type-title {
-            background-color: #333;
-            color: white;
-            width: 380px;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            margin: 0 auto;
-        }
-        
         .invoice-table {
-            width: 400px;
-            margin: 0 auto;
+            width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         
         .invoice-table th, .invoice-table td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 2px;
             text-align: center;
         }
         
         .invoice-table th {
             background-color: #f2f2f2;
             font-weight: bold;
+        }
+        
+        .job-type-header {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            text-align: center;
         }
         
         .total-row {
@@ -95,8 +87,7 @@
                 display: none;
             }
             
-            .invoice-section {
-                margin-bottom: 20px;
+            .invoice-table {
                 page-break-inside: avoid;
             }
             
@@ -108,20 +99,15 @@
 </head>
 <body>
     <div class="container">
-        <h1>فواتير مصروفات العمال</h1>
+        
         <div id="invoicesContainer"></div>
         <button class="print-btn" onclick="window.print()">طباعة الفواتير</button>
     </div>
 
     <script> 
-
-        // رابط جدول جوجل شيت
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
-        
-        // عناصر DOM
         const invoicesContainer = document.getElementById('invoicesContainer');
         
-        // جلب البيانات من جوجل شيت
         async function fetchData() {
             try {
                 const response = await fetch(SHEET_URL);
@@ -136,19 +122,31 @@
             }
         }
         
-        // معالجة البيانات وإنشاء الفواتير
         function processData(rows) {
-            // تحويل الصفوف إلى مصفوفة من الكائنات
             const workers = rows.map(row => ({
                 workerName: row.c[0]?.v || '',
                 jobType: row.c[1]?.v || '',
                 hourlyRate: row.c[2]?.v || 0,
                 NumOfHours: row.c[3]?.v || 0,
                 discountWorker: row.c[4]?.v || 0,
-                dayExpence: row.c[5]?.v || 0
+                dayExpence: row.c[5]?.v || 0,
+                shiftNumber: row.c[6]?.v || ''
             }));
             
-            // تجميع العمال حسب نوع العمل
+            const storedShift = localStorage.getItem('shiftNumber');
+            if (storedShift) {
+                filterWorkersByShift(workers, storedShift);
+            } else {
+                groupAndCreateInvoices(workers);
+            }
+        }
+        
+        function filterWorkersByShift(workers, shiftNumber) {
+            const filteredWorkers = workers.filter(worker => worker.shiftNumber == shiftNumber);
+            groupAndCreateInvoices(filteredWorkers);
+        }
+        
+        function groupAndCreateInvoices(workers) {
             const groupedByJob = workers.reduce((acc, worker) => {
                 if (!acc[worker.jobType]) {
                     acc[worker.jobType] = [];
@@ -157,29 +155,18 @@
                 return acc;
             }, {});
             
-            // إنشاء فاتورة لكل نوع عمل
-            invoicesContainer.innerHTML = '';
-            for (const jobType in groupedByJob) {
-                if (groupedByJob.hasOwnProperty(jobType)) {
-                    createInvoice(jobType, groupedByJob[jobType]);
-                }
-            }
+            createSingleInvoice(groupedByJob);
         }
         
-        // إنشاء فاتورة لنوع عمل معين
-        function createInvoice(jobType, workers) {
-            const invoiceSection = document.createElement('div');
-            invoiceSection.className = 'invoice-section';
-            
-            const title = document.createElement('div');
-            title.className = 'job-type-title';
-            title.textContent = jobType;
-            invoiceSection.appendChild(title);
+        function createSingleInvoice(groupedByJob) {
+            invoicesContainer.innerHTML = '';
+            if (Object.keys(groupedByJob).length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
+                return;
+            }
             
             const table = document.createElement('table');
             table.className = 'invoice-table';
-            
-            // رأس الجدول
             const thead = document.createElement('thead');
             thead.innerHTML = `
                 <tr>
@@ -191,56 +178,48 @@
             `;
             table.appendChild(thead);
             
-            // جسم الجدول
             const tbody = document.createElement('tbody');
-            let totalExpense = 0;
-            
-            workers.forEach(worker => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${worker.workerName}</td>
-                    <td>${worker.NumOfHours}</td>
-                    <td>${worker.discountWorker}</td>
-                    <td>${worker.dayExpence}</td>
-                `;
-                tbody.appendChild(row);
-                totalExpense += parseFloat(worker.dayExpence) || 0;
-            });
-            
-            // صف المجموع
-            const totalRow = document.createElement('tr');
-            totalRow.className = 'total-row';
-            totalRow.innerHTML = `
-                <td colspan="3">الإجمالي</td>
-                <td>${totalExpense.toFixed(2)}</td>
-            `;
-            tbody.appendChild(totalRow);
+            for (const jobType in groupedByJob) {
+                if (groupedByJob.hasOwnProperty(jobType)) {
+                    const workers = groupedByJob[jobType];
+                    let totalExpense = 0;
+
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'job-type-header';
+                    headerRow.innerHTML = `<td colspan="4">${jobType}</td>`;
+                    tbody.appendChild(headerRow);
+                    
+                    workers.forEach(worker => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${worker.workerName}</td>
+                            <td>${worker.NumOfHours}</td>
+                            <td>${worker.discountWorker}</td>
+                            <td>${worker.dayExpence}</td>
+                        `;
+                        tbody.appendChild(row);
+                        totalExpense += parseFloat(worker.dayExpence) || 0;
+                    });
+                    
+                    const totalRow = document.createElement('tr');
+                    totalRow.className = 'total-row';
+                    totalRow.innerHTML = `
+                        <td colspan="3">إجمالي ${jobType}</td>
+                        <td>${totalExpense.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(totalRow);
+                    
+                    const spacerRow = document.createElement('tr');
+                    spacerRow.innerHTML = `<td colspan="4" style="height: 10px; background-color: #f5f5f5;"></td>`;
+                    tbody.appendChild(spacerRow);
+                }
+            }
             
             table.appendChild(tbody);
-            invoiceSection.appendChild(table);
-            invoicesContainer.appendChild(invoiceSection);
+            invoicesContainer.appendChild(table);
         }
         
-        // جلب البيانات عند تحميل الصفحة
         window.addEventListener('load', fetchData);
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- //////////////////////////////////////////////////////////////////////////////////////// -->
-
-    

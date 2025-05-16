@@ -261,6 +261,13 @@
         const logoutButton = document.getElementById('logoutButton');
             if(logoutButton) {
                 logoutButton.addEventListener('click', () => {
+                    localStorage.removeItem('adminPassword');
+                    localStorage.removeItem('hourlyRate');
+                    localStorage.removeItem('jobType');
+                    localStorage.removeItem('workerName');
+                    localStorage.removeItem('workers');
+                    localStorage.removeItem('تاريخ_التسجيل');
+                    localStorage.removeItem('وقت_التسجيل');
                     localStorage.removeItem('allStatements');
                     localStorage.removeItem('adminName');
                     localStorage.removeItem('التاريخ');
