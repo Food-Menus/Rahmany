@@ -11,6 +11,7 @@
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
+            font-weight: bold;
         }
         
         .container {
@@ -25,6 +26,8 @@
             text-align: center;
             color: #333;
             margin-bottom: 30px;
+            font-weight: bold;
+            border: 2px solid black;
         }
         
         .invoice-table {
@@ -34,7 +37,8 @@
         }
         
         .invoice-table th, .invoice-table td {
-            border: 1px solid #000;
+            font-weight: bold;
+            border: 2px solid black;
             padding: 2px;
             text-align: center;
         }
@@ -51,7 +55,7 @@
             text-align: center;
         }
         
-        .total-row {
+        .total-row, .grand-total-row {
             font-weight: bold;
             background-color: #f2f2f2;
         }
@@ -100,7 +104,6 @@
 </head>
 <body>
     <div class="container">
-        
         <div id="invoicesContainer"></div>
         <button class="print-btn" onclick="window.print()">طباعة الفواتير</button>
     </div>
@@ -127,11 +130,12 @@
             const workers = rows.map(row => ({
                 workerName: row.c[0]?.v || '',
                 jobType: row.c[1]?.v || '',
-                hourlyRate: row.c[2]?.v || 0,
-                NumOfHours: row.c[3]?.v || 0,
-                discountWorker: row.c[4]?.v || 0,
-                dayExpence: row.c[5]?.v || 0,
-                shiftNumber: row.c[6]?.v || ''
+                comeTime: row.c[2]?.v || 0,
+                hourlyRate: row.c[3]?.v || 0,
+                NumOfHours: row.c[4]?.v || 0,
+                discountWorker: row.c[5]?.v || 0,
+                dayExpence: row.c[6]?.v || 0,
+                shiftNumber: row.c[7]?.v || ''
             }));
             
             const storedShift = localStorage.getItem('shiftNumber');
@@ -172,6 +176,7 @@
             thead.innerHTML = `
                 <tr>
                     <th>اسم العامل</th>
+                    <th>وقت الحضور</th>
                     <th>عدد الساعات</th>
                     <th>الخصم</th>
                     <th>المصروف</th>
@@ -180,6 +185,8 @@
             table.appendChild(thead);
             
             const tbody = document.createElement('tbody');
+            let grandTotal = 0; // متغير لتخزين المجموع الكلي
+            
             for (const jobType in groupedByJob) {
                 if (groupedByJob.hasOwnProperty(jobType)) {
                     const workers = groupedByJob[jobType];
@@ -187,13 +194,14 @@
 
                     const headerRow = document.createElement('tr');
                     headerRow.className = 'job-type-header';
-                    headerRow.innerHTML = `<td colspan="4">${jobType}</td>`;
+                    headerRow.innerHTML = `<td colspan="5">${jobType}</td>`;
                     tbody.appendChild(headerRow);
                     
                     workers.forEach(worker => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${worker.workerName}</td>
+                            <td>${worker.comeTime}</td>
                             <td>${worker.NumOfHours}</td>
                             <td>${worker.discountWorker}</td>
                             <td>${worker.dayExpence}</td>
@@ -205,18 +213,30 @@
                     const totalRow = document.createElement('tr');
                     totalRow.className = 'total-row';
                     totalRow.innerHTML = `
-                        <td colspan="3">إجمالي ${jobType}</td>
+                        <td colspan="4">إجمالي ${jobType}</td>
                         <td>${totalExpense.toFixed(2)}</td>
                     `;
                     tbody.appendChild(totalRow);
                     
+                    grandTotal += totalExpense; // إضافة المجموع إلى المجموع الكلي
+                    
                     const spacerRow = document.createElement('tr');
-                    spacerRow.innerHTML = `<td colspan="4" style="height: 10px; background-color: #f5f5f5;"></td>`;
+                    spacerRow.innerHTML = `<td colspan="5" style="height: 10px; background-color: #f5f5f5;"></td>`;
                     tbody.appendChild(spacerRow);
                 }
             }
             
             table.appendChild(tbody);
+            
+            // إضافة صف المجموع الكلي
+            const grandTotalRow = document.createElement('tr');
+            grandTotalRow.className = 'grand-total-row';
+            grandTotalRow.innerHTML = `
+                <td colspan="4">الإجمالي الكلي</td>
+                <td>${grandTotal.toFixed(2)}</td>
+            `;
+            tbody.appendChild(grandTotalRow);
+            
             invoicesContainer.appendChild(table);
         }
         
