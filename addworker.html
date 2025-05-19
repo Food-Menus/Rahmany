@@ -7,7 +7,7 @@
     <title>The Rahmany Management</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* تنسيق عام للصفحة */
+       
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
@@ -159,8 +159,13 @@ select option {
                 <label for="workerName">اسم العامل</label>
                 <input type="text" id="workerName" name="workerName" required>
             </div>
-            
+
             <div class="form-group">
+                <label for="jobType">اسم العمل </label>
+                <input type="text" id="jobType" name="jobType" required>
+            </div>
+            
+            <!-- <div class="form-group">
                 <label for="jobType">نوع العمل</label>
                 <select id="jobType" name="jobType" required>
                     <option value="">اختر نوع العمل</option>
@@ -170,7 +175,7 @@ select option {
                     <option value="كاشير">كاشير</option>
                 </select>
             </div>
-            
+             -->
             <div class="form-group">
                 <label for="hourlyRate">المصروف بالساعة (جنيه)</label>
                 <input type="number" id="hourlyRate" name="hourlyRate" min="1" required>
@@ -179,7 +184,7 @@ select option {
             <button type="submit">حفظ البيانات</button>
         </form>
         <br>
-        <a href="https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/edit?usp=sharing" style="color:#ffffff; text-align: center; margin: 33%;">  الذهاب لجدول الاكسيل  </a>
+        <a href="https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/edit?usp=sharing" style="color:#ffffff; text-align: center; margin: 33%;">  الذهاب لجدول الاكسيل  </a>
 
         <div id="message" class="message"></div>
     </div>
