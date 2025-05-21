@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <title>The Rahmany Management</title>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 410px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+            border: 2px solid black;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .invoice-table th, .invoice-table td {
+            font-weight: bold;
+            border: 2px solid black;
+            padding: 2px;
+            text-align: center;
+        }
+        
+        .invoice-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .job-type-header {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .total-row, .grand-total-row {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+        
+        .print-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .search-input {
+            padding: 8px 15px;
+            width: 200px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .search-btn {
+            padding: 8px 15px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        
+        .search-btn:hover {
+            background-color: #0b7dda;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                padding: 10px;
+            }
+            
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            
+            .print-btn, .search-container {
+                display: none;
+            }
+            
+            .invoice-table {
+                page-break-inside: avoid;
+            }
+            
+            h1 {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Rahmany </h1>
+        
+        <div class="search-container">
+            <input type="text" id="shiftSearch" class="search-input" placeholder="أدخل رقم الشيفت">
+            <button class="search-btn" onclick="searchShift()">بحث</button>
+        </div>
+        
+        <div id="invoicesContainer"></div>
+        <button class="print-btn" onclick="window.print()">طباعة الفواتير</button>
+    </div>
+
+    <script> 
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
+        const invoicesContainer = document.getElementById('invoicesContainer');
+        let allWorkers = []; // لتخزين جميع البيانات المسترجعة
+        
+        async function fetchData() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const text = await response.text();
+                const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
+                const data = JSON.parse(jsonStr);
+                
+                // حفظ جميع البيانات في المتغير العام
+                allWorkers = data.table.rows.map(row => ({
+                    workerName: row.c[0]?.v || '',
+                    jobType: row.c[1]?.v || '',
+                    comeTime: row.c[2]?.v || 0,
+                    hourlyRate: row.c[3]?.v || 0,
+                    NumOfHours: row.c[4]?.v || 0,
+                    discountWorker: row.c[5]?.v || 0,
+                    dayExpence: row.c[6]?.v || 0,
+                    shiftNumber: row.c[7]?.v || ''
+                }));
+                
+                // عرض رسالة ترحيبية بدلاً من البيانات
+                invoicesContainer.innerHTML = '<p style="text-align: center;">قم بإدخال رقم الشيفت للبحث</p>';
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                invoicesContainer.innerHTML = '<p style="text-align: center;">حدث خطأ في جلب البيانات</p>';
+            }
+        }
+        
+        function searchShift() {
+            const shiftNumber = document.getElementById('shiftSearch').value.trim();
+            if (!shiftNumber) {
+                alert('الرجاء إدخال رقم الشيفت');
+                return;
+            }
+            
+            if (allWorkers.length === 0) {
+                alert('البيانات لم يتم تحميلها بعد، يرجى الانتظار');
+                return;
+            }
+            
+            const filteredWorkers = allWorkers.filter(worker => worker.shiftNumber == shiftNumber);
+            if (filteredWorkers.length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات للشيفت رقم ' + shiftNumber + '</p>';
+            } else {
+                groupAndCreateInvoices(filteredWorkers);
+            }
+        }
+        
+        function groupAndCreateInvoices(workers) {
+            const groupedByJob = workers.reduce((acc, worker) => {
+                if (!acc[worker.jobType]) {
+                    acc[worker.jobType] = [];
+                }
+                acc[worker.jobType].push(worker);
+                return acc;
+            }, {});
+            
+            createSingleInvoice(groupedByJob);
+        }
+        
+        function createSingleInvoice(groupedByJob) {
+            invoicesContainer.innerHTML = '';
+            if (Object.keys(groupedByJob).length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
+                return;
+            }
+            
+            let grandTotal = 0; // متغير لتخزين المجموع الكلي
+            
+            for (const jobType in groupedByJob) {
+                if (groupedByJob.hasOwnProperty(jobType)) {
+                    const workers = groupedByJob[jobType];
+                    let totalExpense = 0;
+                    
+                    // إنشاء جدول منفصل لكل فئة
+                    const table = document.createElement('table');
+                    table.className = 'invoice-table';
+                    
+                    // إضافة عنوان الفئة كصف في الجدول
+                    const caption = document.createElement('caption');
+                    caption.className = 'job-type-header';
+                    caption.textContent = jobType;
+                    table.appendChild(caption);
+                    
+                    // إنشاء رأس الجدول
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+                        <tr>
+                            <th>اسم العامل</th>
+                            <th>وقت الحضور</th>
+                            <th>عدد الساعات</th>
+                            <th>الخصم</th>
+                            <th>المصروف</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+                    
+                    // إنشاء جسم الجدول
+                    const tbody = document.createElement('tbody');
+                    
+                    workers.forEach(worker => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${worker.workerName}</td>
+                            <td>${worker.comeTime}</td>
+                            <td>${worker.NumOfHours}</td>
+                            <td>${worker.discountWorker}</td>
+                            <td>${worker.dayExpence}</td>
+                        `;
+                        tbody.appendChild(row);
+                        totalExpense += parseFloat(worker.dayExpence) || 0;
+                    });
+                    
+                    // إضافة صف المجموع للفئة
+                    const totalRow = document.createElement('tr');
+                    totalRow.className = 'total-row';
+                    totalRow.innerHTML = `
+                        <td colspan="4">إجمالي ${jobType}</td>
+                        <td>${totalExpense.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(totalRow);
+                    
+                    grandTotal += totalExpense; // إضافة المجموع إلى المجموع الكلي
+                    
+                    table.appendChild(tbody);
+                    invoicesContainer.appendChild(table);
+                    
+                    // إضافة مسافة بين الجداول
+                    const spacer = document.createElement('div');
+                    spacer.style.height = '20px';
+                    invoicesContainer.appendChild(spacer);
+                }
+            }
+            
+            // إضافة المجموع الكلي في جدول منفصل
+            const grandTotalTable = document.createElement('table');
+            grandTotalTable.className = 'invoice-table grand-total-table';
+            
+            const grandTbody = document.createElement('tbody');
+            const grandTotalRow = document.createElement('tr');
+            grandTotalRow.className = 'grand-total-row';
+            grandTotalRow.innerHTML = `
+                <td colspan="4">الإجمالي الكلي</td>
+                <td>${grandTotal.toFixed(2)}</td>
+            `;
+            grandTbody.appendChild(grandTotalRow);
+            grandTotalTable.appendChild(grandTbody);
+            invoicesContainer.appendChild(grandTotalTable);
+        }
+        
+        window.addEventListener('load', fetchData);
+        
+        // للسماح بالبحث عند الضغط على زر Enter
+        document.getElementById('shiftSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchShift();
+            }
+        });
+    </script>
+</body>
+</html>
