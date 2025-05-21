@@ -9,7 +9,7 @@
         /* تنسيق عام للصفحة */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #cfa363, #fb6b23);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             margin: 0;
@@ -44,19 +44,6 @@
             margin-bottom: 1.5rem;
             text-align: center;
             text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .page-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: #fff;
-            border-radius: 2px;
         }
 
         /* تنسيق مجموعة الحقول */
@@ -73,11 +60,12 @@
         .form-group input,
         .form-group select {
             width: 90%;
+            margin: 5px;
             padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgb(255, 255, 255);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 8px;
-            color: white;
+            color: rgb(0, 0, 0);
             font-size: 1rem;
             transition: all 0.3s ease;
         }
@@ -85,17 +73,14 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.8);
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
-        /* تنسيق الزر */
         .submit-btn {
             width: 100%;
             padding: 0.8rem;
             background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
             border: none;
             border-radius: 8px;
             color: white;
@@ -105,12 +90,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             margin-top: 1rem;
-        }
-
-        .submit-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* تنسيق رسائل النظام */
@@ -124,12 +103,10 @@
 
         .success {
             background: rgba(46, 125, 50, 0.3);
-            border: 1px solid rgba(76, 175, 80, 0.5);
         }
 
         .error {
             background: rgba(211, 47, 47, 0.3);
-            border: 1px solid rgba(244, 67, 54, 0.5);
         }
 
         /* تأثيرات الحركة */
@@ -137,43 +114,12 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* تنسيق للهواتف */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-                margin: 1rem;
-            }
-            
-            .page-title {
-                font-size: 1.5rem;
-            }
-        }
-
-        /* تنسيق خيارات القائمة المنسدلة */
-        select option {
-            background: #333;
-            color: white;
-        }
-
-        /* تنسيق حقق الخصم والساعات */
-        .input-group {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .input-group .form-group {
-            flex: 1;
-        }
-
-                /* تنسيق زر التنقل */
-        .main-nav-buttons {
+                .main-nav-buttons {
             text-align: center;
             margin: 30px auto;
             max-width: 800px;
         }
-
-        .nav-btn {
+                .nav-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -202,7 +148,6 @@
             font-size: 1.2rem;
         }
     </style>
-    <!-- إضافة مكتبة SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -213,48 +158,12 @@
             <div class="form-group">
                 <label for="jobType">نوع العمل</label>
                 <select id="jobType" name="jobType" required>
-                    <option value="">جاري تحميل أنواع العمل...</option>
+                    <option value="">اختر نوع العمل</option>
                 </select>
             </div>
             
-            <div class="form-group">
-                <label for="workerName">اسم العامل</label>
-                <select id="workerName" name="workerName" required disabled>
-                    <option value="">اختر نوع العمل أولاً</option>
-                </select>
-            </div>
+            <div id="workersContainer"></div>
 
-            <div class="input-group">
-                <div class="form-group">
-                    <label for="comeTime">وقت الحضور</label>
-                    <input type="number" id="comeTime" name="comeTime"  min="0" step="0.01"  required>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <div class="form-group">
-                    <label for="hoursWorked">عدد ساعات العمل</label>
-                    <input type="number" id="hoursWorked" name="hoursWorked"  min="0" step="0.01" required>
-                </div>
-            </div>
-
-            <div class="input-group"> 
-                <div class="form-group">
-                    <label for="discount">الخصم (جنيه)</label>
-                    <input type="number" id="discount" name="discount" min="0" value="0">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="hourlyRate">ثمن الساعة (جنيه)</label>
-                <input type="number" id="hourlyRate" name="hourlyRate" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label for="dayExpense">مصاريف اليوم (جنيه)</label>
-                <input type="number" id="dayExpense" name="dayExpense" readonly>
-            </div>
-            
             <button type="submit" class="submit-btn">حفظ البيانات</button>
         </form>
         
@@ -269,27 +178,16 @@
     </div>
 
     <script>
-        // روابط الجداول
         const WORKERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
         const EXPENSES_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV1pQizIbiTEOxDMzvIatE8xJO4kYhx23kGiptz4BK7b32lQsb9jrC4DJEcUFE7amI/exec';
         
-        // عناصر DOM
         const jobTypeSelect = document.getElementById('jobType');
-        const workerNameSelect = document.getElementById('workerName');
-        const hoursWorkedInput = document.getElementById('hoursWorked');
-        const discountInput = document.getElementById('discount');
-        const hourlyRateInput = document.getElementById('hourlyRate');
-        const comeTimeInput =  document.getElementById('comeTime');
-        const dayExpenseInput = document.getElementById('dayExpense');
+        const workersContainer = document.getElementById('workersContainer');
         const expenseForm = document.getElementById('expenseForm');
         const messageDiv = document.getElementById('message');
-            
-
-        // بيانات العمال
-        let workersData = [];
-        let uniqueJobTypes = [];
         
-        // تحميل بيانات العمال من جوجل شيت
+        let workersData = [];
+
         function loadWorkersData() {
             fetch(WORKERS_SHEET_URL)
                 .then(res => res.text())
@@ -305,12 +203,8 @@
                         };
                     });
                     
-                    // استخراج أنواع العمل الفريدة
-                    uniqueJobTypes = [...new Set(workersData.map(worker => worker.jobType))];
-                    
-                    // تعبئة قائمة أنواع العمل
-                    jobTypeSelect.innerHTML = '<option value="">اختر نوع العمل</option>' + 
-                        uniqueJobTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+                    const uniqueJobTypes = [...new Set(workersData.map(worker => worker.jobType))];
+                    jobTypeSelect.innerHTML += uniqueJobTypes.map(type => `<option value="${type}">${type}</option>`).join('');
                 })
                 .catch(error => {
                     console.error('Error loading workers data:', error);
@@ -318,115 +212,105 @@
                 });
         }
         
-        // عند اختيار نوع العمل
         jobTypeSelect.addEventListener('change', function() {
             const selectedJobType = this.value;
-            workerNameSelect.disabled = !selectedJobType;
-            
+            workersContainer.innerHTML = ''; 
+
             if (selectedJobType) {
-                // تصفية العمال حسب نوع العمل المختار
                 const filteredWorkers = workersData.filter(worker => worker.jobType === selectedJobType);
                 
-                // تعبئة قائمة أسماء العمال
-                workerNameSelect.innerHTML = '<option value="">اختر اسم العامل</option>' + 
-                    filteredWorkers.map(worker => `<option value="${worker.workerName}" data-hourly-rate="${worker.hourlyRate}">${worker.workerName}</option>`).join('');
-            } else {
-                workerNameSelect.innerHTML = '<option value="">اختر نوع العمل أولاً</option>';
+                filteredWorkers.forEach(worker => {
+                    const workerDiv = document.createElement('div');
+                    workerDiv.className = 'form-group';
+                    workerDiv.innerHTML = `
+                        <label>${worker.workerName}</label>
+                        <input type="number" placeholder="وقت الحضور" class="comeTime" >
+                        <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" >
+                        <input type="number" placeholder="الخصم (جنيه)" class="discount" value="0">
+                        <input type="hidden" class="hourlyRate" value="${worker.hourlyRate}">
+                    `;
+                    workersContainer.appendChild(workerDiv);
+                });
             }
-            
-            // إعادة تعيين الحقول
-            hourlyRateInput.value = '';
-            dayExpenseInput.value = '';
         });
         
-        // عند اختيار اسم العامل
-        workerNameSelect.addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            const hourlyRate = selectedOption.getAttribute('data-hourly-rate') || 0;
-            
-            hourlyRateInput.value = hourlyRate;
-            calculateDayExpense();
-        });
-        
-        // حساب مصاريف اليوم
-        function calculateDayExpense() {
-            const hours = parseFloat(hoursWorkedInput.value) || 0;
-            const rate = parseFloat(hourlyRateInput.value) || 0;
-            const discount = parseFloat(discountInput.value) || 0;
-            
-            const total = (hours * rate) - discount;
-            dayExpenseInput.value = total.toFixed(2);
+        async function saveExpenses(workers) {
+            messageDiv.innerHTML = ' جاري إرسال البيانات لا تغلق الصفحة حتى يتم الارسال...';
+            messageDiv.style.display = 'block';
+
+            for (const worker of workers) {
+                // التأكد من أن جميع الحقول المطلوبة مملوءة
+                if (!worker.comeTime || !worker.hoursWorked) {
+                    continue; // إذا كان هناك حقل فارغ، انتقل إلى العامل التالي
+                }
+
+                const formData = new FormData();
+                
+                formData.append('workerName', worker.workerName);
+                formData.append('jobType', worker.jobType);
+                formData.append('comeTime', worker.comeTime);
+                formData.append('hourlyRate', worker.hourlyRate);
+                formData.append('NumOfHours', worker.hoursWorked);
+                formData.append('discountWorker', worker.discount);
+                formData.append('dayExpence', (worker.hoursWorked * worker.hourlyRate - worker.discount).toFixed(2));
+                formData.append('shiftNumber', localStorage.getItem('shiftNumber'));
+
+                try {
+                    const response = await fetch(EXPENSES_SCRIPT_URL, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'خطأ',
+                        text: 'حدث خطأ أثناء محاولة التسجيل',
+                        icon: 'error',
+                        confirmButtonText: 'حسناً'
+                    });
+                }
+
+                await new Promise(r => setTimeout(r, 1000));
+            }
+
+            Swal.fire({
+                title: 'تم بنجاح',
+                text: 'تم تسجيل مصروفات العمال بنجاح',
+                icon: 'success',
+                confirmButtonText: 'حسناً'
+            });
+
+            messageDiv.style.display = 'none';
         }
-        
-        // استماع لتغيير عدد الساعات أو الخصم
-        hoursWorkedInput.addEventListener('input', calculateDayExpense);
-        discountInput.addEventListener('input', calculateDayExpense);
-        
-        // إرسال البيانات
+
         expenseForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const workers = Array.from(workersContainer.querySelectorAll('.form-group')).map(workerDiv => {
+                return {
+                    workerName: workerDiv.querySelector('label').textContent,
+                    comeTime: workerDiv.querySelector('.comeTime').value,
+                    hoursWorked: workerDiv.querySelector('.hoursWorked').value,
+                    discount: workerDiv.querySelector('.discount').value,
+                    hourlyRate: workerDiv.querySelector('.hourlyRate').value,
+                    jobType: jobTypeSelect.value
+                };
+            }).filter(worker => worker.comeTime && worker.hoursWorked); // تصفية العمال الذين لديهم بيانات مكتملة
+
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'جاري الحفظ...';
-            
-            // إضافة التاريخ والوقت
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString('ar-EG');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const time = `${hours}:${minutes}`;
-            const shiftNumber = localStorage.getItem('shiftNumber');
 
-            const formData = new FormData();
-            formData.append('workerName', workerNameSelect.value);
-            formData.append('jobType', jobTypeSelect.value);
-            formData.append('hourlyRate', hourlyRateInput.value);
-            formData.append('comeTime', comeTimeInput.value);
-            formData.append('NumOfHours', hoursWorkedInput.value);
-            formData.append('discountWorker', discountInput.value);
-            formData.append('dayExpence', dayExpenseInput.value);
-            formData.append('تاريخ_التسجيل', formattedDate);
-            formData.append('وقت_التسجيل', time);
-            formData.append('shiftNumber', shiftNumber);
-
-            fetch(EXPENSES_SCRIPT_URL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    Swal.fire({
-                        title: 'تم بنجاح',
-                        text: 'تم تسجيل مصروفات العامل بنجاح',
-                        icon: 'success',
-                        confirmButtonText: 'حسناً'
-                    });
-                    this.reset();
-                    hourlyRateInput.value = '';
-                    dayExpenseInput.value = '';
-                    workerNameSelect.disabled = true;
-                    workerNameSelect.innerHTML = '<option value="">اختر نوع العمل أولاً</option>';
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: 'خطأ',
-                    text: 'حدث خطأ أثناء محاولة التسجيل',
-                    icon: 'error',
-                    confirmButtonText: 'حسناً'
-                });
-                console.error('Error:', error);
-            })
-            .finally(() => {
+            saveExpenses(workers).then(() => {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'حفظ البيانات';
+                this.reset();
+                workersContainer.innerHTML = '';
             });
         });
-        
-        // تحميل البيانات عند فتح الصفحة
+
         loadWorkersData();
     </script>
 </body>

@@ -17,9 +17,10 @@
         .container {
             max-width: 410px;
             margin: 0 auto;
-            background: white;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
         
         h1 {
@@ -33,7 +34,6 @@
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
         
         .invoice-table th, .invoice-table td {
@@ -170,32 +170,38 @@
                 return;
             }
             
-            const table = document.createElement('table');
-            table.className = 'invoice-table';
-            const thead = document.createElement('thead');
-            thead.innerHTML = `
-                <tr>
-                    <th>اسم العامل</th>
-                    <th>وقت الحضور</th>
-                    <th>عدد الساعات</th>
-                    <th>الخصم</th>
-                    <th>المصروف</th>
-                </tr>
-            `;
-            table.appendChild(thead);
-            
-            const tbody = document.createElement('tbody');
             let grandTotal = 0; // متغير لتخزين المجموع الكلي
             
             for (const jobType in groupedByJob) {
                 if (groupedByJob.hasOwnProperty(jobType)) {
                     const workers = groupedByJob[jobType];
                     let totalExpense = 0;
-
-                    const headerRow = document.createElement('tr');
-                    headerRow.className = 'job-type-header';
-                    headerRow.innerHTML = `<td colspan="5">${jobType}</td>`;
-                    tbody.appendChild(headerRow);
+                    
+                    // إنشاء جدول منفصل لكل فئة
+                    const table = document.createElement('table');
+                    table.className = 'invoice-table';
+                    
+                    // إضافة عنوان الفئة كصف في الجدول
+                    const caption = document.createElement('caption');
+                    caption.className = 'job-type-header';
+                    caption.textContent = jobType;
+                    table.appendChild(caption);
+                    
+                    // إنشاء رأس الجدول
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = `
+                        <tr>
+                            <th>اسم العامل</th>
+                            <th>وقت الحضور</th>
+                            <th>عدد الساعات</th>
+                            <th>الخصم</th>
+                            <th>المصروف</th>
+                        </tr>
+                    `;
+                    table.appendChild(thead);
+                    
+                    // إنشاء جسم الجدول
+                    const tbody = document.createElement('tbody');
                     
                     workers.forEach(worker => {
                         const row = document.createElement('tr');
@@ -210,6 +216,7 @@
                         totalExpense += parseFloat(worker.dayExpence) || 0;
                     });
                     
+                    // إضافة صف المجموع للفئة
                     const totalRow = document.createElement('tr');
                     totalRow.className = 'total-row';
                     totalRow.innerHTML = `
@@ -220,24 +227,30 @@
                     
                     grandTotal += totalExpense; // إضافة المجموع إلى المجموع الكلي
                     
-                    const spacerRow = document.createElement('tr');
-                    spacerRow.innerHTML = `<td colspan="5" style="height: 10px; background-color: #f5f5f5;"></td>`;
-                    tbody.appendChild(spacerRow);
+                    table.appendChild(tbody);
+                    invoicesContainer.appendChild(table);
+                    
+                    // إضافة مسافة بين الجداول
+                    const spacer = document.createElement('div');
+                    spacer.style.height = '20px';
+                    invoicesContainer.appendChild(spacer);
                 }
             }
             
-            table.appendChild(tbody);
+            // إضافة المجموع الكلي في جدول منفصل
+            const grandTotalTable = document.createElement('table');
+            grandTotalTable.className = 'invoice-table grand-total-table';
             
-            // إضافة صف المجموع الكلي
+            const grandTbody = document.createElement('tbody');
             const grandTotalRow = document.createElement('tr');
             grandTotalRow.className = 'grand-total-row';
             grandTotalRow.innerHTML = `
                 <td colspan="4">الإجمالي الكلي</td>
                 <td>${grandTotal.toFixed(2)}</td>
             `;
-            tbody.appendChild(grandTotalRow);
-            
-            invoicesContainer.appendChild(table);
+            grandTbody.appendChild(grandTotalRow);
+            grandTotalTable.appendChild(grandTbody);
+            invoicesContainer.appendChild(grandTotalTable);
         }
         
         window.addEventListener('load', fetchData);
