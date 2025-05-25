@@ -76,6 +76,27 @@
             background-color: #45a049;
         }
         
+        .shift-selection {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .shift-btn {
+            padding: 10px 15px;
+            margin: 0 5px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .shift-btn:hover {
+            background-color: #0b7dda;
+        }
+        
         @media print {
             body {
                 background-color: white;
@@ -88,7 +109,7 @@
                 max-width: 100%;
             }
             
-            .print-btn {
+            .print-btn, .shift-selection {
                 display: none;
             }
             
@@ -104,6 +125,15 @@
 </head>
 <body>
     <div class="container">
+        <h1>The Rahmany </h1>
+        
+        <div class="shift-selection" id="shiftSelection">
+            <p>اختر نوع الشيفت:</p>
+            <button class="shift-btn" onclick="filterByShiftType('بداية اليوم')">بداية اليوم</button>
+            <button class="shift-btn" onclick="filterByShiftType('منتصف اليوم')">منتصف اليوم</button>
+            <button class="shift-btn" onclick="filterByShiftType('نهاية اليوم')">نهاية اليوم</button>
+        </div>
+        
         <div id="invoicesContainer"></div>
         <button class="print-btn" onclick="window.print()">طباعة الفواتير</button>
     </div>
@@ -111,6 +141,9 @@
     <script> 
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
         const invoicesContainer = document.getElementById('invoicesContainer');
+        const shiftSelection = document.getElementById('shiftSelection');
+        
+        let allWorkers = []; // لتخزين جميع البيانات المسترجعة
         
         async function fetchData() {
             try {
@@ -119,15 +152,20 @@
                 const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
                 const data = JSON.parse(jsonStr);
                 
-                processData(data.table.rows);
+                allWorkers = processData(data.table.rows);
+                
+                // عرض واجهة اختيار الشيفت
+                shiftSelection.style.display = 'block';
+                invoicesContainer.innerHTML = '<p style="text-align: center;">الرجاء اختيار نوع الشيفت لعرض البيانات</p>';
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
-                invoicesContainer.innerHTML = '<p>حدث خطأ في جلب البيانات</p>';
+                invoicesContainer.innerHTML = '<p style="text-align: center;">حدث خطأ في جلب البيانات</p>';
             }
         }
         
         function processData(rows) {
-            const workers = rows.map(row => ({
+            return rows.map(row => ({
                 workerName: row.c[0]?.v || '',
                 jobType: row.c[1]?.v || '',
                 comeTime: row.c[2]?.v || 0,
@@ -135,23 +173,37 @@
                 NumOfHours: row.c[4]?.v || 0,
                 discountWorker: row.c[5]?.v || 0,
                 dayExpence: row.c[6]?.v || 0,
-                shiftNumber: row.c[7]?.v || ''
+                shiftNumber: row.c[7]?.v || '',
+                shiftType: row.c[8]?.v || ''
             }));
-            
-            const storedShift = localStorage.getItem('shiftNumber');
-            if (storedShift) {
-                filterWorkersByShift(workers, storedShift);
-            } else {
-                groupAndCreateInvoices(workers);
-            }
         }
         
-        function filterWorkersByShift(workers, shiftNumber) {
-            const filteredWorkers = workers.filter(worker => worker.shiftNumber == shiftNumber);
+        function filterByShiftType(shiftType) {
+            const storedShift = localStorage.getItem('shiftNumber');
+            let filteredWorkers = [...allWorkers];
+            
+            // فلترة حسب رقم الشيفت إذا كان موجوداً
+            if (storedShift) {
+                filteredWorkers = filteredWorkers.filter(worker => worker.shiftNumber == storedShift);
+            }
+            
+            // فلترة حسب نوع الشيفت المختار
+            filteredWorkers = filteredWorkers.filter(worker => worker.shiftType === shiftType);
+            
+            // عرض البيانات المفلترة
             groupAndCreateInvoices(filteredWorkers);
+            
+            // إخفاء واجهة الاختيار
+            shiftSelection.style.display = 'none';
         }
         
         function groupAndCreateInvoices(workers) {
+            invoicesContainer.innerHTML = '';
+            if (workers.length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
+                return;
+            }
+            
             const groupedByJob = workers.reduce((acc, worker) => {
                 if (!acc[worker.jobType]) {
                     acc[worker.jobType] = [];
@@ -164,12 +216,6 @@
         }
         
         function createSingleInvoice(groupedByJob) {
-            invoicesContainer.innerHTML = '';
-            if (Object.keys(groupedByJob).length === 0) {
-                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
-                return;
-            }
-            
             let grandTotal = 0; // متغير لتخزين المجموع الكلي
             
             for (const jobType in groupedByJob) {

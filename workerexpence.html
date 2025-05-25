@@ -114,12 +114,14 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-                .main-nav-buttons {
+
+        .main-nav-buttons {
             text-align: center;
             margin: 30px auto;
             max-width: 800px;
         }
-                .nav-btn {
+
+        .nav-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -162,6 +164,16 @@
                 </select>
             </div>
             
+            <div class="form-group">
+                <label for="shiftType">نوع الوردية</label>
+                <select id="shiftType" name="shiftType" required>
+                    <option value="">اختر نوع الوردية</option>
+                    <option value="بداية اليوم">بداية اليوم</option>
+                    <option value="منتصف اليوم">منتصف اليوم</option>
+                    <option value="نهاية اليوم">نهاية اليوم</option>
+                </select>
+            </div>
+
             <div id="workersContainer"></div>
 
             <button type="submit" class="submit-btn">حفظ البيانات</button>
@@ -182,6 +194,7 @@
         const REGISTERED_WORKERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
         const EXPENSES_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV1pQizIbiTEOxDMzvIatE8xJO4kYhx23kGiptz4BK7b32lQsb9jrC4DJEcUFE7amI/exec';
         const jobTypeSelect = document.getElementById('jobType');
+        const shiftTypeSelect = document.getElementById('shiftType');
         const workersContainer = document.getElementById('workersContainer');
         const expenseForm = document.getElementById('expenseForm');
         const messageDiv = document.getElementById('message');
@@ -267,7 +280,7 @@
                     workerDiv.className = 'form-group';
                     workerDiv.innerHTML = `
                         <label>${worker.workerName}</label>
-                        <input type="number" placeholder="وقت الحضور" class="comeTime" >
+                        <input type="number" placeholder="وقت الحضور" class="comeTime" min="0" step="0.01">
                         <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" min="0" step="0.01" >
                         <input type="number" placeholder="الخصم (جنيه)" class="discount" value="0" min="0" step="0.01">
                         <input type="hidden" class="hourlyRate" value="${worker.hourlyRate}">
@@ -290,6 +303,7 @@
                 
                 formData.append('workerName', worker.workerName);
                 formData.append('jobType', worker.jobType);
+                formData.append('shiftType', worker.shiftType); // إضافة نوع الوردية
                 formData.append('comeTime', worker.comeTime);
                 formData.append('hourlyRate', worker.hourlyRate);
                 formData.append('NumOfHours', worker.hoursWorked);
@@ -341,7 +355,8 @@
                     hoursWorked: workerDiv.querySelector('.hoursWorked').value,
                     discount: workerDiv.querySelector('.discount').value,
                     hourlyRate: workerDiv.querySelector('.hourlyRate').value,
-                    jobType: jobTypeSelect.value
+                    jobType: jobTypeSelect.value,
+                    shiftType: shiftTypeSelect.value // إضافة نوع الوردية
                 };
             }).filter(worker => worker.comeTime && worker.hoursWorked);
 
