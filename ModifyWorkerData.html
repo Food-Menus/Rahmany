@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة العمال</title>
+    <link rel="icon" href="./اساسيات/icon.png" type="image/x-icon">
+    <title>The Rahmany Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* تنسيق عام للصفحة */
@@ -112,7 +113,7 @@
 
         .form-group input,
         .form-group select {
-            width: 100%;
+            width: 96%;
             padding: 0.8rem 1rem;
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -448,24 +449,24 @@
                     </div>
                     <div class="form-group">
                         <label for="hourly-rate">معدل الساعة (جنية) *</label>
-                        <input type="number" id="hourly-rate" min="0" required>
+                        <input type="number" id="hourly-rate" min="0" step="0.01" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="num-hours">عدد الساعات *</label>
-                        <input type="number" id="num-hours" min="0" required>
+                        <input type="number" id="num-hours" min="0" step="0.01" required>
                     </div>
                     <div class="form-group">
                         <label for="discount">الخصم (جنية)</label>
-                        <input type="number" id="discount" min="0" value="0">
+                        <input type="number" id="discount" min="0" step="0.01" value="0">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="day-expence">مصروف اليوم (جنية)</label>
-                    <input type="number" id="day-expence" min="0" value="0">
+                    <input type="number" id="day-expence" min="0" step="0.01" value="0">
                 </div>
 
                 <div class="form-actions">
@@ -520,7 +521,6 @@
         // عناصر DOM
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbwap2-jUdy3zfUW5hZoD65P2v02HyMH9qdk0xmHMxYACWlXEh3X6qUw9X0YH2teC9sq/exec';
         const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
-        const registeredWorkersSheetUrl = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         const searchBtn = document.getElementById('search-btn');
@@ -545,11 +545,9 @@
         let currentEditingRowIndex = null;
         let workersData = []; // لتخزين بيانات العمال من جوجل شيت
         let selectedWorkers = []; // لتخزين العمال المحددين للإضافة
-        let registeredWorkers = []; // لتخزين العمال المسجلين بالفعل
-
+        
         // تحميل البيانات عند بدء التشغيل
         document.addEventListener('DOMContentLoaded', () => {
-            loadRegisteredWorkers();
             loadWorkersFromGoogleSheet();
         });
 
@@ -823,28 +821,6 @@
             }, 3000);
         }
 
-        // تحميل بيانات العمال المسجلين بالفعل
-        async function loadRegisteredWorkers() {
-            try {
-                const response = await fetch(registeredWorkersSheetUrl);
-                const text = await response.text();
-                const jsonText = text.substring(47, text.length - 2);
-                const data = JSON.parse(jsonText);
-                
-                registeredWorkers = data.table.rows.map(row => {
-                    return {
-                        workerName: row.c[0]?.v || '',
-                        shiftNumber: row.c[7]?.v || ''
-                    };
-                });
-                
-                return registeredWorkers;
-            } catch (error) {
-                console.error('Error loading registered workers:', error);
-                return [];
-            }
-        }
-
         // تحميل بيانات العمال من جوجل شيت
         async function loadWorkersFromGoogleSheet() {
             try {
@@ -862,16 +838,6 @@
                         hourlyRate: cells[2]?.v || 0
                     };
                 }).filter(worker => worker.workerName && worker.jobType);
-                
-                // تصفية العمال المسجلين بالفعل
-                const currentShift = localStorage.getItem('shiftNumber');
-                if (currentShift) {
-                    workersData = workersData.filter(worker => 
-                        !registeredWorkers.some(rw => 
-                            rw.workerName === worker.workerName && rw.shiftNumber === currentShift
-                        )
-                    );
-                }
                 
                 // تعبئة قائمة أنواع العمل بدون تكرار
                 const jobTypes = [...new Set(workersData.map(worker => worker.jobType))];
@@ -899,13 +865,8 @@
             // تخزين رقم الشيفت في localStorage
             localStorage.setItem('shiftNumber', shiftNumber);
             
-            // تصفية العمال حسب نوع العمل والذين ليسوا مسجلين بالفعل
-            selectedWorkers = workersData.filter(worker => 
-                worker.jobType === selectedJobType &&
-                !registeredWorkers.some(rw => 
-                    rw.workerName === worker.workerName && rw.shiftNumber === shiftNumber
-                )
-            );
+            // تصفية العمال حسب نوع العمل
+            selectedWorkers = workersData.filter(worker => worker.jobType === selectedJobType);
             
             // عرض قائمة العمال
             displayWorkersList(selectedWorkers, selectedShiftType);
@@ -916,7 +877,7 @@
             multiWorkersList.innerHTML = '';
             
             if (workers.length === 0) {
-                multiWorkersList.innerHTML = '<p class="no-results">لا يوجد عمال متاحين للتسجيل في هذا النوع من العمل للشيفت الحالي</p>';
+                multiWorkersList.innerHTML = '<p class="no-results">لا يوجد عمال لهذا النوع من العمل</p>';
                 submitMultiBtn.classList.add('hidden');
                 return;
             }
@@ -933,11 +894,11 @@
                     <div class="worker-entry-fields">
                         <div class="worker-entry-field">
                             <label for="worker-${index}-hours">عدد الساعات *</label>
-                            <input type="number" id="worker-${index}-hours" min="0" class="worker-hours" required>
+                            <input type="number" id="worker-${index}-hours" min="0" step="0.01" class="worker-hours" required>
                         </div>
                         <div class="worker-entry-field">
                             <label for="worker-${index}-discount">الخصم (جنية)</label>
-                            <input type="number" id="worker-${index}-discount" min="0" value="0" class="worker-discount">
+                            <input type="number" id="worker-${index}-discount" min="0" step="0.01" value="0" class="worker-discount">
                         </div>
                         <div class="worker-entry-field">
                             <label for="worker-${index}-come-time">وقت الحضور *</label>
@@ -1054,11 +1015,21 @@
                 multiShiftNumberInput.value = '';
                 multiWorkersList.classList.add('hidden');
                 submitMultiBtn.classList.add('hidden');
-                // إعادة تحميل بيانات العمال لتحديث القائمة
-                loadRegisteredWorkers();
-                loadWorkersFromGoogleSheet();
             }
         }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+<!-- dddddddddddddddddddddsd --><!-- dddddddddddddddddddddsd -->
+ <!-- dddddddddddddddddddddsd -->
+  <!-- dddddddddddddddddddddsd -->
+   <!-- dddddddddddddddddddddsd -->
+    <!-- dddddddddddddddddddddsd -->
+     <!-- dddddddddddddddddddddsd --><!-- dddddddddddddddddddddsd --><!-- dddddddddddddddddddddsd -->
