@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة بيانات الشفتات</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="email"]:focus,
+        .form-group input[type="tel"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .buttons-container {
+            text-align: center;
+            margin-top: 25px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .btn-update {
+            background-color: #28a745;
+        }
+        .btn-update:hover {
+            background-color: #218838;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+        #responseMessage {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .data-display {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+        }
+        .data-item {
+            border-bottom: 1px dashed #eee;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        .data-item span {
+            flex-grow: 1;
+            margin-right: 15px;
+            font-size: 0.95em;
+        }
+        .data-item .actions {
+            flex-shrink: 0;
+        }
+        .data-item .actions button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-left: 5px;
+            transition: background-color 0.2s ease;
+        }
+        .data-item .actions button:hover {
+            background-color: #5a6268;
+        }
+        .data-item .actions .edit-btn {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .data-item .actions .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        .data-item .actions .delete-btn {
+            background-color: #dc3545;
+        }
+        .data-item .actions .delete-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>إضافة بيانات جديدة</h2>
+        <form id="dataForm">
+            <div class="form-group">
+                <label for="shiftNumber">رقم الشفت:</label>
+                <input type="text" id="shiftNumber" name="shiftNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="personName">اسم الشخص:</label>
+                <input type="text" id="personName" name="personName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">رقم الهاتف:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="buttons-container">
+                <button type="submit" class="btn">إضافة بيانات</button>
+            </div>
+        </form>
+        <div id="responseMessage"></div>
+    </div>
+
+    <div class="container">
+        <h2>تعديل / حذف بيانات</h2>
+        <form id="searchForm">
+            <div class="form-group">
+                <label for="searchShiftNumber">رقم الشفت للبحث:</label>
+                <input type="text" id="searchShiftNumber" name="searchShiftNumber" required>
+            </div>
+            <div class="form-group">
+                <label for="searchPersonName">اسم الشخص للبحث:</label>
+                <input type="text" id="searchPersonName" name="searchPersonName" required>
+            </div>
+            <div class="buttons-container">
+                <button type="button" class="btn" onclick="searchData()">بحث عن البيانات</button>
+            </div>
+        </form>
+        <div id="searchResults" class="data-display">
+        </div>
+        <div id="editFormContainer" style="display:none; margin-top: 30px;">
+            <h3>تعديل البيانات</h3>
+            <form id="updateForm">
+                <input type="hidden" id="editRowIndex">
+                <div class="form-group">
+                    <label for="editShiftNumber">رقم الشفت:</label>
+                    <input type="text" id="editShiftNumber" name="editShiftNumber" required readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editPersonName">اسم الشخص:</label>
+                    <input type="text" id="editPersonName" name="editPersonName" required readonly>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">البريد الإلكتروني:</label>
+                    <input type="email" id="editEmail" name="editEmail">
+                </div>
+                <div class="form-group">
+                    <label for="editPhoneNumber">رقم الهاتف:</label>
+                    <input type="tel" id="editPhoneNumber" name="editPhoneNumber">
+                </div>
+                <div class="buttons-container">
+                    <button type="submit" class="btn btn-update">حفظ التعديلات</button>
+                    <button type="button" class="btn" onclick="cancelEdit()">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // رابط نشر Google Apps Script الخاص بك
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby16-dP9fC67ioZYIFzSe7-50ObE3hmexw22ihwXEDntSThZ5cRfmjNGrW6XUSoHDA/exec';
+
+        const dataForm = document.getElementById('dataForm');
+        const searchForm = document.getElementById('searchForm');
+        const updateForm = document.getElementById('updateForm');
+        const responseMessage = document.getElementById('responseMessage');
+        const searchResultsDiv = document.getElementById('searchResults');
+        const editFormContainer = document.getElementById('editFormContainer');
+
+        function showMessage(message, type) {
+            responseMessage.textContent = message;
+            responseMessage.className = type;
+            responseMessage.style.display = 'block';
+            setTimeout(() => {
+                responseMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        // دالة إضافة البيانات
+        dataForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(dataForm);
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                data[key] = value || '';
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'add',
+                        data: JSON.stringify(data)
+                    })
+                });
+
+                showMessage('تم إضافة البيانات بنجاح!', 'success');
+                dataForm.reset();
+            } catch (error) {
+                console.error('Error adding data:', error);
+                showMessage('حدث خطأ أثناء إضافة البيانات. يرجى المحاولة مرة أخرى.', 'error');
+            }
+        });
+
+        // دالة البحث عن البيانات
+        async function searchData() {
+            const searchShiftNumber = document.getElementById('searchShiftNumber').value.trim();
+            const searchPersonName = document.getElementById('searchPersonName').value.trim();
+
+            if (!searchShiftNumber || !searchPersonName) {
+                showMessage('الرجاء إدخال رقم الشفت واسم الشخص للبحث.', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=search&shiftNumber=${encodeURIComponent(searchShiftNumber)}&personName=${encodeURIComponent(searchPersonName)}`);
+                const result = await response.json();
+
+                searchResultsDiv.innerHTML = '';
+                editFormContainer.style.display = 'none';
+
+                if (result.status === 'success' && result.data.length > 0) {
+                    result.data.forEach((row, index) => {
+                        const dataItem = document.createElement('div');
+                        dataItem.classList.add('data-item');
+                        dataItem.dataset.rowIndex = row.rowIndex;
+                        
+                        dataItem.innerHTML = `
+                            <span>الشفت: ${row.shiftNumber || ''} | الاسم: ${row.personName || ''} | الإيميل: ${row.email || 'لا يوجد'} | الهاتف: ${row.phoneNumber || 'لا يوجد'}</span>
+                            <div class="actions">
+                                <button class="edit-btn" onclick="editData(${row.rowIndex}, '${row.shiftNumber || ''}', '${row.personName || ''}', '${row.email || ''}', '${row.phoneNumber || ''}')">تعديل</button>
+                                <button class="delete-btn" onclick="deleteData(${row.rowIndex}, '${row.shiftNumber || ''}', '${row.personName || ''}')">حذف</button>
+                            </div>
+                        `;
+                        searchResultsDiv.appendChild(dataItem);
+                    });
+                    showMessage('تم العثور على بيانات.', 'success');
+                } else {
+                    showMessage('لم يتم العثور على بيانات مطابقة.', 'info');
+                }
+            } catch (error) {
+                console.error('Error searching data:', error);
+                showMessage('حدث خطأ أثناء البحث عن البيانات. يرجى المحاولة مرة أخرى.', 'error');
+            }
+        }
+
+        // دالة تحميل البيانات للتعديل
+        function editData(rowIndex, shiftNumber, personName, email, phoneNumber) {
+            document.getElementById('editRowIndex').value = rowIndex;
+            document.getElementById('editShiftNumber').value = shiftNumber || '';
+            document.getElementById('editPersonName').value = personName || '';
+            document.getElementById('editEmail').value = email || '';
+            document.getElementById('editPhoneNumber').value = phoneNumber || '';
+            editFormContainer.style.display = 'block';
+            searchResultsDiv.innerHTML = '';
+        }
+
+        // دالة حفظ التعديلات
+        updateForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const rowIndex = document.getElementById('editRowIndex').value;
+            const updatedData = {
+                ShiftNumber: document.getElementById('editShiftNumber').value,
+                PersonName: document.getElementById('editPersonName').value,
+                Email: document.getElementById('editEmail').value || '',
+                PhoneNumber: document.getElementById('editPhoneNumber').value || ''
+            };
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'update',
+                        rowIndex: rowIndex,
+                        data: JSON.stringify(updatedData)
+                    })
+                });
+
+                showMessage('تم تحديث البيانات بنجاح!', 'success');
+                updateForm.reset();
+                editFormContainer.style.display = 'none';
+                searchData();
+            } catch (error) {
+                console.error('Error updating data:', error);
+                showMessage('حدث خطأ أثناء تحديث البيانات. يرجى المحاولة مرة أخرى.', 'error');
+            }
+        });
+
+        // دالة إلغاء التعديل
+        function cancelEdit() {
+            editFormContainer.style.display = 'none';
+            updateForm.reset();
+            searchResultsDiv.innerHTML = '';
+        }
+
+        // دالة حذف البيانات
+        async function deleteData(rowIndex, shiftNumber, personName) {
+            if (!confirm(`هل أنت متأكد من حذف بيانات ${personName || 'هذا الشخص'} في الشفت رقم ${shiftNumber || 'هذا الشفت'}؟`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'delete',
+                        rowIndex: rowIndex
+                    })
+                });
+
+                showMessage('تم حذف البيانات بنجاح!', 'success');
+                searchData();
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                showMessage('حدث خطأ أثناء حذف البيانات. يرجى المحاولة مرة أخرى.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

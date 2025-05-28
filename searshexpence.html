@@ -105,6 +105,28 @@
             background-color: #0b7dda;
         }
         
+        .shift-selection {
+            text-align: center;
+            margin-bottom: 20px;
+            display: none; /* مخفي بشكل افتراضي */
+        }
+        
+        .shift-btn {
+            padding: 10px 10px;
+            margin: 2 2px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .shift-btn:hover {
+            background-color: #0b7dda;
+        }
+        
         @media print {
             body {
                 background-color: white;
@@ -117,7 +139,7 @@
                 max-width: 100%;
             }
             
-            .print-btn, .search-container {
+            .print-btn, .search-container, .shift-selection {
                 display: none;
             }
             
@@ -140,6 +162,14 @@
             <button class="search-btn" onclick="searchShift()">بحث</button>
         </div>
         
+        <div class="shift-selection" id="shiftSelection">
+            <p>اختر نوع الشيفت:</p>
+            <button class="shift-btn" onclick="filterByShiftType('بداية اليوم')">بداية اليوم</button>
+            <button class="shift-btn" onclick="filterByShiftType('منتصف اليوم')">منتصف اليوم</button>
+            <button class="shift-btn" onclick="filterByShiftType('نهاية اليوم')">نهاية اليوم</button>
+            <button class="shift-btn" onclick="showAllShifts()">عرض الكل</button>
+        </div>
+        
         <div id="invoicesContainer"></div>
         <button class="print-btn" onclick="window.print()">طباعة الفواتير</button>
     </div>
@@ -147,7 +177,11 @@
     <script> 
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
         const invoicesContainer = document.getElementById('invoicesContainer');
+        const shiftSelection = document.getElementById('shiftSelection');
+        const shiftSearchInput = document.getElementById('shiftSearch');
+        
         let allWorkers = []; // لتخزين جميع البيانات المسترجعة
+        let currentShiftNumber = ''; // لتخزين رقم الشيفت الحالي
         
         async function fetchData() {
             try {
@@ -165,7 +199,8 @@
                     NumOfHours: row.c[4]?.v || 0,
                     discountWorker: row.c[5]?.v || 0,
                     dayExpence: row.c[6]?.v || 0,
-                    shiftNumber: row.c[7]?.v || ''
+                    shiftNumber: row.c[7]?.v || '',
+                    shiftType: row.c[8]?.v || ''
                 }));
                 
                 // عرض رسالة ترحيبية بدلاً من البيانات
@@ -178,7 +213,7 @@
         }
         
         function searchShift() {
-            const shiftNumber = document.getElementById('shiftSearch').value.trim();
+            const shiftNumber = shiftSearchInput.value.trim();
             if (!shiftNumber) {
                 alert('الرجاء إدخال رقم الشيفت');
                 return;
@@ -189,15 +224,50 @@
                 return;
             }
             
+            currentShiftNumber = shiftNumber;
             const filteredWorkers = allWorkers.filter(worker => worker.shiftNumber == shiftNumber);
+            
             if (filteredWorkers.length === 0) {
                 invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات للشيفت رقم ' + shiftNumber + '</p>';
+                shiftSelection.style.display = 'none';
+            } else {
+                // عرض واجهة اختيار نوع الشيفت
+                shiftSelection.style.display = 'block';
+                invoicesContainer.innerHTML = '<p style="text-align: center;">الرجاء اختيار نوع الشيفت لعرض البيانات</p>';
+            }
+        }
+        
+        function filterByShiftType(shiftType) {
+            if (!currentShiftNumber) return;
+            
+            const filteredWorkers = allWorkers.filter(worker => 
+                worker.shiftNumber == currentShiftNumber && worker.shiftType === shiftType
+            );
+            
+            if (filteredWorkers.length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات للشيفت ' + shiftType + ' في الشيفت رقم ' + currentShiftNumber + '</p>';
             } else {
                 groupAndCreateInvoices(filteredWorkers);
             }
         }
         
+        function showAllShifts() {
+            if (!currentShiftNumber) return;
+            
+            const filteredWorkers = allWorkers.filter(worker => 
+                worker.shiftNumber == currentShiftNumber
+            );
+            
+            groupAndCreateInvoices(filteredWorkers);
+        }
+        
         function groupAndCreateInvoices(workers) {
+            invoicesContainer.innerHTML = '';
+            if (workers.length === 0) {
+                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
+                return;
+            }
+            
             const groupedByJob = workers.reduce((acc, worker) => {
                 if (!acc[worker.jobType]) {
                     acc[worker.jobType] = [];
@@ -210,12 +280,6 @@
         }
         
         function createSingleInvoice(groupedByJob) {
-            invoicesContainer.innerHTML = '';
-            if (Object.keys(groupedByJob).length === 0) {
-                invoicesContainer.innerHTML = '<p style="text-align: center;">لا توجد بيانات متاحة للعرض</p>';
-                return;
-            }
-            
             let grandTotal = 0; // متغير لتخزين المجموع الكلي
             
             for (const jobType in groupedByJob) {
@@ -302,7 +366,7 @@
         window.addEventListener('load', fetchData);
         
         // للسماح بالبحث عند الضغط على زر Enter
-        document.getElementById('shiftSearch').addEventListener('keypress', function(e) {
+        shiftSearchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 searchShift();
             }

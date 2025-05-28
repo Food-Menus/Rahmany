@@ -151,6 +151,7 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -189,165 +190,282 @@
         </a>
     </div>
     <script>
+        // **تأكد أن هذا الـ URL هو نفس الـ URL الخاص بنشر Google Apps Script API الخاص بك**
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4rHSV3lbB_kI52_TElC2VKCw631Vi8tw5QZDKSr3qzkFg-CqcC-MpX4uvl-rB-Fsf/exec'; 
         const WORKERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
-        const REGISTERED_WORKERS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
-        const EXPENSES_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyV1pQizIbiTEOxDMzvIatE8xJO4kYhx23kGiptz4BK7b32lQsb9jrC4DJEcUFE7amI/exec';
+        
         const jobTypeSelect = document.getElementById('jobType');
         const shiftTypeSelect = document.getElementById('shiftType');
         const workersContainer = document.getElementById('workersContainer');
         const expenseForm = document.getElementById('expenseForm');
         const messageDiv = document.getElementById('message');
         
-        let workersData = [];
-        let registeredWorkersInShift = [];
+        let allWorkersData = []; // لتخزين جميع بيانات العمال من sheet 1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8
+        let registeredWorkersInCurrentShift = new Set(); // لتخزين أسماء العمال المسجلين في الوردية الحالية
+        let lastSubmissionTime = 0;
 
-        // تحميل بيانات العمال المسجلين بالفعل في الشيفت الحالي
-        async function loadRegisteredWorkers() {
+        // دالة لجلب العمال المسجلين بالفعل في الوردية الحالية من السكريبت API
+        async function fetchRegisteredWorkersForCurrentShift() {
+            const currentShift = localStorage.getItem('shiftNumber');
+            if (!currentShift) {
+                console.warn('Shift number not found in local storage. Cannot fetch registered workers.');
+                registeredWorkersInCurrentShift = new Set(); // إعادة تعيين لضمان عدم وجود بيانات قديمة
+                return;
+            }
+
             try {
-                const currentShift = localStorage.getItem('shiftNumber');
-                if (!currentShift) {
-                    console.error('Shift number not found in local storage');
-                    return [];
-                }
+                const params = new URLSearchParams({
+                    action: 'search',
+                    shiftNumber: currentShift,
+                    workerName: '' // نرسل workerName فارغًا لطلب جميع العمال في هذه الوردية
+                });
 
-                const response = await fetch(REGISTERED_WORKERS_SHEET_URL);
-                const text = await response.text();
-                const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
-                const data = JSON.parse(jsonStr);
-                
-                return data.table.rows
-                    .filter(row => row.c[7]?.v == currentShift) // العمود 7 هو shiftNumber
-                    .map(row => row.c[0]?.v || ''); // العمود 0 هو workerName
+                const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                const result = await response.json();
+
+                if (result.status === 'success' && result.data) {
+                    registeredWorkersInCurrentShift = new Set(result.data.map(worker => worker.workerName));
+                } else {
+                    console.error('Failed to fetch registered workers from Apps Script:', result.message);
+                    registeredWorkersInCurrentShift = new Set(); // مسح أي بيانات سابقة في حالة الخطأ
+                }
             } catch (error) {
-                console.error('Error loading registered workers:', error);
-                return [];
+                console.error('Error fetching registered workers:', error);
+                registeredWorkersInCurrentShift = new Set(); // مسح أي بيانات سابقة في حالة الخطأ
             }
         }
 
-        // تحميل بيانات العمال من الجدول الرئيسي
-        async function loadWorkersData() {
+        // تحميل بيانات العمال من الجدول الرئيسي (sheet 1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8)
+        async function loadAllWorkersData() {
             try {
-                registeredWorkersInShift = await loadRegisteredWorkers();
+                // قبل جلب العمال المتاحين، نحدث قائمة العمال المسجلين
+                await fetchRegisteredWorkersForCurrentShift(); 
                 
-                const response = await fetch(WORKERS_SHEET_URL);
+                const response = await fetch(`${WORKERS_SHEET_URL}&t=${Date.now()}`);
                 const text = await response.text();
                 const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+)\);/)[1];
                 const data = JSON.parse(jsonStr);
                 
-                workersData = data.table.rows.map(row => {
-                    return {
-                        workerName: row.c[0]?.v || '',
-                        jobType: row.c[1]?.v || '',
-                        hourlyRate: row.c[2]?.v || 0
-                    };
-                }).filter(worker => 
-                    worker.workerName && 
-                    !registeredWorkersInShift.includes(worker.workerName)
+                const uniqueWorkers = new Map();
+                
+                data.table.rows.forEach(row => {
+                    const workerName = row.c[0]?.v || '';
+                    if (workerName) { // نتأكد أن اسم العامل ليس فارغًا
+                        uniqueWorkers.set(workerName, {
+                            workerName: workerName,
+                            jobType: row.c[1]?.v || '',
+                            hourlyRate: row.c[2]?.v || 0
+                        });
+                    }
+                });
+                
+                // نحول Map إلى مصفوفة ونفلتر العمال المسجلين بالفعل في الوردية الحالية
+                allWorkersData = Array.from(uniqueWorkers.values()).filter(worker => 
+                    !registeredWorkersInCurrentShift.has(worker.workerName)
                 );
                 
-                const uniqueJobTypes = [...new Set(workersData.map(worker => worker.jobType))];
-                jobTypeSelect.innerHTML += uniqueJobTypes.map(type => 
-                    `<option value="${type}">${type}</option>`
-                ).join('');
+                populateJobTypes();
             } catch (error) {
-                console.error('Error loading workers data:', error);
+                console.error('Error loading all workers data:', error);
                 jobTypeSelect.innerHTML = '<option value="">حدث خطأ في تحميل البيانات</option>';
             }
+        }
+        
+        function populateJobTypes() {
+            const uniqueJobTypes = [...new Set(allWorkersData.map(worker => worker.jobType))];
+            jobTypeSelect.innerHTML = '<option value="">اختر نوع العمل</option>' + 
+                uniqueJobTypes.map(type => 
+                    `<option value="${type}">${type}</option>`
+                ).join('');
         }
         
         jobTypeSelect.addEventListener('change', function() {
             const selectedJobType = this.value;
             workersContainer.innerHTML = ''; 
 
-            if (selectedJobType) {
-                const filteredWorkers = workersData.filter(worker => 
-                    worker.jobType === selectedJobType && 
-                    !registeredWorkersInShift.includes(worker.workerName)
-                );
-                
-                if (filteredWorkers.length === 0) {
-                    workersContainer.innerHTML = `
-                        <div class="form-group" style="text-align: center; color: #fff;">
-                            لا يوجد عمال متاحين للتسجيل في هذا النوع من العمل للشيفت الحالي
-                        </div>
-                    `;
-                    return;
-                }
-                
-                filteredWorkers.forEach(worker => {
-                    const workerDiv = document.createElement('div');
-                    workerDiv.className = 'form-group';
-                    workerDiv.innerHTML = `
-                        <label>${worker.workerName}</label>
-                        <input type="number" placeholder="وقت الحضور" class="comeTime" min="0" step="0.01">
-                        <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" min="0" step="0.01" >
-                        <input type="number" placeholder="الخصم (جنيه)" class="discount" value="0" min="0" step="0.01">
-                        <input type="hidden" class="hourlyRate" value="${worker.hourlyRate}">
-                    `;
-                    workersContainer.appendChild(workerDiv);
-                });
+            if (selectedJobType && shiftTypeSelect.value) {
+                showWorkersForSelectedJob();
             }
         });
+
+        shiftTypeSelect.addEventListener('change', function() {
+            if (jobTypeSelect.value) {
+                showWorkersForSelectedJob();
+            }
+        });
+
+        function showWorkersForSelectedJob() {
+            const selectedJobType = jobTypeSelect.value;
+            workersContainer.innerHTML = '';
+
+            if (!selectedJobType || !shiftTypeSelect.value) {
+                return;
+            }
+
+            // نفلتر العمال المتاحين فقط لاسم العمل المختار وغير المسجلين في الوردية الحالية
+            const filteredWorkers = allWorkersData.filter(worker => 
+                worker.jobType === selectedJobType && 
+                !registeredWorkersInCurrentShift.has(worker.workerName)
+            );
+            
+            if (filteredWorkers.length === 0) {
+                workersContainer.innerHTML = `
+                    <div class="form-group" style="text-align: center; color: #fff;">
+                        لا يوجد عمال متاحين للتسجيل في هذا النوع من العمل للشيفت الحالي.
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredWorkers.forEach(worker => {
+                const workerDiv = document.createElement('div');
+                workerDiv.className = 'form-group';
+                workerDiv.innerHTML = `
+                    <label>${worker.workerName}</label>
+                    <input type="text" placeholder="وقت الحضور (مثال: 08:00)" class="comeTime" min="0" step="0.01" value="0">
+                    <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" min="0" step="0.01" value="0">
+                    <input type="number" placeholder="الخصم (جنيه)" class="discount" value="0" min="0" step="0.01">
+                    <input type="hidden" class="hourlyRate" value="${worker.hourlyRate}">
+                `;
+                workersContainer.appendChild(workerDiv);
+            });
+        }
         
-        async function saveExpenses(workers) {
-            messageDiv.innerHTML = ' جاري إرسال البيانات لا تغلق الصفحة حتى يتم الارسال...';
+        async function saveExpenses(workersToSave) {
+            const now = Date.now();
+            if (now - lastSubmissionTime < 5000) {
+                Swal.fire({
+                    title: 'تحذير',
+                    text: 'يرجى الانتظار قليلاً قبل إرسال البيانات مرة أخرى',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+                return;
+            }
+            lastSubmissionTime = now;
+
+            messageDiv.innerHTML = 'جاري إرسال البيانات لا تغلق الصفحة حتى يتم الارسال...';
+            messageDiv.className = 'message success'; // استخدام Success كـ Loading
             messageDiv.style.display = 'block';
 
-            for (const worker of workers) {
-                if (!worker.comeTime || !worker.hoursWorked) {
+            const successfulSubmissions = [];
+            const failedSubmissions = [];
+            const currentShiftNumber = localStorage.getItem('shiftNumber');
+
+            if (!currentShiftNumber) {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: 'رقم الوردية غير موجود في التخزين المحلي. يرجى تعيينه.',
+                    icon: 'error',
+                    confirmButtonText: 'حسناً'
+                });
+                messageDiv.style.display = 'none';
+                return;
+            }
+
+            for (const worker of workersToSave) {
+                // التحقق من أن حقول الإدخال تحتوي على قيم صالحة
+                if (!worker.comeTime || isNaN(parseFloat(worker.hoursWorked)) || isNaN(parseFloat(worker.discount))) {
+                    failedSubmissions.push(worker.workerName + ' (بيانات غير كاملة أو غير صحيحة)');
                     continue;
                 }
 
-                const formData = new FormData();
-                
-                formData.append('workerName', worker.workerName);
-                formData.append('jobType', worker.jobType);
-                formData.append('shiftType', worker.shiftType); // إضافة نوع الوردية
-                formData.append('comeTime', worker.comeTime);
-                formData.append('hourlyRate', worker.hourlyRate);
-                formData.append('NumOfHours', worker.hoursWorked);
-                formData.append('discountWorker', worker.discount);
-                formData.append('dayExpence', (worker.hoursWorked * worker.hourlyRate - worker.discount).toFixed(2));
-                formData.append('shiftNumber', localStorage.getItem('shiftNumber'));
+                const dataToSend = {
+                    workerName: worker.workerName,
+                    jobType: worker.jobType,
+                    comeTime: worker.comeTime,
+                    hourlyRate: parseFloat(worker.hourlyRate),
+                    NumOfHours: parseFloat(worker.hoursWorked),
+                    discountWorker: parseFloat(worker.discount),
+                    dayExpence: (parseFloat(worker.hoursWorked) * parseFloat(worker.hourlyRate) - parseFloat(worker.discount)).toFixed(2),
+                    shiftNumber: currentShiftNumber,
+                    shiftType: worker.shiftType
+                };
+
+                const params = new URLSearchParams();
+                params.append('action', 'add');
+                params.append('data', JSON.stringify(dataToSend));
 
                 try {
-                    const response = await fetch(EXPENSES_SCRIPT_URL, {
+                    const response = await fetch(SCRIPT_URL, {
                         method: 'POST',
-                        body: formData
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: params.toString()
                     });
 
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        successfulSubmissions.push(worker.workerName);
+                        // إضافة العامل إلى قائمة المسجلين لمنع ظهوره مرة أخرى
+                        registeredWorkersInCurrentShift.add(worker.workerName);
+                    } else {
+                        failedSubmissions.push(worker.workerName + ` (${result.message})`);
                     }
                 } catch (error) {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        title: 'خطأ',
-                        text: 'حدث خطأ أثناء محاولة التسجيل',
-                        icon: 'error',
-                        confirmButtonText: 'حسناً'
-                    });
+                    console.error('Error sending data for worker:', worker.workerName, error);
+                    failedSubmissions.push(worker.workerName + ' (خطأ في الاتصال)');
                 }
 
-                await new Promise(r => setTimeout(r, 1000));
+                // انتظار قليل بين كل إرسال لمنع تجاوز حدود Apps Script
+                await new Promise(r => setTimeout(r, 200)); 
             }
 
-            Swal.fire({
-                title: 'تم بنجاح',
-                text: 'تم تسجيل مصروفات العمال بنجاح',
-                icon: 'success',
-                confirmButtonText: 'حسناً'
-            });
-
             messageDiv.style.display = 'none';
-            // إعادة تحميل البيانات بعد الحفظ لتحديث قائمة العمال المسجلين
-            loadWorkersData();
+
+            if (failedSubmissions.length > 0) {
+                Swal.fire({
+                    title: 'خطأ جزئي',
+                    html: `تم تسجيل **${successfulSubmissions.length}** عامل بنجاح.<br>
+                           فشل تسجيل **${failedSubmissions.length}** عامل:
+                           <ul>${failedSubmissions.map(name => `<li>${name}</li>`).join('')}</ul>`,
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+            } else {
+                Swal.fire({
+                    title: 'تم بنجاح',
+                    text: `تم تسجيل مصروفات **${successfulSubmissions.length}** عامل بنجاح.`,
+                    icon: 'success',
+                    confirmButtonText: 'حسناً'
+                });
+            }
+
+            // إعادة تحميل البيانات لتحديث القوائم بعد الحفظ
+            await loadAllWorkersData(); 
+            // إخفاء حقول العمال بعد الحفظ
+            workersContainer.innerHTML = '';
+            // إعادة ضبط تحديد العمل ونوع الوردية
+            jobTypeSelect.value = '';
+            shiftTypeSelect.value = '';
         }
 
-        expenseForm.addEventListener('submit', function(e) {
+        expenseForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const workers = Array.from(workersContainer.querySelectorAll('.form-group')).map(workerDiv => {
+            if (!jobTypeSelect.value) {
+                Swal.fire({
+                    title: 'تحذير',
+                    text: 'يجب اختيار نوع العمل.',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+                return;
+            }
+
+            if (!shiftTypeSelect.value) {
+                Swal.fire({
+                    title: 'تحذير',
+                    text: 'يجب اختيار نوع الوردية.',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+                return;
+            }
+
+            const workersToSubmit = Array.from(workersContainer.querySelectorAll('.form-group')).map(workerDiv => {
                 return {
                     workerName: workerDiv.querySelector('label').textContent,
                     comeTime: workerDiv.querySelector('.comeTime').value,
@@ -355,21 +473,30 @@
                     discount: workerDiv.querySelector('.discount').value,
                     hourlyRate: workerDiv.querySelector('.hourlyRate').value,
                     jobType: jobTypeSelect.value,
-                    shiftType: shiftTypeSelect.value // إضافة نوع الوردية
+                    shiftType: shiftTypeSelect.value
                 };
-            }).filter(worker => worker.comeTime && worker.hoursWorked);
+            }).filter(worker => worker.comeTime && parseFloat(worker.hoursWorked) > 0); // فلترة العمال الذين لديهم وقت حضور وساعات عمل
+
+            if (workersToSubmit.length === 0) {
+                Swal.fire({
+                    title: 'تحذير',
+                    text: 'لم تقم بإدخال بيانات كاملة لأي عامل.',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+                return;
+            }
 
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
 
-            saveExpenses(workers).then(() => {
-                submitBtn.disabled = false;
-                this.reset();
-                workersContainer.innerHTML = '';
-            });
+            await saveExpenses(workersToSubmit);
+            
+            submitBtn.disabled = false;
         });
 
-        loadWorkersData();
+        // تحميل البيانات عند فتح الصفحة
+        loadAllWorkersData();
     </script>
 </body>
 </html>

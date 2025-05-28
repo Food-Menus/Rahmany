@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة العمال</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            direction: rtl; /* Right-to-left for Arabic */
+            text-align: right;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+            font-size: 2em;
+            border-bottom: 1px solid #388E3C;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 i {
+            margin-left: 10px;
+            color: #5cb85c;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .tab-btn {
+            background-color: #e9ecef;
+            border: none;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #495057;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .tab-btn i {
+            margin-left: 8px;
+            font-size: 1.2em;
+        }
+
+        .tab-btn:hover {
+            background-color: #e2e6ea;
+            color: #212529;
+        }
+
+        .tab-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-bottom: 3px solid #388E3C;
+        }
+
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="time"], /* Changed to text in JS for custom handling */
+        select {
+            width: calc(100% - 22px);
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1em;
+            color: #495057;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fdfdfd;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="time"]:focus, /* Changed to text in JS for custom handling */
+        select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            outline: none;
+        }
+        
+        input[readonly], input[disabled], select[disabled] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .btn i {
+            margin-left: 8px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+
+        .btn.hidden {
+            display: none;
+        }
+
+        .results-container {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            font-size: 1.1em;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #ced4da;
+        }
+
+        .worker-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .worker-card h3 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        .worker-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item strong {
+            color: #555;
+            font-weight: 600;
+            margin-left: 5px; /* For RTL */
+        }
+
+        .detail-item span {
+            color: #333;
+        }
+
+        .worker-actions {
+            text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .worker-actions .btn {
+            margin: 0 8px;
+            padding: 8px 18px;
+            font-size: 0.95em;
+        }
+
+        .btn-edit {
+            background-color: #007bff;
+        }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .workers-list {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .worker-entry {
+            background-color: #fefefe;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .worker-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .worker-entry-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .worker-hourly-rate {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .worker-entry-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .worker-entry-field label {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .worker-entry-field input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>نظام إدارة العمال</h1>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="search-tab"><i class="fas fa-search"></i> بحث عن عامل</button>
+        <button class="tab-btn" data-tab="multi-add-tab"><i class="fas fa-users-cog"></i> إضافة متعددة</button>
+    </div>
+
+    <div class="tab-content active" id="search-tab">
+        <h2><i class="fas fa-search"></i> بحث عن عامل</h2>
+        <div class="form-group">
+            <label for="search-name">اسم العامل:</label>
+            <input type="text" id="search-name" placeholder="أدخل اسم العامل">
+        </div>
+        <button id="search-btn" class="btn"><i class="fas fa-search"></i> بحث</button>
+
+        <div id="search-results" class="results-container">
+            </div>
+    </div>
+
+    <div class="tab-content" id="multi-add-tab">
+        <h2><i class="fas fa-users-cog"></i> إضافة متعددة للعمال</h2>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="multi-job-type">نوع العمل *</label>
+                <select id="multi-job-type" required>
+                    <option value="">-- اختر نوع العمل --</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="multi-shift-type">نوع الشيفت *</label>
+                <select id="multi-shift-type" required>
+                    <option value="صباحي">صباحي</option>
+                    <option value="مسائي">مسائي</option>
+                    <option value="ليلي">ليلي</option>
+                </select>
+            </div>
+        </div>
+        
+        <button id="load-workers-btn" class="btn btn-primary"><i class="fas fa-users"></i> عرض العمال</button>
+        
+        <div id="multi-workers-list" class="workers-list hidden">
+            </div>
+        
+        <div class="form-actions">
+            <button id="submit-multi-btn" class="btn hidden"><i class="fas fa-save"></i> تسجيل جميع العمال</button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification hidden"></div>
+
+    <div id="edit-modal" class="tab-content hidden" style="background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 600px; margin: 20px auto;">
+        <h2><i class="fas fa-edit"></i> تعديل بيانات العامل</h2>
+        <form id="edit-worker-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-worker-name">اسم العامل</label>
+                    <input type="text" id="edit-worker-name" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="edit-job-type">نوع العمل</label>
+                    <input type="text" id="edit-job-type" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-come-time">وقت الحضور *</label>
+                    <input type="text" id="edit-come-time" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-shift-number">رقم الشيفت</label>
+                    <input type="text" id="edit-shift-number" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-shift-type">نوع الشيفت</label>
+                    <input type="text" id="edit-shift-type" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="edit-hourly-rate">معدل الساعة (جنية)</label>
+                    <input type="number" id="edit-hourly-rate" min="0" step="0.01" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit-num-hours">عدد الساعات *</label>
+                    <input type="number" id="edit-num-hours" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-discount">الخصم (جنية)</label>
+                    <input type="number" id="edit-discount" min="0" step="0.01" value="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-day-expence">مصروف اليوم (جنية)</label>
+                <input type="number" id="edit-day-expence" min="0" step="0.01" value="0" readonly>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn"><i class="fas fa-save"></i> تحديث</button>
+                <button type="button" id="edit-cancel-btn" class="btn btn-cancel"><i class="fas fa-times"></i> إلغاء</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    // عناصر DOM
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbwap2-jUdy3zfUW5hZoD65P2v02HyMH9qdk0xmHMxYACWlXEh3X6qUw9X0YH2teC9sq/exec';
+    const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const searchBtn = document.getElementById('search-btn');
+    // const searchShiftInput = document.getElementById('search-shift'); // تم إزالته
+    const searchNameInput = document.getElementById('search-name');
+    const searchResults = document.getElementById('search-results');
+    const notification = document.getElementById('notification');
+    
+    // عناصر الإضافة المتعددة
+    const multiJobTypeSelect = document.getElementById('multi-job-type');
+    const multiShiftTypeSelect = document.getElementById('multi-shift-type');
+    // const multiShiftNumberInput = document.getElementById('multi-shift-number'); // تم إزالته
+    const loadWorkersBtn = document.getElementById('load-workers-btn');
+    const multiWorkersList = document.getElementById('multi-workers-list');
+    const submitMultiBtn = document.getElementById('submit-multi-btn');
+    
+    // عناصر نموذج التعديل (المودال)
+    const editModal = document.getElementById('edit-modal');
+    const editWorkerForm = document.getElementById('edit-worker-form');
+    const editCancelBtn = document.getElementById('edit-cancel-btn');
+
+    // متغيرات التطبيق
+    let currentEditingRowIndex = null;
+    let workersData = []; // لتخزين بيانات العمال من جوجل شيت
+    let selectedWorkers = []; // لتخزين العمال المحددين للإضافة
+
+    // رقم الشيفت الافتراضي من localStorage
+    let defaultShiftNumber = localStorage.getItem('shiftNumber') || '1'; // يمكنك تعيين قيمة افتراضية هنا
+
+    // تحميل البيانات عند بدء التشغيل
+    document.addEventListener('DOMContentLoaded', () => {
+        loadWorkersFromGoogleSheet();
+        // إظهار تبويب البحث كافتراضي
+        document.querySelector('[data-tab="search-tab"]').click();
+    });
+
+    // تبديل التبويبات
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            
+            // إزالة النشاط من جميع الأزرار والمحتويات
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // إخفاء نموذج التعديل عند التبديل بين التبويبات
+            editModal.classList.add('hidden');
+
+            // إضافة النشاط للعناصر المحددة
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+
+    // البحث عن العمال
+    searchBtn.addEventListener('click', async () => {
+        // رقم الشيفت يؤخذ من localStorage بدلاً من إدخال المستخدم
+        const shiftNumber = defaultShiftNumber;
+        const workerName = searchNameInput.value.trim();
+        
+        if (!shiftNumber || !workerName) {
+            showNotification('يجب إدخال اسم العامل ورقم الشيفت محفوظ في المتصفح', 'error');
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${scriptUrl}?action=search&shiftNumber=${encodeURIComponent(shiftNumber)}&workerName=${encodeURIComponent(workerName)}`);
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                displaySearchResults(data.data);
+            } else {
+                showNotification(data.message || 'حدث خطأ أثناء البحث', 'error');
+            }
+        } catch (error) {
+            showNotification('حدث خطأ في الاتصال بالخادم', 'error');
+            console.error('Search error:', error);
+        }
+    });
+
+    // عرض نتائج البحث
+    function displaySearchResults(workers) {
+        searchResults.innerHTML = '';
+        
+        if (workers.length === 0) {
+            searchResults.innerHTML = '<p class="no-results">لا توجد نتائج مطابقة</p>';
+            return;
+        }
+        
+        workers.forEach(worker => {
+            const workerCard = document.createElement('div');
+            workerCard.className = 'worker-card';
+            
+            workerCard.innerHTML = `
+                <h3>${worker.workerName}</h3>
+                <div class="worker-details">
+                    <div class="detail-item">
+                        <strong>نوع العمل:</strong>
+                        <span>${worker.jobType}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>وقت الحضور:</strong>
+                        <span>${worker.comeTime}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>معدل الساعة:</strong>
+                        <span>${worker.hourlyRate} ج.م</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>عدد الساعات:</strong>
+                        <span>${worker.NumOfHours}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>الخصم:</strong>
+                        <span>${worker.discountWorker} ج.م</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>مصروف اليوم:</strong>
+                        <span>${worker.dayExpence} ج.م</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>رقم الشيفت:</strong>
+                        <span>${worker.shiftNumber}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>نوع الشيفت:</strong>
+                        <span>${worker.shiftType}</span>
+                    </div>
+                </div>
+                <div class="worker-actions">
+                    <button class="btn btn-edit" data-row-index="${worker.rowIndex}" data-worker-data='${JSON.stringify(worker)}'>
+                        <i class="fas fa-edit"></i> تعديل
+                    </button>
+                    <button class="btn btn-delete" data-row-index="${worker.rowIndex}">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            `;
+            
+            searchResults.appendChild(workerCard);
+        });
+        
+        // إضافة مستمعي الأحداث لأزرار التعديل والحذف
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const rowIndex = btn.getAttribute('data-row-index');
+                const workerData = JSON.parse(btn.getAttribute('data-worker-data'));
+                editWorker(rowIndex, workerData);
+            });
+        });
+        
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', () => deleteWorker(btn.getAttribute('data-row-index')));
+        });
+    }
+
+    // تعديل عامل (يتم عرض نموذج التعديل كـ "مودال" الآن)
+    function editWorker(rowIndex, worker) {
+        // إظهار المودال (نموذج التعديل)
+        editModal.classList.remove('hidden');
+        // إخفاء التبويبات الأخرى
+        tabContents.forEach(c => c.classList.remove('active'));
+        tabBtns.forEach(b => b.classList.remove('active'));
+
+
+        // تعبئة النموذج ببيانات العامل وجعل بعض الحقول للقراءة فقط
+        document.getElementById('edit-worker-name').value = worker.workerName;
+        document.getElementById('edit-worker-name').setAttribute('readonly', true);
+
+        document.getElementById('edit-job-type').value = worker.jobType;
+        document.getElementById('edit-job-type').setAttribute('readonly', true);
+        
+        document.getElementById('edit-come-time').value = worker.comeTime; // هذا الحقل قابل للتعديل
+
+        document.getElementById('edit-shift-number').value = worker.shiftNumber;
+        document.getElementById('edit-shift-number').setAttribute('readonly', true);
+
+        document.getElementById('edit-shift-type').value = worker.shiftType;
+        document.getElementById('edit-shift-type').setAttribute('readonly', true);
+
+        document.getElementById('edit-hourly-rate').value = worker.hourlyRate;
+        document.getElementById('edit-hourly-rate').setAttribute('readonly', true);
+        
+        document.getElementById('edit-num-hours').value = worker.NumOfHours; // هذا الحقل قابل للتعديل
+        
+        document.getElementById('edit-discount').value = worker.discountWorker; // هذا الحقل قابل للتعديل
+        
+        // مصروف اليوم يتم عرضه كقراءة فقط
+        document.getElementById('edit-day-expence').value = worker.dayExpence;
+        document.getElementById('edit-day-expence').setAttribute('readonly', true);
+
+        currentEditingRowIndex = rowIndex;
+    }
+
+    // معالجة تحديث العامل من نموذج التعديل
+    editWorkerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!currentEditingRowIndex) {
+            showNotification('لا يوجد عامل محدد للتحديث', 'error');
+            return;
+        }
+
+        const workerData = {
+            workerName: document.getElementById('edit-worker-name').value.trim(),
+            jobType: document.getElementById('edit-job-type').value.trim(),
+            comeTime: document.getElementById('edit-come-time').value.trim(), // تم تغيير نوع الإدخال إلى نص
+            hourlyRate: parseFloat(document.getElementById('edit-hourly-rate').value),
+            NumOfHours: parseFloat(document.getElementById('edit-num-hours').value),
+            discountWorker: parseFloat(document.getElementById('edit-discount').value),
+            // مصروف اليوم يتم إعادة حسابه أو يمكن إرساله كما هو إذا لم يتم تعديله
+            dayExpence: parseFloat(document.getElementById('edit-day-expence').value), 
+            shiftNumber: document.getElementById('edit-shift-number').value.trim(),
+            shiftType: document.getElementById('edit-shift-type').value
+        };
+
+        // التحقق من البيانات المطلوبة التي يمكن تعديلها
+        if (!workerData.comeTime || isNaN(workerData.NumOfHours)) {
+            showNotification('يجب ملء وقت الحضور وعدد الساعات', 'error');
+            return;
+        }
+
+        // تحديث مصروف اليوم بناءً على الساعات الجديدة ومعدل الساعة
+        workerData.dayExpence = workerData.NumOfHours * workerData.hourlyRate;
+        
+        try {
+            const response = await fetch(scriptUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=update&rowIndex=${currentEditingRowIndex}&data=${encodeURIComponent(JSON.stringify(workerData))}`
+            });
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                showNotification('تم تحديث بيانات العامل بنجاح', 'success');
+                editModal.classList.add('hidden'); // إخفاء المودال
+                // إعادة عرض تبويب البحث وتحديث النتائج
+                document.querySelector('[data-tab="search-tab"]').click();
+                searchBtn.click();
+            } else {
+                showNotification(data.message || 'حدث خطأ أثناء التحديث', 'error');
+            }
+        } catch (error) {
+            showNotification('حدث خطأ في الاتصال بالخادم', 'error');
+            console.error('Update error:', error);
+        }
+    });
+
+    // إلغاء التعديل (إخفاء المودال وإعادة تبويب البحث)
+    editCancelBtn.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+        document.querySelector('[data-tab="search-tab"]').click();
+    });
+
+    // حذف عامل
+    async function deleteWorker(rowIndex) {
+        if (!confirm('هل أنت متأكد من حذف هذا العامل؟')) return;
+        
+        try {
+            const response = await fetch(scriptUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `action=delete&rowIndex=${rowIndex}`
+            });
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                showNotification('تم حذف العامل بنجاح', 'success');
+                // تحديث نتائج البحث
+                searchBtn.click();
+            } else {
+                showNotification(data.message || 'حدث خطأ أثناء الحذف', 'error');
+            }
+        } catch (error) {
+            showNotification('حدث خطأ في الاتصال بالخادم', 'error');
+            console.error('Delete error:', error);
+        }
+    }
+
+    // عرض الإشعارات
+    function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification show ${type}`;
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // تحميل بيانات العمال من جوجل شيت
+    async function loadWorkersFromGoogleSheet() {
+        try {
+            const response = await fetch(googleSheetUrl);
+            const text = await response.text();
+            // تصحيح لمعالجة الـ JSONP
+            const jsonText = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+            const data = JSON.parse(jsonText);
+            
+            // استخراج بيانات العمال من الجدول
+            workersData = data.table.rows.map(row => {
+                const cells = row.c;
+                return {
+                    workerName: cells[0]?.v || '',
+                    jobType: cells[1]?.v || '',
+                    hourlyRate: cells[2]?.v || 0
+                };
+            }).filter(worker => worker.workerName && worker.jobType);
+            
+            // تعبئة قائمة أنواع العمل بدون تكرار
+            const jobTypes = [...new Set(workersData.map(worker => worker.jobType))];
+            multiJobTypeSelect.innerHTML = '<option value="">-- اختر نوع العمل --</option>' + 
+                jobTypes.map(type => `<option value="${type}">${type}</option>`).join('');
+            
+            showNotification('تم تحميل بيانات العمال بنجاح', 'success');
+        } catch (error) {
+            console.error('Error loading workers data:', error);
+            showNotification('حدث خطأ أثناء تحميل بيانات العمال', 'error');
+        }
+    }
+
+    // عرض العمال حسب نوع العمل المحدد
+    loadWorkersBtn.addEventListener('click', () => {
+        const selectedJobType = multiJobTypeSelect.value;
+        const selectedShiftType = multiShiftTypeSelect.value;
+        // رقم الشيفت يؤخذ من localStorage بدلاً من إدخال المستخدم
+        // var multiShiftNumber = multiShiftNumberInput.value.trim(); // تم إزالته
+        // الآن يتم أخذ رقم الشيفت من المتغير الافتراضي
+        const multiShiftNumber = defaultShiftNumber;
+        
+        // التحقق من أن رقم الشيفت موجود في localStorage
+        if (!localStorage.getItem('shiftNumber')) {
+            showNotification('لم يتم تعيين رقم الشيفت في المتصفح. يرجى تعيينه يدوياً في الكود أو عن طريق وظيفة أخرى.', 'error');
+            return;
+        }
+
+        if (!selectedJobType || !selectedShiftType) { // تم إزالة التحقق من multiShiftNumber
+            showNotification('يجب تحديد نوع العمل ونوع الشيفت', 'error');
+            return;
+        }
+        
+        // تصفية العمال حسب نوع العمل
+        selectedWorkers = workersData.filter(worker => worker.jobType === selectedJobType);
+        
+        // عرض قائمة العمال
+        displayWorkersList(selectedWorkers, selectedShiftType);
+    });
+
+    // عرض قائمة العمال للإضافة المتعددة
+    function displayWorkersList(workers, shiftType) {
+        multiWorkersList.innerHTML = '';
+        
+        if (workers.length === 0) {
+            multiWorkersList.innerHTML = '<p class="no-results">لا يوجد عمال لهذا النوع من العمل</p>';
+            submitMultiBtn.classList.add('hidden');
+            return;
+        }
+        
+        workers.forEach((worker, index) => {
+            const workerEntry = document.createElement('div');
+            workerEntry.className = 'worker-entry';
+            
+            workerEntry.innerHTML = `
+                <div class="worker-entry-header">
+                    <div class="worker-entry-title">${worker.workerName}</div>
+                    <div class="worker-hourly-rate">سعر الساعة: ${worker.hourlyRate} ج.م</div>
+                </div>
+                <div class="worker-entry-fields">
+                    <div class="worker-entry-field">
+                        <label for="worker-${index}-hours">عدد الساعات *</label>
+                        <input type="number" id="worker-${index}-hours" min="0" step="0.01" class="worker-hours" required>
+                    </div>
+                    <div class="worker-entry-field">
+                        <label for="worker-${index}-discount">الخصم (جنية)</label>
+                        <input type="number" id="worker-${index}-discount" min="0" step="0.01" value="0" class="worker-discount">
+                    </div>
+                    <div class="worker-entry-field">
+                        <label for="worker-${index}-come-time">وقت الحضور *</label>
+                        <input type="text" id="worker-${index}-come-time" class="worker-come-time" required placeholder="مثال: 8 (للساعة 8 صباحاً) أو 20 (للساعة 8 مساءً)">
+                    </div>
+                </div>
+            `;
+            
+            multiWorkersList.appendChild(workerEntry);
+        });
+        
+        multiWorkersList.classList.remove('hidden');
+        submitMultiBtn.classList.remove('hidden');
+    }
+
+    // تسجيل العمال المتعددين
+    submitMultiBtn.addEventListener('click', async () => {
+        // رقم الشيفت يؤخذ من localStorage
+        const shiftNumber = defaultShiftNumber;
+        const shiftType = multiShiftTypeSelect.value;
+        const jobType = multiJobTypeSelect.value;
+        
+        if (!shiftNumber || !shiftType || !jobType) {
+            showNotification('يجب تحديد نوع العمل ونوع الشيفت، ورقم الشيفت محفوظ في المتصفح', 'error');
+            return;
+        }
+        
+        // جمع بيانات العمال المطلوب تسجيلهم
+        const workersToSubmit = [];
+        const workerEntries = document.querySelectorAll('.worker-entry');
+        
+        workerEntries.forEach((entry, index) => {
+            const hoursInput = entry.querySelector('.worker-hours');
+            const discountInput = entry.querySelector('.worker-discount');
+            const comeTimeInput = entry.querySelector('.worker-come-time');
+            
+            const hours = parseFloat(hoursInput.value);
+            const discount = parseFloat(discountInput.value) || 0;
+            let comeTime = comeTimeInput.value.trim(); // قيمة نصية لوقت الحضور
+            
+            // التحقق من البيانات المطلوبة
+            if (hours > 0 && comeTime !== '') {
+                const worker = selectedWorkers[index];
+                
+                // حساب مصروف اليوم هنا قبل الإرسال
+                const dayExpence = hours * worker.hourlyRate;
+
+                workersToSubmit.push({
+                    workerName: worker.workerName,
+                    jobType: worker.jobType,
+                    comeTime: comeTime, // سيتم إرسالها كنص عادي
+                    hourlyRate: worker.hourlyRate,
+                    NumOfHours: hours,
+                    discountWorker: discount,
+                    dayExpence: dayExpence,
+                    shiftNumber: shiftNumber,
+                    shiftType: shiftType
+                });
+            }
+        });
+        
+        if (workersToSubmit.length === 0) {
+            showNotification('لا يوجد عمال ببيانات صالحة للتسجيل', 'error');
+            return;
+        }
+        
+        // إرسال البيانات عاملًا عاملًا مع تأخير بين كل عامل
+        submitWorkersOneByOne(workersToSubmit);
+    });
+
+    // إرسال العمال واحدًا تلو الآخر مع تأخير
+    async function submitWorkersOneByOne(workers) {
+        submitMultiBtn.disabled = true;
+        submitMultiBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التسجيل...';
+        
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (let i = 0; i < workers.length; i++) {
+            const worker = workers[i];
+            
+            try {
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=add&data=${encodeURIComponent(JSON.stringify(worker))}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    successCount++;
+                } else {
+                    errorCount++;
+                    console.error('Error submitting worker:', worker.workerName, data.message);
+                }
+            } catch (error) {
+                errorCount++;
+                console.error('Error submitting worker:', worker.workerName, error);
+            }
+            
+            // تأخير 500 مللي ثانية بين كل عامل
+            if (i < workers.length - 1) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        
+        submitMultiBtn.disabled = false;
+        submitMultiBtn.innerHTML = '<i class="fas fa-save"></i> تسجيل جميع العمال';
+        
+        showNotification(`تم تسجيل ${successCount} عامل بنجاح، وحدث خطأ في ${errorCount} عامل`, 
+                      errorCount > 0 ? 'error' : 'success');
+        
+        // إعادة تعيين النموذج بعد التسجيل
+        if (errorCount === 0) {
+            // multiShiftNumberInput.value = ''; // تم إزالته
+            multiWorkersList.classList.add('hidden');
+            submitMultiBtn.classList.add('hidden');
+            // إعادة تعيين قيم select
+            multiJobTypeSelect.value = ''; 
+            multiShiftTypeSelect.value = 'صباحي'; 
+        }
+    }
+
+    // وظيفة لتعيين رقم الشيفت في localStorage (يمكنك استدعاؤها يدوياً أو عبر واجهة إعدادات بسيطة)
+    function setShiftNumber(shiftNum) {
+        localStorage.setItem('shiftNumber', shiftNum);
+        defaultShiftNumber = shiftNum; // تحديث المتغير أيضًا
+        showNotification(`تم تعيين رقم الشيفت إلى: ${shiftNum}`, 'success');
+    }
+
+    // مثال: يمكنك استدعاء هذه الوظيفة من خلال زر إعدادات أو عند تحميل التطبيق لأول مرة
+    // setShiftNumber('1'); // قم بتعيين رقم الشيفت الافتراضي هنا
+
+</script>
+</body>
+</html>
+
+<!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz --><!-- xxzxzxz -->
