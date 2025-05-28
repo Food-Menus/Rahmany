@@ -175,7 +175,7 @@
     </div>
 
     <script> 
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1Pd_8W9gm_t2jJV8kxagddbafQI57UCL_gz7qW7W3i2Y/gviz/tq?tqx=out:json';
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1l-eyd9wDoAhMA-TZzxV_S1LJqWgf3Ju2hc3ZansgUNs/gviz/tq?tqx=out:json';
         const invoicesContainer = document.getElementById('invoicesContainer');
         const shiftSelection = document.getElementById('shiftSelection');
         const shiftSearchInput = document.getElementById('shiftSearch');
@@ -192,15 +192,15 @@
                 
                 // حفظ جميع البيانات في المتغير العام
                 allWorkers = data.table.rows.map(row => ({
-                    workerName: row.c[0]?.v || '',
-                    jobType: row.c[1]?.v || '',
-                    comeTime: row.c[2]?.v || 0,
-                    hourlyRate: row.c[3]?.v || 0,
-                    NumOfHours: row.c[4]?.v || 0,
-                    discountWorker: row.c[5]?.v || 0,
-                    dayExpence: row.c[6]?.v || 0,
-                    shiftNumber: row.c[7]?.v || '',
-                    shiftType: row.c[8]?.v || ''
+                    workerName: row.c[1]?.v || '',
+                    jobType: row.c[2]?.v || '',
+                    comeTime: row.c[3]?.v || 0,
+                    hourlyRate: row.c[4]?.v || 0,
+                    NumOfHours: row.c[5]?.v || 0,
+                    discountWorker: row.c[6]?.v || 0,
+                    dayExpence: row.c[7]?.v || 0,
+                    shiftNumber: row.c[8]?.v || '',
+                    shiftType: row.c[9]?.v || ''
                 }));
                 
                 // عرض رسالة ترحيبية بدلاً من البيانات
