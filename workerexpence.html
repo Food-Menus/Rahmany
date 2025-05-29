@@ -322,9 +322,9 @@
                 workerDiv.className = 'form-group';
                 workerDiv.innerHTML = `
                     <label>${worker.workerName}</label>
-                    <input type="text" placeholder="وقت الحضور (مثال: 08:00)" class="comeTime" min="0" step="0.01" value="0">
-                    <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" min="0" step="0.01" value="0">
-                    <input type="number" placeholder="الخصم (جنيه)" class="discount" value="0" min="0" step="0.01">
+                    <input type="text" placeholder="وقت الحضور (مثال: 08:00)" class="comeTime" min="0" step="0.01">
+                    <input type="number" placeholder="عدد ساعات العمل" class="hoursWorked" min="0" step="0.01">
+                    <input type="number" placeholder="الخصم (جنيه)" class="discount" min="0" step="0.01">
                     <input type="hidden" class="hourlyRate" value="${worker.hourlyRate}">
                 `;
                 workersContainer.appendChild(workerDiv);
