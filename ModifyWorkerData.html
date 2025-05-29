@@ -174,7 +174,7 @@ button {
     </div>
   </div>
 
-  <script>
+<script>
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbw4rHSV3lbB_kI52_TElC2VKCw631Vi8tw5QZDKSr3qzkFg-CqcC-MpX4uvl-rB-Fsf/exec'; // استبدل هذا باللينك الخاص بك
     const dataSheetUrl = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json'; // لينك جدول البيانات
 
@@ -267,6 +267,16 @@ button {
         }
       }
 
+      // دالة لحساب المصروف اليومي تلقائيًا
+      function calculateDayExpence() {
+        const hourlyRate = parseFloat(displayHourlyRate.value) || 0;
+        const numOfHours = parseFloat(inputNumOfHours.value) || 0;
+        const discount = parseFloat(inputDiscountWorker.value) || 0;
+        
+        const total = (hourlyRate * numOfHours) - discount;
+        displayDayExpence.value = total.toFixed(2);
+      }
+
       jobTypeSelect.addEventListener('change', () => {
         const selectedJobType = jobTypeSelect.value;
         populateWorkerNames(selectedJobType);
@@ -283,6 +293,10 @@ button {
         workerDataSection.style.display = 'none';
         clearStatusMessage();
       });
+
+      // إضافة مستمعات الأحداث للحقول المرتبطة بالحساب
+      inputNumOfHours.addEventListener('input', calculateDayExpence);
+      inputDiscountWorker.addEventListener('input', calculateDayExpence);
 
       searchButton.addEventListener('click', async () => {
         const selectedJobType = jobTypeSelect.value;
@@ -344,10 +358,14 @@ button {
         loadingMessage.style.display = 'block';
         clearStatusMessage();
 
+        // احتساب المصروف اليومي قبل التحديث
+        calculateDayExpence();
+
         const updatedData = {
           comeTime: inputComeTime.value,
           NumOfHours: parseFloat(inputNumOfHours.value) || 0,
-          discountWorker: parseFloat(inputDiscountWorker.value) || 0
+          discountWorker: parseFloat(inputDiscountWorker.value) || 0,
+          dayExpence: parseFloat(displayDayExpence.value) || 0
         };
 
         try {
