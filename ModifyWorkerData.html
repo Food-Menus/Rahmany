@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
-  <base target="_top">
-  <title>البحث عن بيانات العمال</title>
-  <style>
-/* تنسيق عام للصفحة */
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة العمال</title>
+    <style>
+/* General page styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #cfa363, #fb6b23);
@@ -22,21 +23,29 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* تنسيق الحاوية الرئيسية */
+/* Main container styling */
 .container {
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     padding: 2.5rem;
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 2rem auto;
     border: 1px solid rgba(255, 255, 255, 0.1);
     animation: fadeIn 1s ease;
 }
 
-/* تنسيق مجموعة الحقول */
+/* Title styling */
+h1 {
+    font-size: 2rem;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Form group styling */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -44,373 +53,475 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    font-weight: 500;
+    font-weight: bold;
+    font-size: 1.1rem;
 }
 
-.form-group input,
-.form-group select {
-    width: 90%;
-    margin: 5px;
+/* Input and select styling */
+select, input {
+    width: 100%;
     padding: 0.8rem 1rem;
-    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 8px;
-    color: rgb(0, 0, 0);
+    color: #333;
     font-size: 1rem;
     transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-.form-group input:focus,
-.form-group select:focus {
+select:focus, input:focus {
     outline: none;
     border-color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 1);
 }
 
-/* تنسيق أزرار */
+/* Button styling */
 button {
-    width: 100%;
-    padding: 0.8rem;
     background: rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 8px;
-    color: white;
+    cursor: pointer;
+    margin-right: 10px;
     font-size: 1rem;
     font-weight: bold;
-    cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    margin-top: 1rem;
 }
 
-/* تنسيق رسائل النظام */
-.message {
-    margin-top: 1rem;
-    padding: 1rem;
+button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#deleteButton {
+    background: rgba(244, 67, 54, 0.7);
+}
+
+#deleteButton:hover {
+    background: rgba(211, 47, 47, 0.8);
+}
+
+/* Worker data section */
+#workerData {
+    margin-top: 20px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    text-align: center;
+    background: rgba(0, 0, 0, 0.2);
     display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Message styling */
+.message {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
 }
 
 .success {
     background: rgba(46, 125, 50, 0.3);
+    border: 1px solid rgba(46, 125, 50, 0.5);
 }
 
 .error {
     background: rgba(211, 47, 47, 0.3);
+    border: 1px solid rgba(211, 47, 47, 0.5);
 }
 
-/* تأثيرات الحركة */
+/* Loading message */
+#loadingMessage {
+    text-align: center;
+    font-weight: bold;
+    display: none;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+/* Animation effects */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-  </style>
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>البحث عن بيانات العمال</h2>
-
-    <div class="form-group">
-      <label for="shiftNumber">رقم الوردية (يتم جلبه تلقائيًا من التخزين المحلي)</label>
-      <input type="text" id="shiftNumber" readonly class="read-only-field">
-    </div>
-
-    <div class="form-group">
-      <label for="jobTypeSelect">اسم العمل:</label>
-      <select id="jobTypeSelect">
-        <option value="">اختر اسم العمل</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="workerNameSelect">اسم العامل:</label>
-      <select id="workerNameSelect" disabled>
-        <option value="">اختر اسم العامل</option>
-      </select>
-    </div>
-
-    <button id="searchButton" disabled>بحث</button>
-    <div id="loadingMessage">جاري التحميل...</div>
-    <div id="statusMessage" class="message" style="display: none;"></div>
-
-    <div id="workerData" style="display: none;">
-      <h3>بيانات العامل:</h3>
-      <div class="form-group">
-        <label>اسم العامل:</label>
-        <input type="text" id="displayWorkerName" readonly class="read-only-field">
-      </div>
-      <div class="form-group">
-        <label>نوع الوظيفة:</label>
-        <input type="text" id="displayJobType" readonly class="read-only-field">
-      </div>
-      <div class="form-group">
-        <label>سعر الساعة:</label>
-        <input type="number" id="displayHourlyRate" readonly class="read-only-field">
-      </div>
-      <div class="form-group">
-        <label>نوع الوردية:</label>
-        <input type="text" id="displayShiftType" readonly class="read-only-field">
-      </div>
-
-      <div class="form-group">
-        <label for="inputComeTime">وقت الحضور:</label>
-        <input type="text" id="inputComeTime">
-      </div>
-      <div class="form-group">
-        <label for="inputNumOfHours">عدد ساعات العمل:</label>
-        <input type="number" id="inputNumOfHours">
-      </div>
-      <div class="form-group">
-        <label for="inputDiscountWorker">الخصم:</label>
-        <input type="number" id="inputDiscountWorker">
-      </div>
-      <div class="form-group">
-        <label>مصروف يومي:</label>
-        <input type="number" id="displayDayExpence" readonly class="read-only-field">
-      </div>
-      
-      <button id="updateButton">تحديث البيانات</button>
-    </div>
-  </div>
-
-<script>
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbw4rHSV3lbB_kI52_TElC2VKCw631Vi8tw5QZDKSr3qzkFg-CqcC-MpX4uvl-rB-Fsf/exec'; // استبدل هذا باللينك الخاص بك
-    const dataSheetUrl = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json'; // لينك جدول البيانات
-
-    let allWorkersData = [];
-    let currentRowIndex = null; // لتخزين رقم الصف الذي تم جلبه للبحث والتعديل
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const shiftNumberInput = document.getElementById('shiftNumber');
-      const jobTypeSelect = document.getElementById('jobTypeSelect');
-      const workerNameSelect = document.getElementById('workerNameSelect');
-      const searchButton = document.getElementById('searchButton');
-      const updateButton = document.getElementById('updateButton');
-      const loadingMessage = document.getElementById('loadingMessage');
-      const statusMessage = document.getElementById('statusMessage');
-      const workerDataSection = document.getElementById('workerData');
-
-      const displayWorkerName = document.getElementById('displayWorkerName');
-      const displayJobType = document.getElementById('displayJobType');
-      const displayHourlyRate = document.getElementById('displayHourlyRate');
-      const displayShiftType = document.getElementById('displayShiftType');
-      const displayDayExpence = document.getElementById('displayDayExpence');
-
-      const inputComeTime = document.getElementById('inputComeTime');
-      const inputNumOfHours = document.getElementById('inputNumOfHours');
-      const inputDiscountWorker = document.getElementById('inputDiscountWorker');
-
-      // جلب رقم الوردية من localStorage
-      const storedShiftNumber = localStorage.getItem('shiftNumber');
-      if (storedShiftNumber) {
-        shiftNumberInput.value = storedShiftNumber;
-      } else {
-        // يمكنك هنا طلب من المستخدم إدخال رقم الوردية إذا لم يكن موجودًا
-        // أو توجيه المستخدم إلى صفحة لإدخاله أولاً.
-        alert('يرجى تعيين رقم الوردية في التخزين المحلي (localStorage).');
-      }
-
-      // جلب بيانات العمال من Google Sheet
-      async function fetchWorkersData() {
-        loadingMessage.style.display = 'block';
-        try {
-          const response = await fetch(dataSheetUrl);
-          const text = await response.text();
-          const jsonStartIndex = text.indexOf('google.visualization.Query.setResponse(') + 'google.visualization.Query.setResponse('.length;
-          const jsonEndIndex = text.lastIndexOf(');');
-          const jsonString = text.substring(jsonStartIndex, jsonEndIndex);
-          const data = JSON.parse(jsonString);
-
-          allWorkersData = data.table.rows.map(row => ({
-            workerName: row.c[0] ? row.c[0].v : '',
-            jobType: row.c[1] ? row.c[1].v : '',
-            hourlyRate: row.c[2] ? row.c[2].v : 0
-          }));
-
-          populateJobTypes();
-        } catch (error) {
-          console.error('Error fetching workers data:', error);
-          showStatusMessage('حدث خطأ أثناء جلب بيانات العمال.', 'error');
-        } finally {
-          loadingMessage.style.display = 'none';
-        }
-      }
-
-      function populateJobTypes() {
-        const jobTypes = [...new Set(allWorkersData.map(worker => worker.jobType))];
-        jobTypeSelect.innerHTML = '<option value="">اختر اسم العمل</option>';
-        jobTypes.forEach(jobType => {
-          const option = document.createElement('option');
-          option.value = jobType;
-          option.textContent = jobType;
-          jobTypeSelect.appendChild(option);
-        });
-        jobTypeSelect.disabled = false;
-      }
-
-      function populateWorkerNames(selectedJobType) {
-        workerNameSelect.innerHTML = '<option value="">اختر اسم العامل</option>';
-        if (selectedJobType) {
-          const filteredWorkers = allWorkersData.filter(worker => worker.jobType === selectedJobType);
-          const workerNames = filteredWorkers.map(worker => worker.workerName);
-          workerNames.forEach(workerName => {
-            const option = document.createElement('option');
-            option.value = workerName;
-            option.textContent = workerName;
-            workerNameSelect.appendChild(option);
-          });
-          workerNameSelect.disabled = false;
-        } else {
-          workerNameSelect.disabled = true;
-          searchButton.disabled = true;
-        }
-      }
-
-      // دالة لحساب المصروف اليومي تلقائيًا
-      function calculateDayExpence() {
-        const hourlyRate = parseFloat(displayHourlyRate.value) || 0;
-        const numOfHours = parseFloat(inputNumOfHours.value) || 0;
-        const discount = parseFloat(inputDiscountWorker.value) || 0;
+    <div class="container">
+        <h1>نظام إدارة العمال</h1>
         
-        const total = (hourlyRate * numOfHours) - discount;
-        displayDayExpence.value = total.toFixed(2);
-      }
+        <div class="form-group">
+            <label for="shiftNumber">رقم الوردية:</label>
+            <input type="text" id="shiftNumber" placeholder="أدخل رقم الوردية">
+        </div>
+        
+        <div class="form-group">
+            <label for="jobTypeSelect">نوع العمل:</label>
+            <select id="jobTypeSelect" disabled>
+                <option value="">اختر اسم العمل</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="workerNameSelect">اسم العامل:</label>
+            <select id="workerNameSelect" disabled>
+                <option value="">اختر اسم العامل</option>
+            </select>
+        </div>
+        
+        <button id="searchButton" disabled>بحث</button>
+        
+        <div id="loadingMessage">جاري التحميل...</div>
+        <div id="statusMessage" class="message"></div>
+        
+        <div id="workerData">
+            <h2>بيانات العامل</h2>
+            <div class="form-group">
+                <label for="displayWorkerName">اسم العامل:</label>
+                <input type="text" id="displayWorkerName" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="displayJobType">نوع العمل:</label>
+                <input type="text" id="displayJobType" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="displayHourlyRate">سعر الساعة:</label>
+                <input type="text" id="displayHourlyRate" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="displayShiftType">نوع الشيفت:</label>
+                <select id="displayShiftType"></select>
+            </div>
+            
+            <div class="form-group">
+                <label for="inputComeTime">وقت الحضور:</label>
+                <input type="text" id="inputComeTime">
+            </div>
+            
+            <div class="form-group">
+                <label for="inputNumOfHours">عدد الساعات:</label>
+                <input type="number" id="inputNumOfHours" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label for="inputDiscountWorker">الخصم:</label>
+                <input type="number" id="inputDiscountWorker" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label for="displayDayExpence">المصروف اليومي:</label>
+                <input type="text" id="displayDayExpence" readonly>
+            </div>
+            
+            <button id="updateButton">تحديث</button>
+            <button id="deleteButton">حذف</button>
+        </div>
+    </div>
 
-      jobTypeSelect.addEventListener('change', () => {
-        const selectedJobType = jobTypeSelect.value;
-        populateWorkerNames(selectedJobType);
-        workerDataSection.style.display = 'none';
-        clearStatusMessage();
-      });
+    <script>
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbw4rHSV3lbB_kI52_TElC2VKCw631Vi8tw5QZDKSr3qzkFg-CqcC-MpX4uvl-rB-Fsf/exec';
+        const dataSheetUrl = 'https://docs.google.com/spreadsheets/d/1g2sSqoDAxgKO9LHI_jCtFydenS7OXpINLhec26IpJE8/gviz/tq?tqx=out:json';
 
-      workerNameSelect.addEventListener('change', () => {
-        if (workerNameSelect.value && jobTypeSelect.value) {
-          searchButton.disabled = false;
-        } else {
-          searchButton.disabled = true;
-        }
-        workerDataSection.style.display = 'none';
-        clearStatusMessage();
-      });
+        let allWorkersData = [];
+        let currentRowIndex = null;
 
-      // إضافة مستمعات الأحداث للحقول المرتبطة بالحساب
-      inputNumOfHours.addEventListener('input', calculateDayExpence);
-      inputDiscountWorker.addEventListener('input', calculateDayExpence);
+        document.addEventListener('DOMContentLoaded', () => {
+            const shiftNumberInput = document.getElementById('shiftNumber');
+            const jobTypeSelect = document.getElementById('jobTypeSelect');
+            const workerNameSelect = document.getElementById('workerNameSelect');
+            const searchButton = document.getElementById('searchButton');
+            const updateButton = document.getElementById('updateButton');
+            const deleteButton = document.getElementById('deleteButton');
+            const loadingMessage = document.getElementById('loadingMessage');
+            const statusMessage = document.getElementById('statusMessage');
+            const workerDataSection = document.getElementById('workerData');
 
-      searchButton.addEventListener('click', async () => {
-        const selectedJobType = jobTypeSelect.value;
-        const selectedWorkerName = workerNameSelect.value;
-        const shiftNumber = shiftNumberInput.value;
+            const displayWorkerName = document.getElementById('displayWorkerName');
+            const displayJobType = document.getElementById('displayJobType');
+            const displayHourlyRate = document.getElementById('displayHourlyRate');
+            const displayShiftType = document.getElementById('displayShiftType');
+            const displayDayExpence = document.getElementById('displayDayExpence');
 
-        if (!selectedJobType || !selectedWorkerName || !shiftNumber) {
-          showStatusMessage('يرجى اختيار اسم العمل واسم العامل وتعيين رقم الوردية.', 'error');
-          return;
-        }
+            const inputComeTime = document.getElementById('inputComeTime');
+            const inputNumOfHours = document.getElementById('inputNumOfHours');
+            const inputDiscountWorker = document.getElementById('inputDiscountWorker');
 
-        loadingMessage.style.display = 'block';
-        clearStatusMessage();
-        workerDataSection.style.display = 'none';
+            // جلب رقم الوردية من localStorage
+            const storedShiftNumber = localStorage.getItem('shiftNumber');
+            if (storedShiftNumber) {
+                shiftNumberInput.value = storedShiftNumber;
+            } else {
+                alert('يرجى تعيين رقم الوردية في التخزين المحلي (localStorage).');
+            }
 
-        try {
-          const params = new URLSearchParams({
-            action: 'search',
-            shiftNumber: shiftNumber,
-            workerName: selectedWorkerName
-          });
-          const response = await fetch(`${scriptUrl}?${params.toString()}`);
-          const result = await response.json();
+            // جلب بيانات العمال من Google Sheet
+            async function fetchWorkersData() {
+                loadingMessage.style.display = 'block';
+                try {
+                    const response = await fetch(dataSheetUrl);
+                    const text = await response.text();
+                    const jsonStartIndex = text.indexOf('google.visualization.Query.setResponse(') + 'google.visualization.Query.setResponse('.length;
+                    const jsonEndIndex = text.lastIndexOf(');');
+                    const jsonString = text.substring(jsonStartIndex, jsonEndIndex);
+                    const data = JSON.parse(jsonString);
 
-          if (result.status === 'success' && result.data.length > 0) {
-            const worker = result.data[0];
-            currentRowIndex = worker.rowIndex;
+                    allWorkersData = data.table.rows.map(row => ({
+                        workerName: row.c[0] ? row.c[0].v : '',
+                        jobType: row.c[1] ? row.c[1].v : '',
+                        hourlyRate: row.c[2] ? row.c[2].v : 0
+                    }));
 
-            displayWorkerName.value = worker.workerName;
-            displayJobType.value = worker.jobType;
-            displayHourlyRate.value = worker.hourlyRate;
-            displayShiftType.value = worker.shiftType;
-            displayDayExpence.value = worker.dayExpence;
+                    populateJobTypes();
+                } catch (error) {
+                    console.error('Error fetching workers data:', error);
+                    showStatusMessage('حدث خطأ أثناء جلب بيانات العمال.', 'error');
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            }
 
-            inputComeTime.value = worker.comeTime;
-            inputNumOfHours.value = worker.NumOfHours;
-            inputDiscountWorker.value = worker.discountWorker;
+            function populateJobTypes() {
+                const jobTypes = [...new Set(allWorkersData.map(worker => worker.jobType))];
+                jobTypeSelect.innerHTML = '<option value="">اختر اسم العمل</option>';
+                jobTypes.forEach(jobType => {
+                    const option = document.createElement('option');
+                    option.value = jobType;
+                    option.textContent = jobType;
+                    jobTypeSelect.appendChild(option);
+                });
+                jobTypeSelect.disabled = false;
+            }
 
-            workerDataSection.style.display = 'block';
-            showStatusMessage('تم جلب البيانات بنجاح.', 'success');
-          } else {
-            workerDataSection.style.display = 'none';
-            showStatusMessage('لم يتم العثور على بيانات لهذا العامل في هذه الوردية.', 'error');
-          }
-        } catch (error) {
-          console.error('Error searching worker data:', error);
-          showStatusMessage('حدث خطأ أثناء البحث عن بيانات العامل.', 'error');
-        } finally {
-          loadingMessage.style.display = 'none';
-        }
-      });
+            function populateWorkerNames(selectedJobType) {
+                workerNameSelect.innerHTML = '<option value="">اختر اسم العامل</option>';
+                if (selectedJobType) {
+                    const filteredWorkers = allWorkersData.filter(worker => worker.jobType === selectedJobType);
+                    const workerNames = filteredWorkers.map(worker => worker.workerName);
+                    workerNames.forEach(workerName => {
+                        const option = document.createElement('option');
+                        option.value = workerName;
+                        option.textContent = workerName;
+                        workerNameSelect.appendChild(option);
+                    });
+                    workerNameSelect.disabled = false;
+                } else {
+                    workerNameSelect.disabled = true;
+                    searchButton.disabled = true;
+                }
+            }
 
-      updateButton.addEventListener('click', async () => {
-        if (currentRowIndex === null) {
-          showStatusMessage('لا توجد بيانات لتحديثها. يرجى البحث أولاً.', 'error');
-          return;
-        }
+            // دالة لحساب المصروف اليومي تلقائيًا
+            function calculateDayExpence() {
+                const hourlyRate = parseFloat(displayHourlyRate.value) || 0;
+                const numOfHours = parseFloat(inputNumOfHours.value) || 0;
+                const discount = parseFloat(inputDiscountWorker.value) || 0;
+                
+                const total = (hourlyRate * numOfHours) - discount;
+                displayDayExpence.value = total.toFixed(2);
+            }
 
-        loadingMessage.style.display = 'block';
-        clearStatusMessage();
+            jobTypeSelect.addEventListener('change', () => {
+                const selectedJobType = jobTypeSelect.value;
+                populateWorkerNames(selectedJobType);
+                workerDataSection.style.display = 'none';
+                clearStatusMessage();
+            });
 
-        // احتساب المصروف اليومي قبل التحديث
-        calculateDayExpence();
+            workerNameSelect.addEventListener('change', () => {
+                if (workerNameSelect.value && jobTypeSelect.value) {
+                    searchButton.disabled = false;
+                } else {
+                    searchButton.disabled = true;
+                }
+                workerDataSection.style.display = 'none';
+                clearStatusMessage();
+            });
 
-        const updatedData = {
-          comeTime: inputComeTime.value,
-          NumOfHours: parseFloat(inputNumOfHours.value) || 0,
-          discountWorker: parseFloat(inputDiscountWorker.value) || 0,
-          dayExpence: parseFloat(displayDayExpence.value) || 0
-        };
+            // إضافة مستمعات الأحداث للحقول المرتبطة بالحساب
+            inputNumOfHours.addEventListener('input', calculateDayExpence);
+            inputDiscountWorker.addEventListener('input', calculateDayExpence);
 
-        try {
-          const params = new URLSearchParams({
-            action: 'update',
-            rowIndex: currentRowIndex,
-            data: JSON.stringify(updatedData)
-          });
-          const response = await fetch(scriptUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params.toString()
-          });
-          const result = await response.json();
+            searchButton.addEventListener('click', async () => {
+                const selectedJobType = jobTypeSelect.value;
+                const selectedWorkerName = workerNameSelect.value;
+                const shiftNumber = shiftNumberInput.value;
 
-          if (result.status === 'success') {
-            showStatusMessage('تم تحديث البيانات بنجاح!', 'success');
-          } else {
-            showStatusMessage(`فشل التحديث: ${result.message}`, 'error');
-          }
-        } catch (error) {
-          console.error('Error updating worker data:', error);
-          showStatusMessage('حدث خطأ أثناء تحديث البيانات.', 'error');
-        } finally {
-          loadingMessage.style.display = 'none';
-        }
-      });
+                if (!selectedJobType || !selectedWorkerName || !shiftNumber) {
+                    showStatusMessage('يرجى اختيار اسم العمل واسم العامل وتعيين رقم الوردية.', 'error');
+                    return;
+                }
 
-      function showStatusMessage(message, type) {
-        statusMessage.textContent = message;
-        statusMessage.className = `message ${type}`;
-        statusMessage.style.display = 'block';
-      }
+                loadingMessage.style.display = 'block';
+                clearStatusMessage();
+                workerDataSection.style.display = 'none';
 
-      function clearStatusMessage() {
-        statusMessage.style.display = 'none';
-        statusMessage.textContent = '';
-        statusMessage.className = 'message';
-      }
+                try {
+                    const params = new URLSearchParams({
+                        action: 'search',
+                        shiftNumber: shiftNumber,
+                        workerName: selectedWorkerName
+                    });
+                    const response = await fetch(`${scriptUrl}?${params.toString()}`);
+                    const result = await response.json();
 
-      // جلب البيانات عند تحميل الصفحة
-      fetchWorkersData();
-    });
-  </script>
+                    if (result.status === 'success' && result.data.length > 0) {
+                        const worker = result.data[0];
+                        currentRowIndex = worker.rowIndex;
+
+                        displayWorkerName.value = worker.workerName;
+                        displayJobType.value = worker.jobType;
+                        displayHourlyRate.value = worker.hourlyRate;
+                        
+                        // تحويل حقل نوع الشيفت إلى قائمة منسدلة
+                        displayShiftType.innerHTML = '';
+                        const shiftTypes = ['بداية اليوم', 'منتصف اليوم', 'نهاية اليوم'];
+                        shiftTypes.forEach(type => {
+                            const option = document.createElement('option');
+                            option.value = type;
+                            option.textContent = type;
+                            if (type === worker.shiftType) option.selected = true;
+                            displayShiftType.appendChild(option);
+                        });
+                        
+                        displayDayExpence.value = worker.dayExpence;
+                        inputComeTime.value = worker.comeTime;
+                        inputNumOfHours.value = worker.NumOfHours;
+                        inputDiscountWorker.value = worker.discountWorker;
+
+                        workerDataSection.style.display = 'block';
+                        showStatusMessage('تم جلب البيانات بنجاح.', 'success');
+                    } else {
+                        workerDataSection.style.display = 'none';
+                        showStatusMessage('لم يتم العثور على بيانات لهذا العامل في هذه الوردية.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error searching worker data:', error);
+                    showStatusMessage('حدث خطأ أثناء البحث عن بيانات العامل.', 'error');
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            });
+
+            updateButton.addEventListener('click', async () => {
+                if (currentRowIndex === null) {
+                    showStatusMessage('لا توجد بيانات لتحديثها. يرجى البحث أولاً.', 'error');
+                    return;
+                }
+
+                loadingMessage.style.display = 'block';
+                clearStatusMessage();
+
+                // احتساب المصروف اليومي قبل التحديث
+                calculateDayExpence();
+
+                const updatedData = {
+                    comeTime: inputComeTime.value,
+                    NumOfHours: parseFloat(inputNumOfHours.value) || 0,
+                    discountWorker: parseFloat(inputDiscountWorker.value) || 0,
+                    dayExpence: parseFloat(displayDayExpence.value) || 0,
+                    shiftType: displayShiftType.value
+                };
+
+                try {
+                    const params = new URLSearchParams({
+                        action: 'update',
+                        rowIndex: currentRowIndex,
+                        data: JSON.stringify(updatedData)
+                    });
+                    const response = await fetch(scriptUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: params.toString()
+                    });
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        showStatusMessage('تم تحديث البيانات بنجاح!', 'success');
+                    } else {
+                        showStatusMessage(`فشل التحديث: ${result.message}`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error updating worker data:', error);
+                    showStatusMessage('حدث خطأ أثناء تحديث البيانات.', 'error');
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            });
+
+            deleteButton.addEventListener('click', async () => {
+                if (currentRowIndex === null) {
+                    showStatusMessage('لا توجد بيانات لحذفها. يرجى البحث أولاً.', 'error');
+                    return;
+                }
+
+                if (!confirm('هل أنت متأكد من أنك تريد حذف بيانات هذا العامل؟')) {
+                    return;
+                }
+
+                loadingMessage.style.display = 'block';
+                clearStatusMessage();
+
+                try {
+                    const params = new URLSearchParams({
+                        action: 'delete',
+                        rowIndex: currentRowIndex
+                    });
+                    const response = await fetch(scriptUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: params.toString()
+                    });
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+                        showStatusMessage('تم حذف البيانات بنجاح!', 'success');
+                        // إعادة تعيين الحقول بعد الحذف
+                        workerDataSection.style.display = 'none';
+                        currentRowIndex = null;
+                        jobTypeSelect.value = '';
+                        workerNameSelect.innerHTML = '<option value="">اختر اسم العامل</option>';
+                        workerNameSelect.disabled = true;
+                    } else {
+                        showStatusMessage(`فشل الحذف: ${result.message}`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting worker data:', error);
+                    showStatusMessage('حدث خطأ أثناء حذف البيانات.', 'error');
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            });
+
+            function showStatusMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = `message ${type}`;
+                statusMessage.style.display = 'block';
+            }
+
+            function clearStatusMessage() {
+                statusMessage.style.display = 'none';
+                statusMessage.textContent = '';
+                statusMessage.className = 'message';
+            }
+
+            // جلب البيانات عند تحميل الصفحة
+            fetchWorkersData();
+        });
+    </script>
 </body>
 </html>
