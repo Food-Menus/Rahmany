@@ -582,7 +582,7 @@
             const اجمالي = parseFloat(document.getElementById("إجمالي_التوصيل").value) || 0;
             const الخصم = parseFloat(document.getElementById("الخصم").value) || 0;
             const الإضافة = parseFloat(document.getElementById("الإضافة").value) || 0;
-            const الصافي = (اجمالي - الخصم +  الإضافة + ((اجمالي) > 150  ? 80 : 0));
+            const الصافي = (اجمالي - الخصم +  الإضافة + ((اجمالي) > 150  ? 90 : 0));
             document.getElementById("الصافي").value = الصافي;
     
             // حساب عدد_الخدمات_فوق المحدد
